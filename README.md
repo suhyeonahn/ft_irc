@@ -1,2 +1,2 @@
-# ft_irc
-Server to Server Chatting program
+# ft_irc v6
+Internet Relay Chat
