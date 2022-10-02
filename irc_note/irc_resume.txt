@@ -1,0 +1,178 @@
+Subject 42:
+
+	1. NO NEED client code
+	2. NO NEED communication between servers
+	3. ./ircserv <port> <password>
+	4. server manage multiple client non-blocking mode(multi-flexing?)
+	5. fork is INTERDIT
+	6. poll() (ou equivalent) to manage tous les oeprations ( read, write, listen)
+		- If use read/recv ou write/send without poll() => ZERO
+		cf/ Actually, possible non-blocking server without poll()
+			: but it consume system ressources unutilly.
+	7. Mandatory functionalities:
+		- authentification (by ip? nickname?)
+		- define nickname and username
+		- join channel
+		- send/receive messages private with client reference(nickname...?)
+		- send a message to all client in current channel by a client(Thus, these all client receive this msg)
+		- two type client : Operator / User
+		- Operator's commandes
+			- 'KICK'
+			- 'MODE'
+			- 'INVITE'
+			- 'TOPIC'
+
+
+
+Server
+
+	Sample:
+                           [ Server 15 ]  [ Server 13 ] [ Server 14 ]
+                                 /                \         /
+                                /                  \       /
+        [ Server 11 ] ------ [ Server 1 ]       [ Server 12 ]
+                              /        \          /
+                             /          \        /
+                  [ Server 2 ]          [ Server 3 ]
+                    /       \                      \
+                   /         \                      \
+           [ Server 4 ]    [ Server 5 ]         [ Server 6 ]
+            /    |    \                           /
+           /     |     \                         /
+          /      |      \____                   /
+         /       |           \                 /
+ [ Server 7 ] [ Server 8 ] [ Server 9 ]   [ Server 10 ]
+
+                                  :
+                               [ etc. ]
+                                  :
+
+
+Client
+	- 'nickname' : make distingushed each client from other client
+	- Client infos to be saved on server
+		- 'real name'
+		- 'address of the host' that the client is connecting
+		- 'username' of the client on that host
+		- 'server' to which the client is connected
+
+	- Restriction of 'nickname'
+		- NOT contains :
+			- ' '(0x20)
+			- ','(0x2c)
+			- '*'(0x2a)
+			- '?'(0x3f)
+			- '!'(0x21)
+			- '@'(0x40)
+		- NOT start with:
+			- '$'(0x24)
+			- ':'(0x3a)
+		- Also, NOT start with channal type prefix
+			- Regular Channels - '#'(0x23)
+			- Local Channelss - '&'(0x26)
+		- NOT contain '.'(0x2e)
+
+
+Services : ...
+
+
+Operators : 'force' to maintain IRC network as stable
+	- disconnectiong / reconnecting server
+	- remove a user from server or IRC network (ex: kick)
+
+	Clients << Operators << Admininstrator
+	
+
+Channels : group of clients like 'discord'
+	- be created when first client 'JOIN'
+	- be stopped when last client 'LEAVE'
+	- name of the channel : #example...
+
+	* concept of 'channel ownership' ...?
+
+	- restriction of name:
+		NOT contains:
+			- ' '(0x20)
+			- ctrl + g '^G'(0x07)
+			- ','(0x2c)
+
+	- Regualr Channel VS Local Channel
+		- regular : '#', known to all server in network
+		- local : '&', only connected client can see and talk to other client on the same server.
+
+	* Channel mode ( https://modern.ircdocs.horse/#channel-modes ) for more infos
+
+	- 'JOIN' : create or enter the channel
+		- No correspond channel ? => create && first client = channel operator
+		- else, connection to channel depends on the MODE set on current channel(invite-only... etc)
+	- 'topic'
+		- line shown to all users
+		- when 'topic' changed, notification to all users
+		- commonly used to inform rules, links, description of the channel...etc
+
+	* How many Channels client able to join at the same time?
+		: defined by server by CHANLIMIT(https://modern.ircdocs.horse/#chanlimit-parameter)
+	
+	- Case 'disjoint' because of split between servers
+		- exist on one side temporally.
+		- then, when the split healed, server verify if network is consistent. 
+
+
+Channel Operators
+	- Commands used by channel moderators: 
+		- 'KICK' : Eject a client from the channel
+		- 'MODE' : Change mode
+		- 'INVITE' : invite a client when invite-only mode (mode +i)
+		- 'TOPIC' : Change the channel topic in a (mode +t) channel
+	* Channel moderator : has a prefix '@' or '%' as a identifiant
+		- '@': standard channel operator
+		- '%' half operator
+		- more info:
+			- NAMES ( https://modern.ircdocs.horse/#names-message ) 
+			- WHO ( https://modern.ircdocs.horse/#who-message )
+			- WHOIS ( https://modern.ircdocs.horse/#whois-message )
+
+
+
+Commuication Types
+
+	Sample small IRC network:
+
+
+							  1--\
+								  A        D---4
+							  2--/ \      /
+									B----C
+								   /      \
+								  3        E
+
+	   Servers: A, B, C, D, E         Clients: 1, 2, 3, 4
+
+	1. One-to-one
+		- usually used to send a message between clients
+		ex:
+			- message between client1 and client2 ONLY seen by serverA
+			- c1 <-> c3 : seen by A, B
+			- c2 <-> c4 : seen by A, B, C, D
+	
+	2. One-to-many
+		2-1. To A Channel
+			- if channel with single client, msg go only server(nowhere else!)
+			- if two client in a channel, all msg sent like a private msg
+			- if c1,c2 and c3 in a channel && if c1 send a msg, this.msg -> c2 then ->c3 by B
+			(see above sample)
+
+
+		2-2. To A Host/Server Mask
+
+		2-3. To A List
+
+
+		[!] Maybe, as subject says 'Vous ne devez pas gérer la communication de serveur à serveur.'
+		we don't have to check this 2-2, 2-3...?
+		=> To ask to Joscelyn
+
+	3. One-To-All
+		- Broadcast message, sent to all clients or servers or both
+
+
