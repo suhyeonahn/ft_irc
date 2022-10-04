@@ -176,3 +176,18 @@ Commuication Types
 		- Broadcast message, sent to all clients or servers or both
 
 
+
+Client-to-Server Protocol Structure
+	- La communication entre client et server se fait par Stream of bytes.
+	- Ce Stream se sépare par:
+		- CR('\r', 0x0d)
+		- LF('\n', 0x0a)
+	- Server doit implementer le 'Casemapping'
+		/cf Casemapping...? 
+
+	1. Message Format
+		['@' <tags> SPACE ] [':' <source> SPACE ] <command> <parameters> <crlf>
+
+		ex:
+			1. Satre KICK #PHILOSOPHER Camus\r\n
+
