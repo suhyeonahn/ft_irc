@@ -18,7 +18,7 @@ void	get_opt(t_env *e, int ac, char **av)
 {
     if (ac != 2)
         exit(1);
-    std::sscanf(av[1], "%d", &e->port);
+    sscanf(av[1], "%d", &e->port);
 }
 
 void	client_write(t_env *e, int cs)

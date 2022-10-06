@@ -3,16 +3,16 @@
 
 # include <sys/select.h>
 # include <arpa/inet.h>
-# include <cstdio>
-# include <cstdlib>
+# include <stdio.h>
+# include <stdlib.h>
 # include <unistd.h>
-# include <cstring>
+# include <string.h>
 
 # define FD_FREE	0
 # define FD_SERV	1
 # define FD_CLIENT	2
 
-# define FD_MAX 1024
+# define FD_MAX 42
 # define BUF_SIZE	4096
 
 # define MAX(a,b)	((a > b) ? a : b)
@@ -22,15 +22,15 @@
 typedef struct	s_fd
 {
   int	type;
-  void	(*fct_read)(t_env *e, int s);
-  void	(*fct_write)(t_env *e, int cs);
+  void	(*fct_read)();
+  void	(*fct_write)();
   char	buf_read[BUF_SIZE + 1];
   char	buf_write[BUF_SIZE + 1];
 }		t_fd;
 
 typedef struct	s_env
 {
-  t_fd		fds[FD_MAX];
+  t_fd	fds[FD_MAX];
   int		port;
   int		maxfd;
   int		max;
