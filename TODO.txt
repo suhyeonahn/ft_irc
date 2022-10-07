@@ -1,0 +1,4 @@
+Kyubong:
+    - Server:
+        - Manage watch loop better
+        - Manage Client quit server
