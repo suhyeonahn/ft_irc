@@ -1,34 +1,38 @@
-NAME_SERVER = server
+INC_DIR		=	./include/
 
-NAME_CLIENT = client
+SRCS		=	./src/main.cpp \
+				./src/server/Client.cpp \
+				./src/server/Server.cpp 
 
-SRC_SERVER = server.c
+OBJS		= $(SRCS:.cpp=.o)
 
-SRC_CLIENT = client.c
+CC			=	c++
 
-OBJ_SERVER = $(SRC_SERVER:.c=.o)
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98 
 
-OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+NAME		=	ircserv
 
-CFLAGS = -Wall -Wextra -Werror
-all	: $(NAME_SERVER) $(NAME_CLIENT)
+.cpp.o:
+			@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $(<:.cpp=.o)
+			@echo "\033[92m\n...\n \033[0m"
 
-$(NAME_SERVER) : $(OBJ_SERVER)
-	gcc -pthread -o $(NAME_SERVER) $(SRC_SERVER) $(CFLAGS)
-
-$(NAME_CLIENT) : $(OBJ_CLIENT)
-	gcc -pthread -o $(NAME_CLIENT) $(SRC_CLIENT) $(CFLAGS)
-
-clean	:
-	rm -rf $(OBJ_SERVER) $(OBJ_CLIENT)
-
-fclean	: clean
-	rm -rf $(NAME_SERVER) $(NAME_CLIENT)
-
-re : fclean 
-	make all
-
--include $(DEPS)
+$(NAME):		$(OBJS)
+			@echo "\033[92m\n\nObject files has been compiled!\n \033[0m"
+			@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+			@echo "\033[94m\n$(NAME) is up to ready.\n\nCommand with: ./ircserv <port> <password>\n\n\033[0m"
 
 
-.PHONY : re clean fclean all
+all:			$(NAME)
+
+clean:
+			@rm -rf $(OBJS)
+			@echo "\033[91m\nObject files has been removed.\033[0m"
+
+fclean:			clean
+			@rm -f $(NAME)
+			@echo "\033[91m\nExecutable file has been removed.\n\033[0m"
+
+re: 		fclean all
+
+
+.PHONY:		all clean fclean re bonus
