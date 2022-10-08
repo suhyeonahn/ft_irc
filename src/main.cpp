@@ -2,8 +2,9 @@
 #include "Server.hpp"
 
 void handleStop (int signum) {
+    //\b\b to remove ugly ^C
 	if (signum == SIGINT || signum == SIGQUIT)
-		cout << RED << "\bServer stopped. Bye" << DFT << endl;
+		cout << RED << "\b\bServer stopped. Bye" << DFT << endl;
 	exit(0);
 }
 

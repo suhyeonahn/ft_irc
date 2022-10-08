@@ -101,7 +101,8 @@ void	Server::WaitCommand(int allFDs) {
 				cmd.clear();
 				_clientList[fd]->RecvCommand(cmd);
 				// TODO: nextline: to see cmd non-parsed - later to remove
-				cout << "client #" << fd << ": " << cmd << endl;
+				// if (cmd.size())
+				// 	cout << "client #" << fd << ": " << cmd << endl;
 			}
 			--allFDs;
 		}
