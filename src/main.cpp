@@ -30,8 +30,8 @@ int main(int ac, char **av) {
     if (!isValid(ac, av, port))   
         exit(1);
     Server server(port, string(av[2]));
-    server.init();
-    server.watch();
+    server.Init();
+    server.Watch();
 
 	return (0);
 }

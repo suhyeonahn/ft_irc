@@ -20,7 +20,6 @@
 
 
 
-
 // Color to put on stdout
 # ifndef COLOR
 #  define RED "\033[0;31m"
@@ -34,5 +33,10 @@
 # endif
 
 using namespace std;
+
+
+// Declaration classes to use in irc
+class Server;
+class Client;
 
 #endif

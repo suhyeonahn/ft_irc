@@ -2,16 +2,23 @@
 # define CLIENT_HPP
 
 # include "Preset.hpp"
-// # include "Server.hpp"
+
+# define BUF_SIZE 512
 
 class Client {
     private:
-        int _fd;
+        const int   _fd;
+        char        _buf[BUF_SIZE + 1]; // to add '\0' at the last of buffer
+
 
         Client();
+
+        bool        RecvCommand(string &cmd);
 
     public:
         Client(int fd);
         ~Client();
+
+        friend class Server;
 };
 #endif

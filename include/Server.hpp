@@ -7,8 +7,6 @@
 
 # define MAX_LISTEN	42			
 
-class Client;
-
 class Server {
 	private:
 		const int			_port;
@@ -16,19 +14,22 @@ class Server {
 		const string		_password;
 
 		map<int, Client *>	_clientList;
-		int					_maxFd;
+		int					_lastFD;
 		fd_set				_fdReader;
 
-		void acceptClient();
-		int	serv_error(const string &msg);
+		void	AcceptClient();
+		void	SetFDs();
+		int		GetAllFDs();
+		void	WaitCommand(int allFDs);
+		int		ServerError(const string &msg);
 
 	
 	public:
 		Server(int port, const string &password);
 		virtual ~Server();
 
-		void init();
-		void watch();
+		void Init();
+		void Watch();
 };
 
 
