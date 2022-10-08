@@ -21,9 +21,8 @@ class Server {
 		void	SetFDs();
 		int		GetAllFDs();
 		void	WaitCommand(int allFDs);
-		int		ServerError(const string &msg);
+		int		Error(const string &msg);
 
-	
 	public:
 		Server(int port, const string &password);
 		virtual ~Server();

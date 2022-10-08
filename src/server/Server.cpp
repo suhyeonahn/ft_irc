@@ -6,6 +6,7 @@ Server::Server(int port, const string &password) : _port(port), _password(passwo
 Server::~Server(){
 
 }
+
 void	Server::Init(){
 	protoent *proto(getprotobyname("tcp"));
 
@@ -17,7 +18,7 @@ void	Server::Init(){
 	_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, proto->p_proto)
 #endif
 	if (_fd == -1)
-		ServerError("socket");
+		Error("socket");
 
 	int opt = 1;
 	/**
@@ -27,7 +28,7 @@ void	Server::Init(){
 	  * this function make to use which has been just used, managing socket level.
 	  */
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
-		ServerError("setsock");
+		Error("setsock");
 
 	sockaddr_in			servSIN;
 	servSIN.sin_family = AF_INET;
@@ -35,10 +36,18 @@ void	Server::Init(){
 	servSIN.sin_port = htons(_port);
 
 	if (bind(_fd, (sockaddr *)&servSIN, sizeof(servSIN)) == -1)
-		ServerError("bind");
+		Error("bind");
 	if (listen(_fd, MAX_LISTEN) == -1)
-		ServerError("listen");
+		Error("listen");
 	cout << CYN << "FT_IRC Server up to be inited to " << _port << DFT << endl;
+}
+
+
+void	Server::Watch() {
+	while (1) {
+		SetFDs();
+		WaitCommand(GetAllFDs());
+	}
 }
 
 void Server::AcceptClient() {
@@ -78,9 +87,10 @@ void	Server::SetFDs() {
 int		Server::GetAllFDs() {
 	int ret = select(_lastFD + 1, &_fdReader, NULL, NULL, NULL);
 	if (ret == -1)
-		ServerError("select");
+		Error("select");
 	return ret;
 }
+
 /**
  * Wait command by processor 
  * if client connected => AcceptClient()
@@ -100,24 +110,32 @@ void	Server::WaitCommand(int allFDs) {
 				// if clientFD
 				cmd.clear();
 				_clientList[fd]->RecvCommand(cmd);
-				// TODO: nextline: to see cmd non-parsed - later to remove
-				// if (cmd.size())
-				// 	cout << "client #" << fd << ": " << cmd << endl;
+				if (!cmd.empty()) {
+					//TODO: create IRC class to process cmd sent by client and to response to irc client
+					// In this moment test with this command(or with hexchat) to get cmd saved in this cmd variable.
+					// TERMINAL 1: ./ircserv <PORT>
+					// TERMINAL 2: echo -ne 'GET / HTTP/1.1\r\nHost: example.com\r\n\r\n' | nc 127.0.0.1 <PORT>
+					// It will be send like :
+
+					// ❯ ./ircserv 6666 1234
+					// 	FT_IRC Server up to be inited to 6666
+					// 	New client on socket #4
+					// 	client #4:
+					// 	GET / HTTP/1.1
+					// 	Host: example.com
+
+					cout << "client #" << fd << ":" << endl;
+					cout << CYN << cmd << DFT;
+				}
 			}
 			--allFDs;
 		}
 	}
 }
 
-void	Server::Watch() {
-	while (1) {
-		SetFDs();
-		WaitCommand(GetAllFDs());
-	}
-}
 
-int		Server::ServerError(const string &msg) {
-		cerr << RED << msg << " : " << strerror(errno) << DFT << endl;
-		exit(1);
+int		Server::Error(const string &msg) {
+	cerr << RED << msg << " : " << strerror(errno) << DFT << endl;
+	exit(1);
 }
 

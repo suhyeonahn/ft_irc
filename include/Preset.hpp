@@ -7,6 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include <map>
+#include <set>
 
 // socket/filedescriptor/system functions  etc
 #include <unistd.h>
