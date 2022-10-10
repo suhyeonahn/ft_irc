@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(int port, const string &password) : _port(port), _password(password) {
+Server::Server(int port, const string &password, IRC & irc) : _port(port), _password(password), _irc(irc) {
 
 }
 Server::~Server(){
@@ -15,7 +15,7 @@ void	Server::Init(){
 	if (_fd != -1)
 		fcntl(_fd, F_SETFL, O_NONBLOCK);
 #else
-	_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, proto->p_proto)
+	_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, proto->p_proto);
 #endif
 	if (_fd == -1)
 		Error("socket");
@@ -46,7 +46,7 @@ void	Server::Init(){
 void	Server::Watch() {
 	while (1) {
 		SetFDs();
-		WaitCommand(GetAllFDs());
+		WaitClientMsg(GetAllFDs());
 	}
 }
 
@@ -97,8 +97,8 @@ int		Server::GetAllFDs() {
  * else if client send cmd => _clientList[current_client]->RecvCommand(cmd)
  * else if client disconnected => TO MANAGE THIS
  */
-void	Server::WaitCommand(int allFDs) {
-	string	cmd;
+void	Server::WaitClientMsg(int allFDs) {
+	string	msg;
 
 	for (int fd = 3; fd <= _lastFD && allFDs; ++fd) {
 		// verify if current fd is set by _fdReader
@@ -108,9 +108,9 @@ void	Server::WaitCommand(int allFDs) {
 				AcceptClient();
 			else {
 				// if clientFD
-				cmd.clear();
-				_clientList[fd]->RecvCommand(cmd);
-				if (!cmd.empty()) {
+				msg.clear();
+				_clientList[fd]->RecvMsg(msg);
+				if (!msg.empty()) {
 					//TODO: create IRC class to process cmd sent by client and to response to irc client
 					// In this moment test with this command(or with hexchat) to get cmd saved in this cmd variable.
 					// TERMINAL 1: ./ircserv <PORT>
@@ -123,9 +123,10 @@ void	Server::WaitCommand(int allFDs) {
 					// 	client #4:
 					// 	GET / HTTP/1.1
 					// 	Host: example.com
+					_irc.ProcessClientMsg(std::make_pair(fd, msg));
 
 					cout << "client #" << fd << ":" << endl;
-					cout << CYN << cmd << DFT;
+					cout << CYN << msg << DFT;
 				}
 			}
 			--allFDs;

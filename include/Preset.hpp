@@ -7,7 +7,12 @@
 #include <cstring>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <iterator>
 #include <set>
+#include <algorithm>
+#include <sstream>
+#include <string>
 
 // socket/filedescriptor/system functions  etc
 #include <unistd.h>
@@ -39,5 +44,8 @@ using namespace std;
 // Declaration classes to use in irc
 class Server;
 class Client;
+
+typedef std::pair<int, string>	t_ClientMsg;
+
 
 #endif

@@ -3,7 +3,7 @@
 
 # include "Preset.hpp"
 # include "Client.hpp"
-
+# include "src/irc/IRC.hpp"
 
 # define MAX_LISTEN	42			
 
@@ -12,6 +12,7 @@ class Server {
 		const int			_port;
 		int					_fd;
 		const string		_password;
+		IRC	&				_irc;	
 
 		map<int, Client *>	_clientList;
 		int					_lastFD;
@@ -20,11 +21,11 @@ class Server {
 		void	AcceptClient();
 		void	SetFDs();
 		int		GetAllFDs();
-		void	WaitCommand(int allFDs);
+		void	WaitClientMsg(int allFDs);
 		int		Error(const string &msg);
 
 	public:
-		Server(int port, const string &password);
+		Server(int port, const string &password, IRC & irc);
 		virtual ~Server();
 
 		void Init();
