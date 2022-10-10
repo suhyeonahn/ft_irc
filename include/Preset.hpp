@@ -7,6 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include <map>
+#include <set>
 
 // socket/filedescriptor/system functions  etc
 #include <unistd.h>
@@ -17,7 +18,6 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <string.h>
-
 
 
 
@@ -34,5 +34,10 @@
 # endif
 
 using namespace std;
+
+
+// Declaration classes to use in irc
+class Server;
+class Client;
 
 #endif

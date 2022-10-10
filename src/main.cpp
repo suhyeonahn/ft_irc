@@ -2,8 +2,9 @@
 #include "Server.hpp"
 
 void handleStop (int signum) {
+    //\b\b to remove ugly ^C
 	if (signum == SIGINT || signum == SIGQUIT)
-		cout << RED << "\bServer stopped. Bye" << DFT << endl;
+		cout << RED << "\b\bServer stopped. Bye" << DFT << endl;
 	exit(0);
 }
 
@@ -30,8 +31,8 @@ int main(int ac, char **av) {
     if (!isValid(ac, av, port))   
         exit(1);
     Server server(port, string(av[2]));
-    server.init();
-    server.watch();
+    server.Init();
+    server.Watch();
 
 	return (0);
 }
