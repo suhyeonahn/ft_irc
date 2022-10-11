@@ -3,7 +3,7 @@
 
 # include "Preset.hpp"
 # include "Client.hpp"
-# include "src/irc/IRC.hpp"
+# include "IRC.hpp"
 
 # define MAX_LISTEN	42			
 

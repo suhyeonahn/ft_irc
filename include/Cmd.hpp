@@ -1,7 +1,7 @@
 #ifndef CMD_HPP
 # define CMD_HPP
 
-# include "../../include/Preset.hpp"
+# include "Preset.hpp"
 # include "User.hpp"
 
 # define TOTAL_CMD 3

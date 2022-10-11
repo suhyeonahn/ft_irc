@@ -2,7 +2,11 @@ INC_DIR		=	./include/
 
 SRCS		=	./src/main.cpp \
 				./src/server/Client.cpp \
-				./src/server/Server.cpp 
+				./src/server/Server.cpp \
+				./src/irc/IRC.cpp \
+				./src/irc/User.cpp \
+				./src/irc/Cmd.cpp \
+				./src/irc/Numerics.cpp
 
 OBJS		= $(SRCS:.cpp=.o)
 

@@ -2,8 +2,8 @@
 #ifndef IRC_HPP
 # define IRC_HPP
 
-# include "../../include/Preset.hpp"
-# include "../../include/Client.hpp"
+# include "Preset.hpp"
+# include "Client.hpp"
 # include "User.hpp"
 # include "Cmd.hpp"
 
