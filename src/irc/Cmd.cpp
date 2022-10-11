@@ -1,6 +1,7 @@
 #include "Cmd.hpp"
 
-Cmd::Cmd( User * user, string const & msg ) : _user(user), _cmd(-1)
+Cmd::Cmd( User * user, string const & msg, std::string const & servPw ) 
+    : _user(user), _servPw(servPw), _cmd(-1)
 {
     string  cpyMsg(msg);
     setCmdList();
@@ -77,6 +78,31 @@ void    Cmd::execute()
 
 }
 
-void    Cmd::PASS() {}
-void    Cmd::NICK() {}
-void    Cmd::USER() {}
+void    Cmd::PASS()
+{
+    if (_params.empty())
+        ; // err numeric
+    if (_params[0] == _servPw)
+        _user->_isGoodPw = true;
+}
+
+void    Cmd::NICK()
+{
+    std::string const   &nick(_params[0]);
+    if (nick == _user->getNick())
+        return  ;
+    else
+        _user->setNick(nick);
+}
+
+void    Cmd::USER()
+{
+    if (_params.size() < 4)
+        ; // err numeric
+    else
+    {
+        _user->setUname(_params[0]);
+        _user->setRname(_params[3]);
+        _user->_isRegistered = true;
+    }
+}
