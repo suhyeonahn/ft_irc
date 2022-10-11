@@ -6,6 +6,7 @@
 # include "Client.hpp"
 # include "User.hpp"
 # include "Cmd.hpp"
+# include "Utils.hpp"
 
 class   IRC
 {
