@@ -1,26 +1,19 @@
 //TODO: IRC class to process cmd sent by client and to response to irc client
 
- #include "IRC.hpp"
+#include "IRC.hpp"
 
 IRC::IRC(){}
 
-std::vector<std::string> split( std::string const & str, std::string const delim )
+IRC::~IRC()
 {
-    std::vector<std::string> tokens;
-    size_t start;
-    size_t end = 0;
-    while ((start = str.find_first_not_of(delim, end)) != std::string::npos)
-    {
-        end = str.find(delim, start);
-        tokens.push_back(str.substr(start, end - start));
-    }
-    return tokens;
+   for (std::map<int, User *>::iterator it = _userList.begin() ; it != _userList.end() ; ++it )
+      delete it->second;
 }
 
 bool   IRC::ProcessClientMsg( t_ClientMsg const & msg )
 {
-   User  *user;
-   int   fd(msg.first);
+   User *   user;
+   int      fd(msg.first);
 
    // New user registration
    if (_userList.find(fd) == _userList.end())

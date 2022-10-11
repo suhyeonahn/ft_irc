@@ -1,10 +1,12 @@
 #ifndef CMD_HPP
 # define CMD_HPP
 
-# include "../../include/Preset.hpp"
+# include "Preset.hpp"
 # include "User.hpp"
+# include "Utils.hpp"
 
 # define TOTAL_CMD 3
+# define TOTAL_IMPLEMENTED_CMD 3
 
 //  All the client CMDS will be treated in this Class
 //  Divide them into several child classes might be a good idea
@@ -17,14 +19,13 @@ class   Cmd
     private:
 
 	    User *              _user;
-	    std::string         _cmdMsg; // original cmd msg
         int                 _cmd;
 	    std::vector<string> _params;
         std::string         _cmdList[TOTAL_CMD];
 
         void    setCmdList();
-	    void	setCmd();
-	    void	setParams();
+	    void	setCmd( string & msg );
+	    void	setParams( string const & msg );
         
         // Connection cmds
         void    PASS();
@@ -33,7 +34,7 @@ class   Cmd
 
     public:
 
-	    Cmd( User * user, string const & cmd );
+	    Cmd( User * user, string const & msg );
 	    virtual ~Cmd();
 
 	    bool	isValid() const;
