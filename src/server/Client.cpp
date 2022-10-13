@@ -18,7 +18,7 @@ bool    Client::RecvMsg(string &msg) {
 
     _msg += _buf;
     /**
-     * if msg doesn't contains seperator("\r\n"), wait until msg contains that.
+     * if msg doesn't finish by seperator("\r\n"), wait until msg contains that.
      * else update msg then clear _msg in this instance
      */
     if (_msg.find(SEP_MSG, _msg.size() - SEP_LEN) != string::npos) {
