@@ -1,7 +1,7 @@
 #include "User.hpp"
 
 User::User( int fd, string const servPw ) : _fd(fd), _servPw(servPw), _nick(DEFAULT_NAME), _uname(DEFAULT_NAME),
-    _rname(DEFAULT_NAME), _isGoodPw(false), _isRegistered(false) {}
+    _rname(DEFAULT_NAME), _isGoodPw(false), _isRegistered(false), _servOper(false) {}
 
 User::~User() {}
 

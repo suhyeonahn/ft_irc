@@ -2,6 +2,7 @@
 # define USER_HPP
 
 # include "Preset.hpp"
+# include "Channel.hpp"
 
 # define DEFAULT_NAME       "*"
 # define VALID_CHARS_NICK   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
@@ -20,7 +21,10 @@ class   User
         bool            _isGoodPw;
         bool            _isRegistered;
 
-        //std::string     _mode;
+        set<Channel *>  _joined;
+
+        // User mode
+        bool            _servOper;
 
         void    setNick( std::string const & nick );
         void    setUname( std::string const & uname );
@@ -35,6 +39,7 @@ class   User
         std::string    getUname()  const;
 
         friend class Cmd;
+
 };
 
 #endif
