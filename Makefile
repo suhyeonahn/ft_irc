@@ -6,6 +6,7 @@ SRCS		=	./src/main.cpp \
 				./src/irc/IRC.cpp \
 				./src/irc/User.cpp \
 				./src/irc/Cmd.cpp \
+				./src/irc/Channel.cpp \
 				./src/irc/Numerics.cpp \
 				./src/utils/utils.cpp
 

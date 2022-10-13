@@ -13,7 +13,14 @@ Suhyeon:
             however some CMDs' params might contain "," as a sub-param delimeter 
             ex) Command: JOIN
                 Parameters: <channel>{,<channel>} [<key>{,<key>}]
-    - Arrange folders to better visualize
-    - Implement User class
+    *//DONE//* - Arrange folders to better visualize
+    *//DONE//* - Implement User class
     - Implement Channel
     - Draw class hierarchy structure
+        =>  Q. If we use nested CMD class ( or functions ) in user( & operator & channel & channel operator ) class ?
+            --> To group the classes logically.
+            --> ex) 'User' transfoms into 'Operator' with OPER CMD.
+                    'User' is a parent class and 'Operator' is a child class.
+                    Creating a channel, a user has a pointer to a 'Channel operator' object which is a child class of 'Channel'
+                    When a user joins a channel, the user has a pointer to the 'Channel' object.
+                    each class has CMD functions accordingly.
