@@ -37,6 +37,6 @@ void    Cmd::USER(vector<t_ClientMsg> &res)
     }
 }
 
-void    Cmd::PushToRes(const string msg, vector<t_ClientMsg> &res) {
+void    Cmd::PushToRes(const string &msg, vector<t_ClientMsg> &res) {
     res.push_back(make_pair(_user->_fd, msg));
 }

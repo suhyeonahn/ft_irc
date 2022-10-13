@@ -55,7 +55,10 @@ void	Server::Watch() {
 		WaitClientMsg(GetAllFDs(), res);
 
 		//loop to send response to each clientFD
-		for(resIt = res.begin(); resIt!= res.end(); resIt++) {
+		for(resIt = res.begin(); resIt!= res.end(); ++resIt) {
+			int clientFD = resIt->first;
+			if (_clientList.find(clientFD) != _clientList.end())
+				_clientList[clientFD]->SendRes(resIt->second);
 		}
 	}
 }

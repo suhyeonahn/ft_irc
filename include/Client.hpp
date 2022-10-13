@@ -17,6 +17,7 @@ class Client {
         Client();
 
         bool        RecvMsg(string & msg);
+        void        SendRes(const string &res);
 
     public:
         Client(int fd);

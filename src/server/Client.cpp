@@ -27,3 +27,7 @@ bool    Client::RecvMsg(string &msg) {
     }
     return true;
 }
+
+void    Client::SendRes(const string &res) {
+    send(_fd, res.c_str(), res.size(), 0);
+}

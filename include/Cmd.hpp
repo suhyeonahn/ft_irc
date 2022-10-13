@@ -23,7 +23,7 @@ class   Cmd
         void    NICK(vector<t_ClientMsg> &res);
         void    USER(vector<t_ClientMsg> &res);
 
-        void    PushToRes(const string msg, vector<t_ClientMsg> &res);
+        void    PushToRes(const string &msg, vector<t_ClientMsg> &res);
     
     public:
 
