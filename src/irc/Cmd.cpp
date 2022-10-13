@@ -1,7 +1,7 @@
 #include "Cmd.hpp"
 
 Cmd::Cmd( User * user, string const & msg, std::string const & servPw ) 
-    : _user(user), _servPw(servPw), _cmd(-1)
+    : _user(user), _cmd(-1),  _servPw(servPw)
 {
     string  cpyMsg(msg);
     setCmdList();

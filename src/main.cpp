@@ -30,7 +30,7 @@ int main(int ac, char **av) {
 
     if (!isValid(ac, av, port))   
         exit(1);
-    IRC irc();
+    IRC irc;
     Server server(port, string(av[2]), irc);
     server.Init();
     server.Watch();

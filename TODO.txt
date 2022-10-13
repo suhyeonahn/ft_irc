@@ -1,6 +1,4 @@
 Kyubong:
-    - Now, i didn't implement makefile because it's not yet done.
-     => I will put makefile if it will be more compact.
     - Server:
         - Manage watch loop better
         - Manage Client quit server
