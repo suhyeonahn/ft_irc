@@ -3,6 +3,6 @@
 
 # include "Preset.hpp"
 
-std::vector<std::string> split( std::string const & str, std::string const delim );
+vector<std::string> split( std::string const & str, std::string const delim );
 
 #endif
