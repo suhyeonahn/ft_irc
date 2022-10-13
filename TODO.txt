@@ -2,7 +2,13 @@ Kyubong:
     - Server:
         - Manage watch loop better
         - Manage Client quit server
-        
+
+
+TO SEE WITH Suhyeon
+    - Cmd::setCmd() : toupper is not necessary...?
+        Cmd sent by client is already uppercase when client send. 
+    - Maybe, we can remove all std:: with using namespace (but it is just choice)
+
 Suhyeon:
     - Check special cases of Client msg for the parsing
         =>  I think it's not necessary to handle special cases at the beginning
@@ -22,3 +28,44 @@ Suhyeon:
                     Creating a channel, a user has a pointer to a 'Channel operator' object which is a child class of 'Channel'
                     When a user joins a channel, the user has a pointer to the 'Channel' object.
                     each class has CMD functions accordingly.
+
+
+ADMIN - all
+AWAY - all
+DIE - ?
+INVITE - all user in channel
+JOIN - all
+KICK - OPERATOR
+KILL - OPERATOR
+LIST - all
+MODE -all
+MOTD - all
+NAMES - all user in channel (see later)
+NICK - all(change own name ex: /nick <WILL_BE_CHANGED>)
+NOTICE- all
+OPER - all ( see later )
+PASS - all
+PING - all
+PRIVMSG - all
+PART - all
+QUIT - all
+TIME -  
+TOPIC - default all /but depend on topic mode
+USER -all
+
+COrrection
+SERVER
+- JOIN
+- KILL
+- ctrl + z / server always living (leaks)
+
+CLIENT
+-  AUTH
+- NICK
+- PRIVMSG
+- NOTICE
+- seperate priileges USER normal/OPERATOR
+
+
+
+
