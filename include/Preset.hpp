@@ -23,7 +23,8 @@
 #include <netinet/in.h> 
 #include <netdb.h>
 #include <string.h>
-
+#include <signal.h>
+#include <errno.h>
 
 
 // Color to put on stdout

@@ -34,7 +34,7 @@ class   User
         std::string    getNick()   const;
         std::string    getUname()  const;
 
-        friend class CMD;
+        friend class Cmd;
 };
 
 #endif

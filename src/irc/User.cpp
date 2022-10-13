@@ -29,15 +29,3 @@ std::string    User::getUname() const
 {
     return  _uname;
 }
-
-void    User::execute()
-{
-    switch ( _cmd )
-    {
-        case 0:  { PASS(); }
-        case 1:  { NICK(); }
-        case 2:  { USER(); }
-        default:    ;
-    }
-
-}

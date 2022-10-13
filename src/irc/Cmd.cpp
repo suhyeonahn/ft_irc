@@ -6,6 +6,8 @@ Cmd::Cmd( string const & cmd, vector<string> params, User * user)
 
 Cmd::~Cmd() {}
 
+void    Cmd::execute() {}
+
 void    Cmd::PASS()
 {
     if (_params.empty())

@@ -109,7 +109,7 @@ vector<string>  setParams( string const & msg )
     return params;
 }
 
-bool    isValid( string const & cmd, set<string> cmdList )
+bool    isValid( string const & cmd )
 {
     if (cmd.empty())
         return false;
@@ -117,7 +117,7 @@ bool    isValid( string const & cmd, set<string> cmdList )
 		|| (implementedCmd.find(cmd) != implementedCmd.end());
 }
 
-bool	isImplemented( string const & cmd, set<string> cmdList )
+bool	isImplemented( string const & cmd )
 {
     if (cmd.empty())
 		return false;
