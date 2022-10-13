@@ -28,10 +28,10 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
    // Split msg to cmd(s)
    std::vector<string>  cmds = ::split(msg.second, SEP_MSG);
 
+   initCmdList();
    // Execute cmd(s)
    for (std::vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
    {
-      initCmdList();
       string cmdStr = setCmd(*it);
       if (!isValid(cmdStr)) // Check if the cmd exists
          ; // TODO: Send an err numeric accordingly

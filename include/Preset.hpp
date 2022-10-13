@@ -46,6 +46,7 @@ using namespace std;
 class Server;
 class Client;
 class User;
+class Channel;
 
 typedef std::pair<int, string>	t_ClientMsg;
 
