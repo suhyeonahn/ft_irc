@@ -1,6 +1,6 @@
 #include "User.hpp"
 
-User::User( int fd ) : _fd(fd), _nick(DEFAULT_NAME), _uname(DEFAULT_NAME),
+User::User( int fd, string const servPw ) : _fd(fd), _servPw(servPw), _nick(DEFAULT_NAME), _uname(DEFAULT_NAME),
     _rname(DEFAULT_NAME), _isGoodPw(false), _isRegistered(false) {}
 
 User::~User() {}
@@ -28,4 +28,16 @@ std::string    User::getNick() const
 std::string    User::getUname() const
 {
     return  _uname;
+}
+
+void    User::execute()
+{
+    switch ( _cmd )
+    {
+        case 0:  { PASS(); }
+        case 1:  { NICK(); }
+        case 2:  { USER(); }
+        default:    ;
+    }
+
 }

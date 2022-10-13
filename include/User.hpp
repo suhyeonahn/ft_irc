@@ -6,15 +6,16 @@
 # define DEFAULT_NAME       "*"
 # define VALID_CHARS_NICK   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
 
-class   User // Need to add an Operator class as a child class
+class   User
 {
     
     private:
 
         int             _fd;
-        std::string     _nick; // Need to apply nickname restrictions
-        std::string     _uname;
-        std::string     _rname;
+        string  const   _servPw;
+        string          _nick; // Need to apply nickname restrictions
+        string          _uname;
+        string          _rname;
 
         bool            _isGoodPw;
         bool            _isRegistered;
@@ -27,13 +28,13 @@ class   User // Need to add an Operator class as a child class
 
     public:
 
-        User( int fd );
+        User( int fd, string const servPw );
         virtual ~User();
 
         std::string    getNick()   const;
         std::string    getUname()  const;
 
-        friend class Cmd;
+        friend class CMD;
 };
 
 #endif

@@ -21,7 +21,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg )
 
    // New user registration
    if (_userList.find(fd) == _userList.end())
-      user = (_userList[fd] = new User(fd));
+      user = (_userList[fd] = new User(fd, _pw));
    else
       user = _userList[fd];
    
@@ -31,11 +31,16 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg )
    // Execute cmd(s)
    for (std::vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
    {
-      Cmd cmd(user, *it, _pw);
-      if (!cmd.isValid()) // Check if the cmd exists
+      initCmdList();
+      string cmdStr = setCmd(*it);
+      if (!isValid(cmdStr)) // Check if the cmd exists
          ; // TODO: Send an err numeric accordingly
-      else if (cmd.isImplemented()) // Check if the cmd is implemented in our IRC
+      else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
+      {
+         vector<string> params = setParams(*it);
+         Cmd cmd = Cmd(cmdStr, params, user);
          cmd.execute();
+      }
    }
    return 0;
 }
