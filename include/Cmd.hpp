@@ -19,16 +19,18 @@ class   Cmd
         User *          _user;
 
         // Connection cmds
-        void    PASS();
-        void    NICK();
-        void    USER();
+        void    PASS(vector<t_ClientMsg> &res);
+        void    NICK(vector<t_ClientMsg> &res);
+        void    USER(vector<t_ClientMsg> &res);
+
+        void    PushToRes(const string msg, vector<t_ClientMsg> &res);
     
     public:
 
 	    Cmd( string const & cmd, vector<string> params, User *  user );
 	    virtual ~Cmd();
 
-        void    execute();
+        void    execute(vector<t_ClientMsg> &res);
 
 };
 

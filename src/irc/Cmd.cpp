@@ -5,9 +5,10 @@ Cmd::Cmd( string const & cmd, vector<string> params, User * user)
 {}
 Cmd::~Cmd() {}
 
-void    Cmd::execute() {}
+void    Cmd::execute(vector<t_ClientMsg> &res) {
+}
 
-void    Cmd::PASS()
+void    Cmd::PASS(vector<t_ClientMsg> &res)
 {
     if (_params.empty())
         ; // err numeric
@@ -15,7 +16,7 @@ void    Cmd::PASS()
         _user->_isGoodPw = true;
 }
 
-void    Cmd::NICK()
+void    Cmd::NICK(vector<t_ClientMsg> &res)
 {
     std::string const   &nick(_params[0]);
     if (nick == _user->getNick())
@@ -24,7 +25,7 @@ void    Cmd::NICK()
         _user->setNick(nick);
 }
 
-void    Cmd::USER()
+void    Cmd::USER(vector<t_ClientMsg> &res)
 {
     if (_params.size() < 4)
         ; // err numeric
@@ -34,4 +35,8 @@ void    Cmd::USER()
         _user->setRname(_params[3]);
         _user->_isRegistered = true;
     }
+}
+
+void    Cmd::PushToRes(const string msg, vector<t_ClientMsg> &res) {
+    res.push_back(make_pair(_user->_fd, msg));
 }

@@ -44,9 +44,19 @@ void	Server::Init(){
 
 
 void	Server::Watch() {
+	vector<t_ClientMsg> res;
+	vector<t_ClientMsg>::iterator resIt;
+
+
 	while (1) {
+		res.clear();
+
 		SetFDs();
-		WaitClientMsg(GetAllFDs());
+		WaitClientMsg(GetAllFDs(), res);
+
+		//loop to send response to each clientFD
+		for(resIt = res.begin(); resIt!= res.end(); resIt++) {
+		}
 	}
 }
 
@@ -97,7 +107,7 @@ int		Server::GetAllFDs() {
  * else if client send cmd => _clientList[current_client]->RecvCommand(cmd)
  * else if client disconnected => TO MANAGE THIS
  */
-void	Server::WaitClientMsg(int allFDs) {
+void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
 	string	msg;
 
 	for (int fd = 3; fd <= _lastFD && allFDs; ++fd) {
@@ -123,7 +133,7 @@ void	Server::WaitClientMsg(int allFDs) {
 					// 	client #4:
 					// 	GET / HTTP/1.1
 					// 	Host: example.com
-					_irc.ProcessClientMsg(std::make_pair(fd, msg));
+					_irc.ProcessClientMsg(std::make_pair(fd, msg), res);
 
 					cout << "client #" << fd << ":" << endl;
 					cout << CYN << msg << DFT;

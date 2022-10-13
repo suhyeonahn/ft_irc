@@ -14,7 +14,7 @@ IRC::~IRC()
       delete it->second;
 }
 
-bool   IRC::ProcessClientMsg( t_ClientMsg const & msg )
+bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 {
    User *   user;
    int      fd(msg.first);
@@ -39,8 +39,9 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg )
       {
          vector<string> params = setParams(*it);
          Cmd cmd = Cmd(cmdStr, params, user);
-         cmd.execute();
+         cmd.execute(res);
       }
    }
    return 0;
 }
+
