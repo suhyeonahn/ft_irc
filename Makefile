@@ -8,6 +8,7 @@ SRCS		=	./src/main.cpp \
 				./src/irc/Cmd.cpp \
 				./src/irc/Channel.cpp \
 				./src/irc/Numerics.cpp \
+				./src/irc/ParseCmd.cpp \
 				./src/utils/Utils.cpp
 
 OBJS		= $(SRCS:.cpp=.o)

@@ -6,6 +6,7 @@
 # include "Client.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
+# include "ParseCmd.hpp"
 # include "Cmd.hpp"
 # include "Utils.hpp"
 
@@ -13,10 +14,10 @@ class   IRC
 {
     private:
 
-        std::string const               _pw; // password
-        std::map<int, User *>           _userList;
-        std::map<std::string, Channel *> _channelList;
-        
+        std::string const                   _pw; // password
+        std::map<int, User *>               _userList;
+        std::map<std::string, Channel *>    _channelList;
+
     public:
 
         IRC();

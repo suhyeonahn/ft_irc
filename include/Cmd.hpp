@@ -5,9 +5,6 @@
 # include "User.hpp"
 # include "Utils.hpp"
 
-# define TOTAL_CMD 3
-# define TOTAL_IMPLEMENTED_CMD 3
-
 //  All the client CMDS will be treated in this Class
 //  to categorize the CMDS
 //  Possible Categories :
@@ -17,29 +14,19 @@ class   Cmd
     
     private:
 
-	    User *              _user;
-        int                 _cmd;
-        std::string         _servPw;
-	    std::vector<string> _params;
-        std::string         _cmdList[TOTAL_CMD];
+        string          _cmd;
+	    vector<string>  _params;
+        User *          _user;
 
-        void    setCmdList();
-	    void	setCmd( string & msg );
-	    void	setParams( string const & msg );
-        
-        // Plant these cmds in 'User', 'Operator', 'Channel', 'Channel Operator' classes accordingly.
         // Connection cmds
         void    PASS();
         void    NICK();
         void    USER();
-
+    
     public:
 
-	    Cmd( User * user, string const & msg, std::string const & servPw );
+	    Cmd( string const & cmd, vector<string> params, User *  user );
 	    virtual ~Cmd();
-
-	    bool	isValid() const;
-	    bool	isImplemented() const;
 
         void    execute();
 
