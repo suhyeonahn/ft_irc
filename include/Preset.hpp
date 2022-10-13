@@ -45,6 +45,7 @@ using namespace std;
 // Declaration classes to use in irc
 class Server;
 class Client;
+class User;
 
 typedef std::pair<int, string>	t_ClientMsg;
 
