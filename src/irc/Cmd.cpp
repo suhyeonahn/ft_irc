@@ -6,6 +6,7 @@ Cmd::Cmd( string const & cmd, vector<string> params, User * user)
 Cmd::~Cmd() {}
 
 void    Cmd::execute(vector<t_ClientMsg> &res) {
+
 }
 
 void    Cmd::PASS(vector<t_ClientMsg> &res)

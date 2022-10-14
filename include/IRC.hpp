@@ -9,6 +9,7 @@
 # include "ParseCmd.hpp"
 # include "Cmd.hpp"
 # include "Utils.hpp"
+# include "Numerics.hpp"
 
 class   IRC
 {
