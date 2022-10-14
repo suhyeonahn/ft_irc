@@ -19,6 +19,8 @@ class Server {
 		fd_set				_fdReader;
 
 		void	AcceptClient();
+		void 	DeleteClient(int fd);
+
 		void	SetFDs();
 		int		GetAllFDs();
 		void	WaitClientMsg(int allFDs, vector<t_ClientMsg> &res);

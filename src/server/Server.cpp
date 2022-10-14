@@ -47,7 +47,6 @@ void	Server::Watch() {
 	vector<t_ClientMsg> res;
 	vector<t_ClientMsg>::iterator resIt;
 
-
 	while (1) {
 		res.clear();
 
@@ -74,6 +73,13 @@ void Server::AcceptClient() {
 	else {
 		cout << "New client on socket #" << clientFD << endl;
 		_clientList.insert(make_pair(clientFD, new Client(clientFD)));
+	}
+}
+
+void Server::DeleteClient(int fd) {
+	if (_clientList.find(fd) != _clientList.end()) {
+		delete _clientList[fd];
+		_clientList.erase(fd);
 	}
 }
 
@@ -122,8 +128,17 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
 			else {
 				// if clientFD
 				msg.clear();
-				_clientList[fd]->RecvMsg(msg);
-				if (!msg.empty()) {
+				if (!_clientList[fd]->RecvMsg(msg)) {
+					//Although select() said client socket is changed,
+					//if lengh of buffer sent by client is , client socket is disconnected.
+					//So, delete client in _clientList
+
+					//TODO: delete client from channel
+					//like DeleteClientFromChannel(fd)
+					//(this code will be implemented after finish JOIN functionality)
+					DeleteClient(fd);
+				}
+				else if (!msg.empty()) {
 					//TODO: create IRC class to process cmd sent by client and to response to irc client
 					// In this moment test with this command(or with hexchat) to get cmd saved in this cmd variable.
 					// TERMINAL 1: ./ircserv <PORT>

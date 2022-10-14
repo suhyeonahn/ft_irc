@@ -12,7 +12,8 @@ Client::~Client() {
 
 bool    Client::RecvMsg(string &msg) {
     ssize_t len = recv(_fd, _buf, BUF_SIZE, 0);
-    if (len <= 0)
+    //len : -1 if error, 0 if fd is disconnected
+    if (len <= 0) 
         return false;
     _buf[len] = '\0';
 
