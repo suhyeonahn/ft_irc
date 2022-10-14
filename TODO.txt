@@ -69,3 +69,18 @@ CLIENT
 
 
 
+# TO test with nc command
+In this moment test with this command(or with hexchat) to get cmd saved in this cmd variable.
+TERMINAL 1: ./ircserv <PORT>
+TERMINAL 2: echo -ne 'GET / HTTP/1.1\r\nHost: example.com\r\n\r\n' | nc 127.0.0.1 <PORT>
+
+It will send like :
+    ❯ ./ircserv 6666 1234
+
+    FT_IRC Server up to be inited to 6666
+    New client on socket #4
+    client #4:
+    GET / HTTP/1.1
+    Host: example.com
+
+

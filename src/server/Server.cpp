@@ -139,20 +139,9 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
 					DeleteClient(fd);
 				}
 				else if (!msg.empty()) {
-					//TODO: create IRC class to process cmd sent by client and to response to irc client
-					// In this moment test with this command(or with hexchat) to get cmd saved in this cmd variable.
-					// TERMINAL 1: ./ircserv <PORT>
-					// TERMINAL 2: echo -ne 'GET / HTTP/1.1\r\nHost: example.com\r\n\r\n' | nc 127.0.0.1 <PORT>
-					// It will be send like :
-
-					// ❯ ./ircserv 6666 1234
-					// 	FT_IRC Server up to be inited to 6666
-					// 	New client on socket #4
-					// 	client #4:
-					// 	GET / HTTP/1.1
-					// 	Host: example.com
 					_irc.ProcessClientMsg(std::make_pair(fd, msg), res);
 
+					//LINE TO DEBUG
 					cout << "client #" << fd << ":" << endl;
 					cout << CYN << msg << DFT;
 				}
