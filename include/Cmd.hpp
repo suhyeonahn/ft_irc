@@ -4,6 +4,7 @@
 # include "Preset.hpp"
 # include "User.hpp"
 # include "Utils.hpp"
+# include "Numerics.hpp"
 
 //  All the client CMDS will be treated in this Class
 //  to categorize the CMDS
@@ -14,23 +15,26 @@ class   Cmd
     
     private:
 
-        string          _cmd;
-	    vector<string>  _params;
-        User *          _user;
+        string              _cmd;
+	    vector<string>      _params;
+        User *              _user;
+        map<int, User *>    _userList;
 
         // Connection cmds
-        void    PASS(vector<t_ClientMsg> &res);
-        void    NICK(vector<t_ClientMsg> &res);
-        void    USER(vector<t_ClientMsg> &res);
+        void    PASS( vector<t_ClientMsg> & res );
+        void    NICK( vector<t_ClientMsg> & res );
+        void    USER( vector<t_ClientMsg> & res );
 
-        void    PushToRes(const string &msg, vector<t_ClientMsg> &res);
+        void    PushToRes( const string & msg, vector<t_ClientMsg> & res );
     
     public:
 
-	    Cmd( string const & cmd, vector<string> params, User *  user );
+	    Cmd( string const & cmd, vector<string> params, User *  user, map<int, User *> & userList );
 	    virtual ~Cmd();
 
-        void    execute(vector<t_ClientMsg> &res);
+        User *  getUserByNick( string const & nick ) const;
+
+        void    execute( vector<t_ClientMsg> & res );
 
 };
 

@@ -6,9 +6,10 @@
 //  A numeric reply SHOULD contain the target of the reply as the first parameter of the message.
 //  A numeric reply is not allowed to originate from a client.
 
-
 #ifndef NUMERICS_HPP
 # define NUMERICS_HPP
+
+# include "Preset.hpp"
 
 //REPLIES
 #define RPL_WELCOME 1
@@ -105,6 +106,7 @@
 #define ERR_INPUTTOOLONG 417
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_NOMOTD 422
+#define ERR_NONICKNAMEGIVEN 431
 #define ERR_ERRONEUSNICKNAME 432
 #define ERR_NICKNAMEINUSE 433
 #define ERR_USERNOTINCHANNEL 441
@@ -138,5 +140,7 @@
 #define ERR_SASLTOOLONG 905
 #define ERR_SASLABORTED 906
 #define ERR_SASLALREADY 907
+
+string  getServReply(User *user, int code, string params[]);
 
 #endif

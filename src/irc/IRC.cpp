@@ -38,10 +38,9 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
       else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
       {
          vector<string> params = setParams(*it);
-         Cmd cmd = Cmd(cmdStr, params, user);
+         Cmd cmd = Cmd(cmdStr, params, user, _userList);
          cmd.execute(res);
       }
    }
    return 0;
 }
-
