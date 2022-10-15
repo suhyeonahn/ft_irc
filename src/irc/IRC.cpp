@@ -9,8 +9,8 @@ IRC::~IRC()
    for (std::map<int, User *>::iterator it = _userList.begin() ; it != _userList.end() ; ++it )
       delete it->second;
 
-   for (std::map<std::string, Channel *>::iterator it = _channelList.begin() ; 
-      it != _channelList.end() ; ++it )
+   for (std::map<std::string, Channel *>::iterator it = _chanList.begin() ; 
+      it != _chanList.end() ; ++it )
       delete it->second;
 }
 
@@ -21,9 +21,8 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
    string   cmdStr = "";
 
    // New user registration
-   if (_userList.find(fd) == _userList.end()) {
+   if (_userList.find(fd) == _userList.end()) 
       user = (_userList[fd] = new User(fd, _pw));
-   }
    else
       user = _userList[fd];
    
@@ -44,7 +43,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
       else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
       {
          vector<string> params = setParams(*it);
-         Cmd cmd(cmdStr, params, user, _userList);
+         Cmd cmd(cmdStr, params, user, _userList, _chanList);
          cmd.execute(res);
       }
    }

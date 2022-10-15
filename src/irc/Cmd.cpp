@@ -1,12 +1,19 @@
 #include "Cmd.hpp"
-Cmd::Cmd( string const & cmd, vector<string> params, User * user, map<int, User *> & userList )
-    : _cmd(cmd), _params(params), _user(user), _userList(userList) {}
+Cmd::Cmd(
+        string const & cmd,
+        vector<string> params,
+        User * user,
+        map<int, User *> & userList,
+        map<string, Channel *> & chanList
+    ) : _cmd(cmd), _params(params), _user(user), _userList(userList), _chanList(chanList) { }
 
 Cmd::~Cmd() {}
 
 void    Cmd::execute(vector<t_ClientMsg> & res ) {
     if (_cmd == "PASS") PASS(res);
     else if (_cmd == "NICK") NICK(res);
+    else if (_cmd == "USER") USER(res);
+    else if (_cmd == "JOIN") JOIN(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -64,14 +71,52 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
 {
     string  servReply;
 
-    if (_params.size() < 4)
-        ; // err numeric
-    else
-    {
+    // when client send again USER
+    if (_user->_isRegistered)
+        servReply = getServReply(_user, ERR_ALREADYREGISTERED, (string[]){ _cmd });
+    // when not enough param
+    else if (_params.size() < 4) 
+        servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
+    else {
         _user->setUname(_params[0]);
         _user->setRname(_params[3]);
         _user->_isRegistered = true;
     }
+
+    if (!servReply.empty())
+        PushToRes(_user->_fd, servReply, res);
+}
+
+// i decided to do only one channel at the same time
+// so, let's do not manage multiple channel join and local channel:)
+// like : /JOIN #test1, #test2.... or /JOIN &test1 
+// Thus, if client send multiple join, send error(ERR_TOOMANYCHANNELS)
+void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
+    string  servReply;
+    Channel *chan;
+
+    //ERROR_RPLY
+    if (_params.size() < 1) 
+        servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
+    else {
+        //TODO: capsulize this block in a function which returns boolean.
+        vector<string>::iterator it;
+        int                      sharp_count = 0;
+
+        for (it = _params.begin(); it != _params.end(); ++it)
+            if (!(*it).empty() && (*it)[0] == '#') ++sharp_count;
+        if (sharp_count > 1)
+            servReply = getServReply(_user, ERR_TOOMANYCHANNELS, (string[]){ _cmd });
+    }
+
+    if (_chanList.find(_params[0]) == _chanList.end()) 
+        _chanList[_params[0]] = (chan = new Channel(_params[0], _user));
+    else 
+        chan = _chanList[_params[0]];
+
+    if (chan->_topic.size())
+        servReply = getServReply(_user, RPL_TOPIC, (string[]){ chan->_topic });
+
 
     if (!servReply.empty())
         PushToRes(_user->_fd, servReply, res);

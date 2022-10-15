@@ -3,13 +3,14 @@
 
 # include "Preset.hpp"
 # include "User.hpp"
+# include "Cmd.hpp"
 
 class   Channel
 {
     
     private:
 
-        string const    _name;
+        string  const   &_name;
         set<User *>     _userList;  // joined users
         string          _topic;
 
@@ -20,7 +21,9 @@ class   Channel
 
         Channel( string const & name, User * creator );
         virtual ~Channel();
-
+    
+        friend class Cmd;
+        friend class IRC;
 };
 
 #endif
