@@ -3,6 +3,7 @@
 
 # include "Preset.hpp"
 # include "User.hpp"
+# include "Cmd.hpp"
 
 class   Channel
 {
@@ -21,6 +22,7 @@ class   Channel
         Channel( string const & name, User * creator );
         virtual ~Channel();
     
+        friend class Cmd;
         friend class IRC;
 };
 

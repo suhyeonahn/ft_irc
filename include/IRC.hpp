@@ -15,9 +15,9 @@ class   IRC
 {
     private:
 
-        string const                   _pw; // password
-        map<int, User *>               _userList;
-        map<std::string, Channel *>    _channelList;
+        string const            _pw; // password
+        map<int, User *>        _userList;
+        map<string, Channel *>  _chanList;
 
     public:
         IRC(const string &pw);

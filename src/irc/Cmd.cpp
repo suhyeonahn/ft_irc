@@ -1,6 +1,11 @@
 #include "Cmd.hpp"
-Cmd::Cmd( string const & cmd, vector<string> params, User * user, map<int, User *> & userList )
-    : _cmd(cmd), _params(params), _user(user), _userList(userList) {}
+Cmd::Cmd(
+        string const & cmd,
+        vector<string> params,
+        User * user,
+        map<int, User *> & userList,
+        map<string, Channel *> & chanList
+    ) : _cmd(cmd), _params(params), _user(user), _userList(userList), _chanList(chanList) { }
 
 Cmd::~Cmd() {}
 
@@ -8,6 +13,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     if (_cmd == "PASS") PASS(res);
     else if (_cmd == "NICK") NICK(res);
     else if (_cmd == "USER") USER(res);
+    else if (_cmd == "JOIN") JOIN(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -79,6 +85,15 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
 
     if (!servReply.empty())
         PushToRes(_user->_fd, servReply, res);
+}
+
+void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
+    Channel *chan;
+
+    if (_chanList.find(_params[0]) == _chanList.end()) 
+        _chanList[_params[0]] = (chan = new Channel(_params[0], _user));
+    else 
+        chan = _chanList[_params[0]];
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
