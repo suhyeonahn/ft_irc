@@ -31,20 +31,24 @@ string  getServReply(User *user, int code, string params[])
 	{
 		case RPL_WELCOME: // 001
 			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
+		case RPL_TOPIC: // 332
+			ss << ":" << params[0]; break; 
+		case ERR_TOOMANYCHANNELS:
+			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461
 			ss  << params[0] << " :Not enough parameters"; break;
 		case ERR_ALREADYREGISTERED: // 462
-			ss  << " :You may not reregister"; break;
+			ss  << ":You may not reregister"; break;
 		case ERR_PASSWDMISMATCH: // 464
-			ss  << " :Password incorrect"; break;
+			ss  << ":Password incorrect"; break;
 		case ERR_NONICKNAMEGIVEN: // 431
-			ss  << " :No nickname given"; break;
+			ss  << ":No nickname given"; break;
         case ERR_ERRONEUSNICKNAME: // 432
-            ss  << params[0] << " :Erroneus nickname"; break;
+            ss  << params[0] << ":Erroneus nickname"; break;
         case ERR_NICKNAMEINUSE: // 433
-            ss  << params[0] << " :Nickname is already in use"; break;
+            ss  << params[0] << ":Nickname is already in use"; break;
 		default: break;
 
 	}
