@@ -51,6 +51,7 @@ void    Cmd::NICK( vector<t_ClientMsg> & res )
             servReply = getServReply(_user, ERR_NICKNAMEINUSE, (string[]){ _cmd }); //433
         else {
             _user->setNick(nick);
+            //reply welcome msg to client
             Cmd::PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
         }
     }
