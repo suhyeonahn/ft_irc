@@ -1,12 +1,12 @@
 #include "Cmd.hpp"
-
 Cmd::Cmd( string const & cmd, vector<string> params, User * user, map<int, User *> & userList )
     : _cmd(cmd), _params(params), _user(user), _userList(userList) {}
 
 Cmd::~Cmd() {}
 
-void    Cmd::execute( vector<t_ClientMsg> & res ) {
-
+void    Cmd::execute(vector<t_ClientMsg> & res ) {
+    if (_cmd == "PASS") PASS(res);
+    else if (_cmd == "NICK") NICK(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -32,7 +32,7 @@ void    Cmd::PASS( vector<t_ClientMsg> & res )
         servReply = getServReply(_user, ERR_PASSWDMISMATCH, NULL); //464
     
     if (!servReply.empty())
-        PushToRes(servReply, res);
+        PushToRes(_user->_fd, servReply, res);
 }
 
 void    Cmd::NICK( vector<t_ClientMsg> & res )
@@ -44,16 +44,20 @@ void    Cmd::NICK( vector<t_ClientMsg> & res )
     else
     {
         string const   &nick(_params[0]);
-        if (!_user->isValidNick(nick))
+
+        if (!_user->isValidNick(nick)) 
             servReply = getServReply(_user, ERR_ERRONEUSNICKNAME, (string[]){ _cmd }); //432
-        else if (getUserByNick(nick))
+        else if (getUserByNick(nick)) 
             servReply = getServReply(_user, ERR_NICKNAMEINUSE, (string[]){ _cmd }); //433
-        else
+        else {
             _user->setNick(nick);
+            //reply welcome msg to client
+            Cmd::PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
+        }
     }
 
     if (!servReply.empty())
-        PushToRes(servReply, res);
+        PushToRes(_user->_fd, servReply, res);
 }
 
 void    Cmd::USER( vector<t_ClientMsg> & res )
@@ -70,9 +74,9 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
     }
 
     if (!servReply.empty())
-        PushToRes(servReply, res);
+        PushToRes(_user->_fd, servReply, res);
 }
 
-void    Cmd::PushToRes( const string &msg, vector<t_ClientMsg> &res ) {
-    res.push_back(make_pair(_user->_fd, msg));
+void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
+    res.push_back(make_pair(fd, msg));
 }
