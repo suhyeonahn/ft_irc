@@ -39,15 +39,18 @@
 #  define DFT "\033[0m"
 # endif
 
+
+# define HOST "irc-suky.42paris.fr"
+
 # define SEP_MSG "\r\n"
 # define SEP_LEN 2
 
 using namespace std;
 
 // Declaration classes to use in irc
+class User;
 class Server;
 class Client;
-class User;
 class Channel;
 
 typedef std::pair<int, string>	t_ClientMsg;

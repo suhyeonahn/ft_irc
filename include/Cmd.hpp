@@ -25,17 +25,18 @@ class   Cmd
         void    NICK( vector<t_ClientMsg> & res );
         void    USER( vector<t_ClientMsg> & res );
 
-        void    PushToRes( const string & msg, vector<t_ClientMsg> & res );
     
     public:
-
-	    Cmd( string const & cmd, vector<string> params, User *  user, map<int, User *> & userList );
+        Cmd( string const & cmd, vector<string> params, User * user, map<int, User *> & userList );
 	    virtual ~Cmd();
 
         User *  getUserByNick( string const & nick ) const;
 
         void    execute( vector<t_ClientMsg> & res );
 
+        //Put static to use without Cmd's instance
+        //see line 40 in IRC.cpp - if (!isValid(cmdStr){...}) 
+        static void    PushToRes( int fd, const string & msg, vector<t_ClientMsg> & res );
 };
 
 #endif

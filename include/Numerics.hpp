@@ -10,6 +10,7 @@
 # define NUMERICS_HPP
 
 # include "Preset.hpp"
+# include "User.hpp"
 
 //REPLIES
 #define RPL_WELCOME 1
@@ -142,5 +143,6 @@
 #define ERR_SASLALREADY 907
 
 string  getServReply(User *user, int code, string params[]);
+string	get3DigitCode(int code);
 
 #endif
