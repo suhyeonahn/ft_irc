@@ -20,8 +20,7 @@ class   IRC
         map<std::string, Channel *>    _channelList;
 
     public:
-
-        IRC();
+        IRC(const string &pw);
         virtual ~IRC();
 
         bool    ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);

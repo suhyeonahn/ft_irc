@@ -26,12 +26,12 @@ int main(int ac, char **av) {
 	signal(SIGQUIT, handleStop);
 
     int     port;
-    string  password;
+    string  password = av[2];
 
     if (!isValid(ac, av, port))   
         exit(1);
-    IRC irc;
-    Server server(port, string(av[2]), irc);
+    IRC irc(password);
+    Server server(port, password, irc);
     server.Init();
     server.Watch();
 

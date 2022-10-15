@@ -5,8 +5,9 @@ Cmd::Cmd( string const & cmd, vector<string> params, User * user, map<int, User 
 
 Cmd::~Cmd() {}
 
-void    Cmd::execute( vector<t_ClientMsg> & res ) {
-
+void    Cmd::execute(vector<t_ClientMsg> & res ) {
+    if (_cmd == "PASS") PASS(res);
+    else if (_cmd == "NICK") NICK(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -44,12 +45,19 @@ void    Cmd::NICK( vector<t_ClientMsg> & res )
     else
     {
         string const   &nick(_params[0]);
-        if (!_user->isValidNick(nick))
+
+        if (!_user->isValidNick(nick)) {
+            std::cout << "HERE1\n";
             servReply = getServReply(_user, ERR_ERRONEUSNICKNAME, (string[]){ _cmd }); //432
-        else if (getUserByNick(nick))
+        }
+        else if (getUserByNick(nick)) {
+            std::cout << "HERE2\n";
             servReply = getServReply(_user, ERR_NICKNAMEINUSE, (string[]){ _cmd }); //433
-        else
+        }
+        else {
+            // servReply = getServReply(_user, -1, (string[]){ _cmd });
             _user->setNick(nick);
+        }
     }
 
     if (!servReply.empty())

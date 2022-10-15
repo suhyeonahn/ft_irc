@@ -2,7 +2,7 @@
 
 #include "IRC.hpp"
 
-IRC::IRC() : _pw() {}
+IRC::IRC( const string &pw ) : _pw(pw) {}
 
 IRC::~IRC()
 {
