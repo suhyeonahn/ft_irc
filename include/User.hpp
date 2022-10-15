@@ -30,13 +30,15 @@ class   User
         void    setUname( std::string const & uname );
         void    setRname( std::string const & rname );
 
+        bool    isValidNick( string const & nick );
+
     public:
 
         User( int fd, string const servPw );
         virtual ~User();
 
-        std::string    getNick()   const;
-        std::string    getUname()  const;
+        string    getNick()   const;
+        string    getUname()  const;
 
         friend class Cmd;
 

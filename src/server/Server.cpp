@@ -139,7 +139,7 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
 					DeleteClient(fd);
 				}
 				else if (!msg.empty()) {
-					_irc.ProcessClientMsg(std::make_pair(fd, msg), res);
+					_irc.ProcessClientMsg(make_pair(fd, msg), res);
 
 					//LINE TO DEBUG
 					cout << "client #" << fd << ":" << endl;

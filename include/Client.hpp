@@ -4,8 +4,6 @@
 # include "Preset.hpp"
 
 # define BUF_SIZE 512
-# define SEP_MSG "\r\n"
-# define SEP_LEN 2
 
 class Client {
     private:
