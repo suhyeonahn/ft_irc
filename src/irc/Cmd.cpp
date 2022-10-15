@@ -7,6 +7,7 @@ Cmd::~Cmd() {}
 void    Cmd::execute(vector<t_ClientMsg> & res ) {
     if (_cmd == "PASS") PASS(res);
     else if (_cmd == "NICK") NICK(res);
+    else if (_cmd == "USER") USER(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -64,10 +65,13 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
 {
     string  servReply;
 
-    if (_params.size() < 4)
-        ; // err numeric
-    else
-    {
+    // when client send again USER
+    if (_user->_isRegistered)
+        servReply = getServReply(_user, ERR_ALREADYREGISTERED, (string[]){ _cmd });
+    // when not enough param
+    else if (_params.size() < 4) 
+        servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
+    else {
         _user->setUname(_params[0]);
         _user->setRname(_params[3]);
         _user->_isRegistered = true;

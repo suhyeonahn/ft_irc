@@ -3,6 +3,7 @@
 
 # include "Preset.hpp"
 # include "User.hpp"
+# include "Channel.hpp"
 # include "Utils.hpp"
 # include "Numerics.hpp"
 
@@ -15,10 +16,11 @@ class   Cmd
     
     private:
 
-        string              _cmd;
-	    vector<string>      _params;
-        User *              _user;
-        map<int, User *>    _userList;
+        string                  _cmd;
+	    vector<string>          _params;
+        User *                  _user;
+        map<int, User *>        _userList;
+        map<string, Channel *>  _chanList;
 
         // Connection cmds
         void    PASS( vector<t_ClientMsg> & res );

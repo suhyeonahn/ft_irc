@@ -4,11 +4,6 @@ Kyubong:
         - Manage Client quit server
 
 
-TO SEE WITH Suhyeon
-    - Cmd::setCmd() : toupper is not necessary...?
-        Cmd sent by client is already uppercase when client send. 
-    - Maybe, we can remove all std:: with using namespace (but it is just choice)
-
 Suhyeon:
     - Check special cases of Client msg for the parsing
         =>  I think it's not necessary to handle special cases at the beginning
