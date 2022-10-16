@@ -2,6 +2,7 @@
 # define CMD_HPP
 
 # include "Preset.hpp"
+# include "ParseCmd.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
 # include "Utils.hpp"

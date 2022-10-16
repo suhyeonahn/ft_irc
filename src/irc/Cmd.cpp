@@ -87,6 +87,8 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
         PushToRes(_user->_fd, servReply, res);
 }
 
+
+
 // i decided to do only one channel at the same time
 // so, let's do not manage multiple channel join and local channel:)
 // like : /JOIN #test1, #test2.... or /JOIN &test1 
@@ -98,16 +100,8 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
     //ERROR_RPLY
     if (_params.size() < 1) 
         servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
-    else {
-        //TODO: capsulize this block in a function which returns boolean.
-        vector<string>::iterator it;
-        int                      sharp_count = 0;
-
-        for (it = _params.begin(); it != _params.end(); ++it)
-            if (!(*it).empty() && (*it)[0] == '#') ++sharp_count;
-        if (sharp_count > 1)
-            servReply = getServReply(_user, ERR_TOOMANYCHANNELS, (string[]){ _cmd });
-    }
+    else if (isMultiChan(_params))
+        servReply = getServReply(_user, ERR_TOOMANYCHANNELS, (string[]){ _cmd });
 
     if (_chanList.find(_params[0]) == _chanList.end()) 
         _chanList[_params[0]] = (chan = new Channel(_params[0], _user));

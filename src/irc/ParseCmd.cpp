@@ -129,3 +129,14 @@ bool	isImplemented( string const & cmd )
 		return false;
 	return implementedCmd.find(cmd) != implementedCmd.end();
 }
+
+bool isMultiChan(vector<string> params) {
+    vector<string>::iterator    it;
+    int                         sharp_count = 0;
+
+    for (it = params.begin(); it != params.end(); ++it) {
+        if (!(*it).empty() && (*it)[0] == '#') ++sharp_count;
+        if (sharp_count > 1) return true;
+    }
+    return false;
+}
