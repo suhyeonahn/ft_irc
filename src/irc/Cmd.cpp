@@ -88,11 +88,33 @@ void    Cmd::USER( vector<t_ClientMsg> & res )
 }
 
 
+//FIXME: put error case etc
+// ERR_NEEDMOREPARAMS (461)
+// ERR_NOSUCHCHANNEL (403)
+// ERR_NOTONCHANNEL (442)
+// ERR_CHANOPRIVSNEEDED (482)
+// RPL_NOTOPIC (331)
+// RPL_TOPIC (332)
+// RPL_TOPICWHOTIME (333)
+void Cmd::TOPIC( vector<t_ClientMsg> & res) {
+    string  servReply;
+    Channel *chan;
+
+    //ERROR RPLY
+    
+    //No error    
+    chan = _chanList[_params[0]];
+    servReply = getServReply(_user, RPL_TOPIC, (string[]){ chan->_topic });
+
+    if (!servReply.empty())
+        PushToRes(_user->_fd, servReply, res);
+}
 
 // i decided to do only one channel at the same time
 // so, let's do not manage multiple channel join and local channel:)
 // like : /JOIN #test1, #test2.... or /JOIN &test1 
 // Thus, if client send multiple join, send error(ERR_TOOMANYCHANNELS)
+// JOIN(client) - resp(server) -> MODE(client) -resp(server) -> WHO(client)...
 void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
     string  servReply;
     Channel *chan;
@@ -102,15 +124,16 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
         servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
     else if (isMultiChan(_params))
         servReply = getServReply(_user, ERR_TOOMANYCHANNELS, (string[]){ _cmd });
+    else {
+        //No error
+        if (_chanList.find(_params[0]) == _chanList.end()) 
+            _chanList[_params[0]] = (chan = new Channel(_params[0], _user));
+        else 
+            chan = _chanList[_params[0]];
 
-    if (_chanList.find(_params[0]) == _chanList.end()) 
-        _chanList[_params[0]] = (chan = new Channel(_params[0], _user));
-    else 
-        chan = _chanList[_params[0]];
-
-    if (chan->_topic.size())
-        servReply = getServReply(_user, RPL_TOPIC, (string[]){ chan->_topic });
-
+        if (chan->_topic.size()) 
+            TOPIC(res);
+    }
 
     if (!servReply.empty())
         PushToRes(_user->_fd, servReply, res);

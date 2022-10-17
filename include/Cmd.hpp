@@ -29,6 +29,7 @@ class   Cmd
         void    NICK( vector<t_ClientMsg> & res );
         void    USER( vector<t_ClientMsg> & res );
         void    JOIN( vector<t_ClientMsg> & res );
+        void    TOPIC( vector<t_ClientMsg> & res );
 
     
     public:
