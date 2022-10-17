@@ -47,12 +47,14 @@ string  getServReply(User *user, int code, string params[])
 			ss  << ":You may not reregister"; break;
 		case ERR_PASSWDMISMATCH: // 464
 			ss  << ":Password incorrect"; break;
+		case ERR_BADCHANMASK: //476
+			ss	<< params[0] << " :Bad Channel Mask"; break;
 		case ERR_NONICKNAMEGIVEN: // 431
 			ss  << ":No nickname given"; break;
         case ERR_ERRONEUSNICKNAME: // 432
-            ss  << params[0] << ":Erroneus nickname"; break;
+            ss  << params[0] << " :Erroneus nickname"; break;
         case ERR_NICKNAMEINUSE: // 433
-            ss  << params[0] << ":Nickname is already in use"; break;
+            ss  << params[0] << " :Nickname is already in use"; break;
 		default: break;
 
 	}

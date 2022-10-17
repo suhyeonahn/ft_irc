@@ -5,6 +5,10 @@
 # include "User.hpp"
 # include "Cmd.hpp"
 
+# define CHAN_PREFIX '#'
+# define CHAN_INVALID_CHAR "\a,: "
+
+
 class   Channel
 {
     
@@ -22,7 +26,8 @@ class   Channel
         Channel( string const & name, User * creator );
         virtual ~Channel();
 
-        
+        static bool IsPrefix(char c);
+        static bool IsValidName(const string &name);
     
         friend class Cmd;
         friend class IRC;
