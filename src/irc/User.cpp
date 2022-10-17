@@ -37,6 +37,11 @@ bool    User::isValidNick( string const & nick )
     return true;
 }
 
+void    User::join( Channel * chan )
+{
+    _joined.insert(chan);
+}
+
 string    User::getNick()  const
 {
     return  _nick;
