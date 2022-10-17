@@ -32,8 +32,8 @@ class   Cmd
         void    JOIN( vector<t_ClientMsg> & res );
         void    TOPIC( vector<t_ClientMsg> & res );
         void    NAMES( vector<t_ClientMsg> & res );
+        void    INVITE( vector<t_ClientMsg> & res );
 
-    
     public:
         Cmd( 
             string const & cmd,
@@ -44,7 +44,7 @@ class   Cmd
         );
 	    virtual ~Cmd();
 
-        User *  getUserByNick( string const & nick ) const;
+        User *           getUserByNick( string const & nick ) const;
 
         void    execute( vector<t_ClientMsg> & res );
 

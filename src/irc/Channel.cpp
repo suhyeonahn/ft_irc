@@ -9,7 +9,6 @@ Channel::~Channel() {
 }
 
 
-
 bool Channel::IsPrefix( char c ) {
     if (c == CHAN_PREFIX) return true;
     return false;
@@ -24,4 +23,25 @@ bool Channel::IsValidName(const string &name) {
     for (it = nameSet.begin(); it != nameSet.end() ; it++)
         if (InvalidChars.find(*it) != string::npos) return false;
     return true;
+}
+
+string  Channel::getName() const
+{
+    return _name;
+}
+
+string  Channel::getNicks() const
+{
+    string nicks = "";
+
+    for (set<User *>::iterator it(_userList.begin()) ; it != _userList.end() 
+                    ; ++it)
+    {
+                    User * user = *it;
+                    nicks += user->getNick();
+                    nicks += " ";
+    }
+    nicks.erase(nicks.end() - 1); // Remove last " " Char
+    
+    return _name;
 }

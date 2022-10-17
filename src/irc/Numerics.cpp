@@ -38,9 +38,9 @@ string  getServReply(User *user, int code, string params[])
 		case RPL_ENDOFNAMES:
 			ss << params[0] << " :End of /NAMES list"; break;
 		case ERR_TOOMANYCHANNELS:
-			ss << ":You have joined too many channels"; break;
+			ss	<< ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
-			ss << params[0] << " :Unknown command"; break;
+			ss	<< params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461
 			ss  << params[0] << " :Not enough parameters"; break;
 		case ERR_ALREADYREGISTERED: // 462
@@ -55,6 +55,8 @@ string  getServReply(User *user, int code, string params[])
             ss  << params[0] << " :Erroneus nickname"; break;
         case ERR_NICKNAMEINUSE: // 433
             ss  << params[0] << " :Nickname is already in use"; break;
+		case ERR_NOSUCHCHANNEL: // 403
+			ss	<< params[0] << " :No such channel"; break;
 		default: break;
 
 	}
