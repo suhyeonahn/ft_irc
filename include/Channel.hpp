@@ -21,6 +21,8 @@ class   Channel
 
         Channel( string const & name, User * creator );
         virtual ~Channel();
+
+        
     
         friend class Cmd;
         friend class IRC;

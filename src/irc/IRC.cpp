@@ -6,10 +6,10 @@ IRC::IRC( const string &pw ) : _pw(pw) {}
 
 IRC::~IRC()
 {
-   for (std::map<int, User *>::iterator it = _userList.begin() ; it != _userList.end() ; ++it )
+   for (map<int, User *>::iterator it = _userList.begin() ; it != _userList.end() ; ++it )
       delete it->second;
 
-   for (std::map<std::string, Channel *>::iterator it = _chanList.begin() ; 
+   for (map<string, Channel *>::iterator it = _chanList.begin() ; 
       it != _chanList.end() ; ++it )
       delete it->second;
 }
@@ -27,7 +27,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
       user = _userList[fd];
    
    // Split msg to cmd(s)
-   std::vector<string>  cmds = ::split(msg.second, SEP_MSG);
+   vector<string>  cmds = ::split(msg.second, SEP_MSG);
 
    initCmdList();
 

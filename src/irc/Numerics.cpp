@@ -32,7 +32,11 @@ string  getServReply(User *user, int code, string params[])
 		case RPL_WELCOME: // 001
 			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
 		case RPL_TOPIC: // 332
-			ss << ":" << params[0]; break; 
+			ss << ":" << params[0]; break;
+		case RPL_NAMREPLY: // 353
+			ss << params[0] << " :" << params[1]; break;
+		case RPL_ENDOFNAMES:
+			ss << params[0] << " :End of /NAMES list"; break;
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
