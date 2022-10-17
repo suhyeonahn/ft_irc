@@ -17,9 +17,11 @@ class   Channel
         string  const   &_name;
         set<User *>     _userList;  // joined users
         string          _topic;
-
-        // Channel mode
+        //  Channel mode
+        bool            _i; //  inviteOnly
         set<User *>     _operList;  // Channel operators
+
+        void    addUser( User * user );
 
     public:
 

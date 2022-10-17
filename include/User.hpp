@@ -32,6 +32,8 @@ class   User
 
         bool    isValidNick( string const & nick );
 
+        void    join( Channel * chan );
+
     public:
 
         User( int fd, string const servPw );

@@ -14,6 +14,8 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "NICK") NICK(res);
     else if (_cmd == "USER") USER(res);
     else if (_cmd == "JOIN") JOIN(res);
+    else if (_cmd == "NAMES") USER(res);
+    else if (_cmd == "INVITE") JOIN(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -200,24 +202,38 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
     {
         map<string, Channel *>::iterator chanIt;
         chanIt = find(_chanList.begin(), _chanList.end(), _params[1]);
+        //  ERR if the channel doesn't exist
         if (chanIt == _chanList.end())
             PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[1] }), res);
         else
         {
-            //  Case ERR_NOTONCHANNEL
-            //  Is user on the channel?
-
-            //  Case ERR_USERONCHANNEL
-            //  If the invited user is on the channel already
-
-            //  Case RPL_INVITING && INVITE
-            //  If invite is successful
-            //  send a RPL_INVITING numeric to the command issuer,
-            //  and an INVITE message, with the issuer as <source>, to the target user.
-
-            //  Case ERR_CHANOPRIVSNEEDED
-            //  the channel has invite-only mode set, and the user is not a channel operator.
-            
+            set<User *> users = chanIt->second->_userList;
+            set<User *>::iterator it = find(users.begin(), users.end(), _user->getNick());
+            set<User *>::iterator it2 = find(users.begin(), users.end(), _params[0]);
+            //  ERR if the user is a member of the channer
+            if (it == users.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[1] }), res);
+            //  ERR if the invited user is on the channel already
+            else if (it2 != users.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_USERONCHANNEL, (string[]){ _params[0], _params[1]}), res);
+            else if (chanIt->second->_i)
+            {
+                //  ERR if the channel has invite-only mode set, and the user is not a channel operator.
+                set<User *> opers = chanIt->second->_operList;
+                set<User *>::iterator   operIt;
+                operIt = find(opers.begin(), opers.end(), _user);
+                if (operIt == opers.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
+            }
+            else
+            {
+                //  If invite is successful
+                User * invited = getUserByNick(_params[0]); 
+                chanIt->second->addUser(invited);
+                invited->join(chanIt->second);
+                PushToRes(_user->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1]}), res);
+                //  TODO : how to send an INVITE msg to the target user with the issuer as <source>?
+            }
         }
     }
 }
