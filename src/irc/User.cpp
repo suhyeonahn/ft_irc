@@ -37,7 +37,7 @@ bool    User::isValidNick( string const & nick )
     return true;
 }
 
-std::string    User::getNick() const
+std::string    User::getNick()  const
 {
     return  _nick;
 }

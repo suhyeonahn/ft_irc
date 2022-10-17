@@ -28,7 +28,6 @@ class   Channel
 
         static bool IsPrefix(char c);
         static bool IsValidName(const string &name);
-
     
         friend class Cmd;
         friend class IRC;

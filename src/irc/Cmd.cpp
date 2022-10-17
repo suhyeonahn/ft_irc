@@ -151,6 +151,64 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
 
     }
 }
+//  ex)  NAMES #twilight_zone,#42 : takes one parameter
+//  Split by "," must be done firstly.
+//
+//  Users with the invisible user mode set are not shown in channel responses
+//  unless the requesting client is also joined to that channel.
+void    Cmd::NAMES( vector<t_ClientMsg> & res )
+{
+    //  List all channel mems
+    if (_params.empty())
+    {
+        for (map<string, Channel *>::iterator chanIt = _chanList.begin() ; 
+                chanIt != _chanList.end() ; ++chanIt )
+        {
+            set<User *> chanUsers = chanIt->second->_userList;
+            string nicks = "";
+            for (set<User *>::iterator userIt(chanUsers.begin()) ; userIt != chanUsers.end() 
+                ; ++userIt)
+                {
+                    User * user = *userIt;
+                    nicks += user->getNick();
+                    nicks += " ";
+                }
+                nicks.erase(nicks.end() - 1); // Remove last " " Char
+                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + chanIt->first, nicks }), res);
+        }
+    }
+    else
+    {
+        vector<string>  givenNames = ::split(_params[0], ",");
+        for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
+        {
+            //  If the channel doesn't exist, send only RPL_ENDOFNAMES
+            //  Check if the channel exists
+            for (map<string, Channel *>::iterator chanIt = _chanList.begin() ; 
+                chanIt != _chanList.end() ; ++chanIt )
+            {
+                if (chanIt->first == *it)
+                {
+                    set<User *> chanUsers = chanIt->second->_userList;
+                    string nicks = "";
+                    for (set<User *>::iterator userIt(chanUsers.begin()) ; userIt != chanUsers.end() 
+                        ; ++userIt)
+                    {
+                        User * user = *userIt;
+                        nicks += user->getNick();
+                        nicks += " ";
+                    }
+                    nicks.erase(nicks.end() - 1); // Remove last " " Char
+                    PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + *it, nicks }), res);
+                    break;
+                }
+            }
+            PushToRes(_user->_fd, getServReply(_user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
+        }
+        //  if the given channel has the secret channel mode set
+        //  and the user is not joined to that channel return RPL_ENDOFNAMES
+    }
+}
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
     res.push_back(make_pair(fd, msg));
