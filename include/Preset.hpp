@@ -45,6 +45,7 @@
 # define SEP_MSG "\r\n"
 # define SEP_LEN 2
 
+
 using namespace std;
 
 // Declaration classes to use in irc

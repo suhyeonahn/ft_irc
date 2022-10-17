@@ -110,33 +110,46 @@ void Cmd::TOPIC( vector<t_ClientMsg> & res) {
         PushToRes(_user->_fd, servReply, res);
 }
 
-// i decided to do only one channel at the same time
-// so, let's do not manage multiple channel join and local channel:)
-// like : /JOIN #test1, #test2.... or /JOIN &test1 
-// Thus, if client send multiple join, send error(ERR_TOOMANYCHANNELS)
 // JOIN(client) - resp(server) -> MODE(client) -resp(server) -> WHO(client)...
 void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
     string  servReply;
     Channel *chan;
 
     //ERROR_RPLY
-    if (_params.size() < 1) 
+    if (_params.size() < 1) {
         servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
-    else if (isMultiChan(_params))
-        servReply = getServReply(_user, ERR_TOOMANYCHANNELS, (string[]){ _cmd });
-    else {
-        //No error
-        if (_chanList.find(_params[0]) == _chanList.end()) 
-            _chanList[_params[0]] = (chan = new Channel(_params[0], _user));
-        else 
-            chan = _chanList[_params[0]];
-
-        if (chan->_topic.size()) 
-            TOPIC(res);
+        PushToRes(_user->_fd, servReply, res);
+        return ;
     }
 
-    if (!servReply.empty())
-        PushToRes(_user->_fd, servReply, res);
+    vector<string> names;
+    vector<string> keys;
+    names = split(_params[0], ",");
+    if (_params.size() > 1)
+        keys = split(_params[1], ",");
+    
+    for (int i = 0; i < names.size(); ++i) {
+        const string &name = names[i];
+        const string &key = (i < keys.size()) ? keys[i] : "";
+
+        if (!Channel::IsValidName(name)) {
+            servReply = getServReply(_user, ERR_BADCHANMASK, (string []) { name });
+            PushToRes(_user->_fd, servReply, res);
+            continue;
+        }
+
+        //TODO: modify here...
+        // if (_chanList.find(name) == _chanList.end()) 
+        //     _chanList[name] = (chan = new Channel(_params[0], _user));
+        // else 
+        //     chan = _chanList[name];
+        // _user->_joined.insert(chan);
+
+        // if (chan->_topic.size()) 
+        //     TOPIC(res);
+        // NAMES()...
+
+    }
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
