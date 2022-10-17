@@ -14,5 +14,6 @@ vector<string>	setParams( string const & msg );
 
 bool    isValid( string const & cmd );
 bool	isImplemented( string const & cmd );
+bool    isMultiChan(vector<string> params); //for JOIN
 
 #endif
