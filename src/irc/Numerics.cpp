@@ -38,7 +38,12 @@ string  getServReply(User *user, int code, string params[])
 		case RPL_ENDOFNAMES: // 366
 			ss << params[0] << " :End of /NAMES list"; break;
 		case RPL_INVITING:	// 341
-			ss << params[0] << " has been invited to " << params[1]; break;
+		{	
+			ss << params[0] << " has been invited to " << params[1]; 
+			if (*(&params + 1) - params == 3)
+				ss << " by " << params[2];
+			break;
+		}
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
@@ -65,6 +70,8 @@ string  getServReply(User *user, int code, string params[])
 			ss << params[0] << " " << params[1] << " :is already on channel"; break;
 		case ERR_CHANOPRIVSNEEDED: // 482
 			ss << params[0] << " :You're not channel operator"; break;
+		case ERR_NOSUCHNICK: // (401)
+			ss << params[0] << " :No such nick"; break; 
 		default: break;
 
 	}

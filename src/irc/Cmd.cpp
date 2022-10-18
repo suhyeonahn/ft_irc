@@ -201,43 +201,46 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
     else
     {
         map<string, Channel *>::iterator chanIt;
-        // chanIt = find(_chanList.begin(), _chanList.end(), _params[1]);
         chanIt = _chanList.find(_params[1]);
-
-
         //  ERR if the channel doesn't exist
         if (chanIt == _chanList.end())
             PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[1] }), res);
         else
         {
             set<User *> users = chanIt->second->_userList;
-            set<User *>::iterator it = users.find(_user);
-            set<User *>::iterator it2 = users.find(_params[0]); //FIXME: with set<User *>::iterator - you cannot find string
-            
-            //  ERR if the user is a member of the channer
-            if (it == users.end())
-                PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[1] }), res);
-            //  ERR if the invited user is on the channel already
-            else if (it2 != users.end())
-                PushToRes(_user->_fd, getServReply(_user, ERR_USERONCHANNEL, (string[]){ _params[0], _params[1]}), res);
-            else if (chanIt->second->_i)
-            {
-                //  ERR if the channel has invite-only mode set, and the user is not a channel operator.
-                set<User *> opers = chanIt->second->_operList;
-                set<User *>::iterator   operIt;
-
-                operIt = opers.find(_user);
-                if (operIt == opers.end())
-                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
-            }
+            User * invited = getUserByNick(_params[0]);
+            if (invited == NULL) // Not defined by MAN..
+                PushToRes(_user->_fd, getServReply(_user, ERR_NOSUCHNICK, (string[]){ _params[0]}), res);
             else
             {
-                //  If invite is successful
-                User * invited = getUserByNick(_params[0]); 
-                chanIt->second->addUser(invited);
-                invited->join(chanIt->second);
-                PushToRes(_user->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1]}), res);
-                //  TODO : how to send an INVITE msg to the target user with the issuer as <source>?
+                set<User *>::iterator it = users.find(invited);
+                set<User *>::iterator it2 = users.find(_user);
+                //  ERR if the invited user is on the channel already
+                if (it != users.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_USERONCHANNEL, (string[]){ _params[0], _params[1]}), res);
+                //  ERR if the requesting user is not a member of the channer
+                else if (it2 == users.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[1] }), res);
+                else if (chanIt->second->_i)
+                {
+                    //  ERR if the channel has invite-only mode set, and the user is not a channel operator.
+                    set<User *> opers = chanIt->second->_operList;
+                    set<User *>::iterator   operIt;
+
+                    operIt = opers.find(_user);
+                    if (operIt == opers.end())
+                        PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
+                }
+                else
+                {
+                    //  If invite is successful
+                    chanIt->second->addUser(invited);
+                    invited->join(chanIt->second);
+                    //  Reply to the requesting user
+                    PushToRes(_user->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1]}), res);
+                    //  Msg to the invited user
+                    PushToRes(invited->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1], _user->getNick()}), res);
+                }
             }
         }
     }
