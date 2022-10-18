@@ -30,6 +30,21 @@ void    Channel::addUser( User * user )
     _userList.insert(user);
 }
 
+void    Channel::rmUser( User * user )
+{
+    _userList.erase(user);
+}
+
+void    Channel::sendMsg( int code, string params[], vector<t_ClientMsg> & res )
+{
+    for (set<User *>::iterator it(_userList.begin()) ; it != _userList.end() 
+        ; ++it)
+    {
+        User * user = *it;
+        Cmd::PushToRes(user->getFd(), getServReply(user, code, params), res);
+    }
+}
+
 string  Channel::getName() const
 {
     return _name;

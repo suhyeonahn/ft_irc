@@ -44,8 +44,15 @@ string  getServReply(User *user, int code, string params[])
 				ss << " by " << params[2];
 			break;
 		}
-		case RPY_PART: // 999
-			ss << "is leaving the channel " << params[0]; break;
+		case MSG_PART: // 999
+			ss  << ":" << params[0] << " is leaving the channel " << params[1]; break;
+		case MSG_KICK: // 998
+		{	
+			ss << ":You are kicked from " << params[0]; 
+			if (*(&params + 1) - params == 2)
+				ss << " due to following reason: " << params[1];
+			break;
+		}
 		case RPL_LISTSTART: // 321
 			ss << "Channel :Users  Name"; break;
 		case RPL_LIST: // 322

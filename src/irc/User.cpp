@@ -51,3 +51,8 @@ string    User::getUname() const
 {
     return  _uname;
 }
+
+int     User::getFd() const
+{
+    return  _fd;
+}

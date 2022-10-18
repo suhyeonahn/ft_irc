@@ -18,6 +18,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "INVITE") INVITE(res);
     else if (_cmd == "PART") PART(res);
     else if (_cmd == "LIST") LIST(res);
+    else if (_cmd == "KICK") KICK(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -200,8 +201,7 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
         PushToRes(_user->_fd, getServReply(_user,  ERR_NEEDMOREPARAMS, (string[]){ _cmd }), res);
     else
     {
-        map<string, Channel *>::iterator chanIt;
-        chanIt = _chanList.find(_params[1]);
+        map<string, Channel *>::iterator chanIt = _chanList.find(_params[1]);
         //  ERR if the channel doesn't exist
         if (chanIt == _chanList.end())
             PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[1] }), res);
@@ -268,8 +268,10 @@ void    Cmd::PART( vector<t_ClientMsg> & res )
                 PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[0] }), res);
             else
             {
-                // If PART is successful
-                PushToRes(_user->_fd, getServReply(_user, RPY_PART, (string[]){ chanIt->first }), res);
+                //  If PART is successful
+                //  Inform the channel that the user has left
+                //PushToRes(_user->_fd, getServReply(_user, MSG_PART, (string[]){ _user->getNick(), chanIt->first }), res);
+                chanIt->second->sendMsg(MSG_PART, (string[]){_user->getNick(),chanIt->first}, res);
             }
         }
     }
@@ -301,6 +303,50 @@ void    Cmd::LIST( vector<t_ClientMsg> & res )
         }
         PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, (string[]){NULL}), res);
     }
+}
+
+//  Can kick a user at once
+void    Cmd::KICK( vector<t_ClientMsg> & res )
+{
+    if (_params.size() < 1)
+        PushToRes(_user->_fd, getServReply(_user,  ERR_NEEDMOREPARAMS, (string[]){_cmd}), res);
+     else
+    {
+        map<string, Channel *>::iterator chanIt = _chanList.find(_params[0]);
+        //  ERR if the channel doesn't exist
+        if (chanIt == _chanList.end())
+            PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){_params[0]}), res);
+        else
+        {
+            User * usr = getUserByNick(_params[1]);
+            set<User *> usrs = chanIt->second->_userList;
+            set<User *>::iterator it = usrs.find(usr);
+            //  ERR if user is not on the channel
+            if (it == usrs.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){_params[0],_params[1]}), res);
+            else
+            {
+                //  ERR if the channel has invite-only mode set, and the requesting user is not a channel operator.
+                set<User *> opers = chanIt->second->_operList;
+                set<User *>::iterator   operIt = opers.find(_user);
+                if (operIt == opers.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[0]}), res);
+                else
+                {
+                    //  If KICK is successful
+                    chanIt->second->rmUser(usr);
+                    //  Inform the channel that the usr has left
+                    chanIt->second->sendMsg(MSG_PART, (string[]){usr->getNick(),chanIt->first}, res);
+                    //  Send a msg to the kicked usr
+                    if (_params.size() == 1)
+                        PushToRes(usr->_fd, getServReply(_user, MSG_KICK, (string[]){_params[0]}), res);
+                    else
+                        PushToRes(usr->_fd, getServReply(_user, MSG_KICK, (string[]){_params[0],_params[1]}), res);
+                }
+            }
+        }
+    }
+
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {

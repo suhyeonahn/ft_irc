@@ -22,6 +22,9 @@ class   Channel
         set<User *>     _operList;  // Channel operators
 
         void    addUser( User * user );
+        void    rmUser( User * user );
+
+        void    sendMsg( int code, string params[], vector<t_ClientMsg> & res );
 
     public:
 
