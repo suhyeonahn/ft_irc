@@ -15,7 +15,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "USER") USER(res);
     else if (_cmd == "JOIN") JOIN(res);
     else if (_cmd == "NAMES") USER(res);
-    else if (_cmd == "INVITE") JOIN(res);
+    else if (_cmd == "INVITE") INVITE(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -157,13 +157,13 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
 //  ex)  NAMES #twilight_zone,#42 : takes one parameter
 //  Split by "," must be done firstly.
 //
-//  Users with the invisible user mode set are not shown in channel responses
+//  Need to add a case : when users with the invisible user mode set are not shown in channel responses
 //  unless the requesting client is also joined to that channel.
 //
 //  For now, only considered normal channel with "=" preset
 void    Cmd::NAMES( vector<t_ClientMsg> & res )
 {
-    //  List all channel mems
+    //  List all channel members
     if (_params.empty())
     {
         for (map<string, Channel *>::iterator it = _chanList.begin() ; 
@@ -179,10 +179,7 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
         for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
         {
             //  If the channel doesn't exist, send only RPL_ENDOFNAMES
-            //  Check if the channel exists
             map<string, Channel *>::iterator chanIt;
-            // chanIt = find(_chanList.begin(), _chanList.end(), *it);
-            //maybe this...?: https://cplusplus.com/reference/map/map/find/
             chanIt = _chanList.find(*it);
 
             if (chanIt != _chanList.end())
@@ -214,9 +211,6 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
         else
         {
             set<User *> users = chanIt->second->_userList;
-            //https://cplusplus.com/reference/set/set/find/
-            // set<User *>::iterator it = find(users.begin(), users.end(), _user->getNick());
-            // set<User *>::iterator it2 = find(users.begin(), users.end(), _params[0]);
             set<User *>::iterator it = users.find(_user);
             set<User *>::iterator it2 = users.find(_params[0]); //FIXME: with set<User *>::iterator - you cannot find string
             
@@ -233,7 +227,6 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
                 set<User *>::iterator   operIt;
 
                 operIt = opers.find(_user);
-                // operIt = find(opers.begin(), opers.end(), _user);
                 if (operIt == opers.end())
                     PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
             }
