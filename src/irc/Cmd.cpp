@@ -14,6 +14,8 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "NICK") NICK(res);
     else if (_cmd == "USER") USER(res);
     else if (_cmd == "JOIN") JOIN(res);
+    else if (_cmd == "NAMES") USER(res);
+    else if (_cmd == "INVITE") JOIN(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -151,30 +153,24 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
 
     }
 }
+
 //  ex)  NAMES #twilight_zone,#42 : takes one parameter
 //  Split by "," must be done firstly.
 //
 //  Users with the invisible user mode set are not shown in channel responses
 //  unless the requesting client is also joined to that channel.
+//
+//  For now, only considered normal channel with "=" preset
 void    Cmd::NAMES( vector<t_ClientMsg> & res )
 {
     //  List all channel mems
     if (_params.empty())
     {
-        for (map<string, Channel *>::iterator chanIt = _chanList.begin() ; 
-                chanIt != _chanList.end() ; ++chanIt )
+        for (map<string, Channel *>::iterator it = _chanList.begin() ; 
+            it != _chanList.end() ; ++it )
         {
-            set<User *> chanUsers = chanIt->second->_userList;
-            string nicks = "";
-            for (set<User *>::iterator userIt(chanUsers.begin()) ; userIt != chanUsers.end() 
-                ; ++userIt)
-                {
-                    User * user = *userIt;
-                    nicks += user->getNick();
-                    nicks += " ";
-                }
-                nicks.erase(nicks.end() - 1); // Remove last " " Char
-                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + chanIt->first, nicks }), res);
+            string nicks = it->second->getNicks();
+            PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + it->first, nicks }), res);
         }
     }
     else
@@ -184,29 +180,61 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
         {
             //  If the channel doesn't exist, send only RPL_ENDOFNAMES
             //  Check if the channel exists
-            for (map<string, Channel *>::iterator chanIt = _chanList.begin() ; 
-                chanIt != _chanList.end() ; ++chanIt )
+            map<string, Channel *>::iterator chanIt;
+            chanIt = find(_chanList.begin(), _chanList.end(), *it);
+            if (chanIt != _chanList.end())
             {
-                if (chanIt->first == *it)
-                {
-                    set<User *> chanUsers = chanIt->second->_userList;
-                    string nicks = "";
-                    for (set<User *>::iterator userIt(chanUsers.begin()) ; userIt != chanUsers.end() 
-                        ; ++userIt)
-                    {
-                        User * user = *userIt;
-                        nicks += user->getNick();
-                        nicks += " ";
-                    }
-                    nicks.erase(nicks.end() - 1); // Remove last " " Char
-                    PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + *it, nicks }), res);
-                    break;
-                }
+                string nicks = chanIt->second->getNicks();
+                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + *it, nicks }), res);
             }
             PushToRes(_user->_fd, getServReply(_user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
         }
         //  if the given channel has the secret channel mode set
         //  and the user is not joined to that channel return RPL_ENDOFNAMES
+    }
+}
+
+void    Cmd::INVITE( vector<t_ClientMsg> & res )
+{
+    if (_params.size() != 2)
+        PushToRes(_user->_fd, getServReply(_user,  ERR_NEEDMOREPARAMS, (string[]){ _cmd }), res);
+    else
+    {
+        map<string, Channel *>::iterator chanIt;
+        chanIt = find(_chanList.begin(), _chanList.end(), _params[1]);
+        //  ERR if the channel doesn't exist
+        if (chanIt == _chanList.end())
+            PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[1] }), res);
+        else
+        {
+            set<User *> users = chanIt->second->_userList;
+            set<User *>::iterator it = find(users.begin(), users.end(), _user->getNick());
+            set<User *>::iterator it2 = find(users.begin(), users.end(), _params[0]);
+            //  ERR if the user is a member of the channer
+            if (it == users.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[1] }), res);
+            //  ERR if the invited user is on the channel already
+            else if (it2 != users.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_USERONCHANNEL, (string[]){ _params[0], _params[1]}), res);
+            else if (chanIt->second->_i)
+            {
+                //  ERR if the channel has invite-only mode set, and the user is not a channel operator.
+                set<User *> opers = chanIt->second->_operList;
+                set<User *>::iterator   operIt;
+                operIt = find(opers.begin(), opers.end(), _user);
+                if (operIt == opers.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
+            }
+            else
+            {
+                //  If invite is successful
+                User * invited = getUserByNick(_params[0]); 
+                chanIt->second->addUser(invited);
+                invited->join(chanIt->second);
+                PushToRes(_user->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1]}), res);
+                //  TODO : how to send an INVITE msg to the target user with the issuer as <source>?
+            }
+        }
     }
 }
 

@@ -17,9 +17,11 @@ class   Channel
         string  const   &_name;
         set<User *>     _userList;  // joined users
         string          _topic;
-
-        // Channel mode
+        //  Channel mode
+        bool            _i; //  inviteOnly
         set<User *>     _operList;  // Channel operators
+
+        void    addUser( User * user );
 
     public:
 
@@ -28,6 +30,9 @@ class   Channel
 
         static bool IsPrefix(char c);
         static bool IsValidName(const string &name);
+
+        string  getName() const;
+        string  getNicks() const;
     
         friend class Cmd;
         friend class IRC;
