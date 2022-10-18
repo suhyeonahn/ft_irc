@@ -44,6 +44,8 @@ string  getServReply(User *user, int code, string params[])
 				ss << " by " << params[2];
 			break;
 		}
+		case RPY_PART: // 999
+			ss << "is leaving the channel " << params[0];
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421

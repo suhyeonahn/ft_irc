@@ -33,6 +33,7 @@ class   Cmd
         void    TOPIC( vector<t_ClientMsg> & res );
         void    NAMES( vector<t_ClientMsg> & res );
         void    INVITE( vector<t_ClientMsg> & res );
+        void    PART( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 

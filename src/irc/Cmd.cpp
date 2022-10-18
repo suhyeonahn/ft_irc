@@ -16,6 +16,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "JOIN") JOIN(res);
     else if (_cmd == "NAMES") USER(res);
     else if (_cmd == "INVITE") INVITE(res);
+    else if (_cmd == "PART") PART(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -179,9 +180,7 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
         for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
         {
             //  If the channel doesn't exist, send only RPL_ENDOFNAMES
-            map<string, Channel *>::iterator chanIt;
-            chanIt = _chanList.find(*it);
-
+            map<string, Channel *>::iterator chanIt = _chanList.find(*it);
             if (chanIt != _chanList.end())
             {
                 string nicks = chanIt->second->getNicks();
@@ -209,7 +208,9 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
         {
             set<User *> users = chanIt->second->_userList;
             User * invited = getUserByNick(_params[0]);
-            if (invited == NULL) // Not defined by MAN..
+            //  ERR if the invited user doesn't exist on server
+            //  Not defined by MAN..
+            if (invited == NULL)
                 PushToRes(_user->_fd, getServReply(_user, ERR_NOSUCHNICK, (string[]){ _params[0]}), res);
             else
             {
@@ -241,6 +242,33 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
                     //  Msg to the invited user
                     PushToRes(invited->_fd, getServReply(_user, RPL_INVITING, (string[]){ _params[0], _params[1], _user->getNick()}), res);
                 }
+            }
+        }
+    }
+}
+
+//  Send a rpy for each channel
+void    Cmd::PART( vector<t_ClientMsg> & res )
+{
+    if (_params.size() < 1)
+        PushToRes(_user->_fd, getServReply(_user,  ERR_NEEDMOREPARAMS, (string[]){ _cmd }), res);
+    else
+    {
+        vector<string>  givenChans = ::split(_params[0], ",");
+        for (vector<string>::iterator it(givenChans.begin()) ; it != givenChans.end() ; ++it)
+        {
+            map<string, Channel *>::iterator chanIt = _chanList.find(*it);
+            set<User *>::iterator userIt = chanIt->second->_userList.find(_user);
+            //  ERR if the channel doesn't exist
+            if (chanIt == _chanList.end())
+                PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[0] }), res);
+            //  ERR if the user is not a member of the channer
+            else if (userIt == chanIt->second->_userList.end())
+                PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[0] }), res);
+            else
+            {
+                // If PART is successful
+                PushToRes(_user->_fd, getServReply(_user, RPY_PART, (string[]){ chanIt->first }), res);
             }
         }
     }
