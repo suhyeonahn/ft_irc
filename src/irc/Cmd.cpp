@@ -181,7 +181,10 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
             //  If the channel doesn't exist, send only RPL_ENDOFNAMES
             //  Check if the channel exists
             map<string, Channel *>::iterator chanIt;
-            chanIt = find(_chanList.begin(), _chanList.end(), *it);
+            // chanIt = find(_chanList.begin(), _chanList.end(), *it);
+            //maybe this...?: https://cplusplus.com/reference/map/map/find/
+            chanIt = _chanList.find(*it);
+
             if (chanIt != _chanList.end())
             {
                 string nicks = chanIt->second->getNicks();
@@ -201,15 +204,22 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
     else
     {
         map<string, Channel *>::iterator chanIt;
-        chanIt = find(_chanList.begin(), _chanList.end(), _params[1]);
+        // chanIt = find(_chanList.begin(), _chanList.end(), _params[1]);
+        chanIt = _chanList.find(_params[1]);
+
+
         //  ERR if the channel doesn't exist
         if (chanIt == _chanList.end())
             PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){ _params[1] }), res);
         else
         {
             set<User *> users = chanIt->second->_userList;
-            set<User *>::iterator it = find(users.begin(), users.end(), _user->getNick());
-            set<User *>::iterator it2 = find(users.begin(), users.end(), _params[0]);
+            //https://cplusplus.com/reference/set/set/find/
+            // set<User *>::iterator it = find(users.begin(), users.end(), _user->getNick());
+            // set<User *>::iterator it2 = find(users.begin(), users.end(), _params[0]);
+            set<User *>::iterator it = users.find(_user);
+            set<User *>::iterator it2 = users.find(_params[0]); //FIXME: with set<User *>::iterator - you cannot find string
+            
             //  ERR if the user is a member of the channer
             if (it == users.end())
                 PushToRes(_user->_fd, getServReply(_user, ERR_NOTONCHANNEL, (string[]){ _params[1] }), res);
@@ -221,7 +231,9 @@ void    Cmd::INVITE( vector<t_ClientMsg> & res )
                 //  ERR if the channel has invite-only mode set, and the user is not a channel operator.
                 set<User *> opers = chanIt->second->_operList;
                 set<User *>::iterator   operIt;
-                operIt = find(opers.begin(), opers.end(), _user);
+
+                operIt = opers.find(_user);
+                // operIt = find(opers.begin(), opers.end(), _user);
                 if (operIt == opers.end())
                     PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){ _params[1]}), res);
             }
