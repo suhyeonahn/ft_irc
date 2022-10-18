@@ -11,7 +11,7 @@
 //Util function to add '0' until code string's length become 3
 // ex: 1 => 001, 42 => 042, 242 => 242
 string	get3DigitCode(int code) {
-	string res = to_string(code);
+	string res = intToStr(code);
 
 	for(; res.length() < 3;) 
 		res.insert(0, "0");
@@ -45,7 +45,14 @@ string  getServReply(User *user, int code, string params[])
 			break;
 		}
 		case RPY_PART: // 999
-			ss << "is leaving the channel " << params[0];
+			ss << "is leaving the channel " << params[0]; break;
+		case RPL_LISTSTART: // 321
+			ss << "Channel :Users  Name"; break;
+		case RPL_LIST: // 322
+		//  <channel> <client count> :<topic>
+			ss << params[0] << " " << params[1] << " :" << params[2]; break;
+		case RPL_LISTEND: //323
+			ss << "<client> :End of /LIST";
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421

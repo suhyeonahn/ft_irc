@@ -35,12 +35,17 @@ string  Channel::getName() const
     return _name;
 }
 
+string  Channel::getTopic() const
+{
+    return _topic;
+}
+
 string  Channel::getNicks() const
 {
     string nicks = "";
 
     for (set<User *>::iterator it(_userList.begin()) ; it != _userList.end() 
-                    ; ++it)
+        ; ++it)
     {
         User * user = *it;
         nicks += user->getNick();
@@ -49,4 +54,13 @@ string  Channel::getNicks() const
     nicks.erase(nicks.end() - 1); // Remove last " " Char
 
     return _name;
+}
+
+size_t  Channel::getNusers() const
+{
+    size_t  N = 0;
+    for (set<User *>::iterator it(_userList.begin()) ; it != _userList.end() 
+        ; ++it)
+        N++;
+    return N;
 }

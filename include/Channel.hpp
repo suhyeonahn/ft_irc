@@ -32,7 +32,9 @@ class   Channel
         static bool IsValidName(const string &name);
 
         string  getName() const;
+        string  getTopic() const;
         string  getNicks() const;
+        size_t  getNusers() const;
     
         friend class Cmd;
         friend class IRC;

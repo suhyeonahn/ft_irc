@@ -12,3 +12,11 @@ vector<string> split( std::string const & str, std::string const delim )
     }
     return tokens;
 }
+
+string  intToStr(int x)
+{
+    stringstream ss;
+    ss << x;
+    string str = ss.str();
+    return (str);
+}

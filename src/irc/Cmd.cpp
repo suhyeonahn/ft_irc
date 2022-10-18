@@ -17,6 +17,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "NAMES") USER(res);
     else if (_cmd == "INVITE") INVITE(res);
     else if (_cmd == "PART") PART(res);
+    else if (_cmd == "LIST") LIST(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -271,6 +272,34 @@ void    Cmd::PART( vector<t_ClientMsg> & res )
                 PushToRes(_user->_fd, getServReply(_user, RPY_PART, (string[]){ chanIt->first }), res);
             }
         }
+    }
+}
+
+//  No need to send an ERR msg according to MAN
+void    Cmd::LIST( vector<t_ClientMsg> & res )
+{
+    if (_params.empty())
+    {
+        //  Return the information about all visible channels (except hidden channels)
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, (string[]){NULL}), res);
+        for (map<string, Channel *>::iterator it = _chanList.begin() ; 
+            it != _chanList.end() ; ++it )
+            PushToRes(_user->_fd, getServReply(_user,  RPL_LIST, (string[]){it->first,
+                intToStr(it->second->getNusers()), it->second->getTopic()}), res);
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, (string[]){NULL}), res);
+    }
+    else
+    {
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, (string[]){NULL}), res);
+        vector<string>  givenChans = ::split(_params[0], ",");
+        for (vector<string>::iterator it(givenChans.begin()) ; it != givenChans.end() ; ++it)
+        {
+            map<string, Channel *>::iterator chanIt = _chanList.find(*it);
+            if (chanIt != _chanList.end())
+                PushToRes(_user->_fd, getServReply(_user,  RPL_LIST, (string[]){chanIt->first,
+                    intToStr(chanIt->second->getNusers()), chanIt->second->getTopic()}), res);
+        }
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, (string[]){NULL}), res);
     }
 }
 
