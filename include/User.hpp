@@ -41,6 +41,7 @@ class   User
 
         string    getNick()   const;
         string    getUname()  const;
+        int    getFd()  const;
 
         friend class Cmd;
 

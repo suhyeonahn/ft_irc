@@ -22,6 +22,9 @@ class   Channel
         set<User *>     _operList;  // Channel operators
 
         void    addUser( User * user );
+        void    rmUser( User * user );
+
+        void    sendMsg( int code, string params[], vector<t_ClientMsg> & res );
 
     public:
 
@@ -32,7 +35,9 @@ class   Channel
         static bool IsValidName(const string &name);
 
         string  getName() const;
+        string  getTopic() const;
         string  getNicks() const;
+        size_t  getNusers() const;
     
         friend class Cmd;
         friend class IRC;

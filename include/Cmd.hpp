@@ -34,6 +34,8 @@ class   Cmd
         void    NAMES( vector<t_ClientMsg> & res );
         void    INVITE( vector<t_ClientMsg> & res );
         void    PART( vector<t_ClientMsg> & res );
+        void    LIST( vector<t_ClientMsg> & res );
+        void    KICK( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 
