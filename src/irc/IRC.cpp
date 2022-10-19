@@ -49,3 +49,23 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
    }
    return 0;
 }
+
+void  IRC::test()
+{
+            bool plus;
+            //  parse modestring
+            string params = "i0+23l--on++=o-";
+            vector<string> modeStr = splitModeStr(params, "+-");
+            for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
+            {
+               string tmp = *it;
+               if (tmp[0] == '+')
+                  plus = true;
+               else if (tmp[1] == '-')
+                  plus = false;
+               else
+                  ; //  skip err
+               for(string::size_type i = 1; i < tmp.size(); ++i)
+                  std::cout << tmp[i] << endl;
+            }
+}

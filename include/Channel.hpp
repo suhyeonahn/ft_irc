@@ -8,7 +8,6 @@
 # define CHAN_PREFIX '#'
 # define CHAN_INVALID_CHAR "\a,: "
 
-
 class   Channel
 {
     

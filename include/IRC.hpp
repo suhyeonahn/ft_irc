@@ -24,6 +24,8 @@ class   IRC
         virtual ~IRC();
 
         bool    ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
+
+        void  test();
 };
 
 #endif

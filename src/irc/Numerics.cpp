@@ -60,7 +60,9 @@ string  getServReply(User *user, int code, string params[])
 		//  <channel> <client count> :<topic>
 			ss << params[0] << " " << params[1] << " :" << params[2]; break;
 		case RPL_LISTEND: //323
-			ss << "<client> :End of /LIST";
+			ss << "<client> :End of /LIST"; break;
+		case RPL_UMODEIS:	//221
+			ss << params[0]; break;
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
@@ -87,10 +89,13 @@ string  getServReply(User *user, int code, string params[])
 			ss << params[0] << " " << params[1] << " :is already on channel"; break;
 		case ERR_CHANOPRIVSNEEDED: // 482
 			ss << params[0] << " :You're not channel operator"; break;
-		case ERR_NOSUCHNICK: // (401)
-			ss << params[0] << " :No such nick"; break; 
+		case ERR_NOSUCHNICK: // 401
+			ss << params[0] << " :No such nick"; break;
+		case ERR_USERSDONTMATCH: // 502
+			ss << ":Cant change mode for other users"; break;
+		case ERR_UMODEUNKNOWNFLAG: // 501
+			ss << ":Unknown MODE flag"; break;
 		default: break;
-
 	}
 	ss	<< SEP_MSG;
 
