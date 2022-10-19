@@ -48,6 +48,8 @@ class   Cmd
 	    virtual ~Cmd();
 
         User *           getUserByNick( string const & nick ) const;
+        Channel         *GetChannelByName(const string &name) const;
+        Channel         *CreateChannel(const string &name, User *user);
 
         void    execute( vector<t_ClientMsg> & res );
 

@@ -27,10 +27,6 @@ bool    User::isValidNick( string const & nick )
 
     for (set<char>::const_iterator it(nickSet.begin()) ; it != nickSet.end() ; it++)
     {
-        //FIXED: nick.find -> validChars.find(IT_OF_NICK_SET)
-        //Before, if nick doesn't contain all valid charset, return false.
-        //ex: nick_kyu1 => false : because it doesn't contain ALL valid charset
-        //But, idea was so good(we don't need see all char in string but each char not repeating):)
         if (validChars.find(*it) == string::npos) 
             return false;
     }

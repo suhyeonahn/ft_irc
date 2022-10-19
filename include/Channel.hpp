@@ -19,7 +19,9 @@ class   Channel
         string          _topic;
         //  Channel mode
         bool            _i; //  inviteOnly
+        string          _key; // Channel's password
         set<User *>     _operList;  // Channel operators
+        set<User *>     _invitedList; // Invited Users in Channel
 
         void    addUser( User * user );
         void    rmUser( User * user );
@@ -38,7 +40,7 @@ class   Channel
         string  getTopic() const;
         string  getNicks() const;
         size_t  getNusers() const;
-    
+
         friend class Cmd;
         friend class IRC;
 };
