@@ -46,6 +46,7 @@ string  getServReply(User *user, int code, string params[])
 		}
 		case MSG_PART: // 999
 			ss  << ":" << params[0] << " is leaving the channel " << params[1]; break;
+
 		case MSG_KICK: // 998
 		{	
 			ss << ":You are kicked from " << params[0]; 

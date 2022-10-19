@@ -185,17 +185,13 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
         else {
             //1.send to all user in channel(NOT YET)
             PushToRes(_user->_fd, ":" + _user->_nick + " JOIN " + name + SEP_MSG, res);
+            
             //2.topic(NOT YET)
+            if (chan->_topic.size()) 
+                TOPIC(res);
             //3. send names
             NAMES(res);
         }
-
-
-
-        // if (chan->_topic.size()) 
-        //     TOPIC(res);
-        // NAMES()...
-
     }
 }
 
@@ -301,8 +297,11 @@ void    Cmd::PART( vector<t_ClientMsg> & res )
             {
                 //  If PART is successful
                 //  Inform the channel that the user has left
-                //PushToRes(_user->_fd, getServReply(_user, MSG_PART, (string[]){ _user->getNick(), chanIt->first }), res);
-                chan->sendMsg(MSG_PART, (string[]){_user->getNick(),chan->getName()}, res);
+                // PushToRes(_user->_fd, getServReply(_user, MSG_PART, (string[]){ _user->getNick(), chan->_name }), res);
+                // chan->sendMsg(MSG_PART, (string[]){_user->getNick(),chan->getName()}, res);
+
+                //FIXME: message have to like :  ':dan-!d@localhost PART #test'
+                // PushToRes(_user->_fd, ":" + _user->_nick + "!d@127.0.0.1 " + "PART " + chan->_name + SEP_MSG , res);
             }
         }
     }
