@@ -30,6 +30,19 @@ User *  Cmd::getUserByNick( string const & nick ) const
 	return NULL;
 }
 
+Channel *Cmd::GetChannelByName ( const string &name ) const {
+    if (_chanList.find(name) != _chanList.end())
+        return _chanList.at(name);
+    return NULL;
+}
+
+Channel *Cmd::CreateChannel( const string &name, User *user) {
+    Channel *chan = new Channel(name, user);
+    _chanList[name] = chan;
+    user->join(chan);
+    return chan;
+}
+
 void    Cmd::PASS( vector<t_ClientMsg> & res )
 {
     string  servReply;
@@ -144,11 +157,40 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
         }
 
         //TODO: modify here...
-        // if (_chanList.find(name) == _chanList.end()) 
-        //     _chanList[name] = (chan = new Channel(_params[0], _user));
-        // else 
-        //     chan = _chanList[name];
-        // _user->_joined.insert(chan);
+        chan = GetChannelByName(name);
+        if (chan == NULL)
+            chan = CreateChannel(name, _user);
+        else {
+            //if user not yet joined
+            if (_user->_joined.find(chan) == _user->_joined.end()) {
+                // if invite mode and user not invited
+                if (chan->_i && chan->_invitedList.find(_user) == chan->_invitedList.end())
+                    servReply = getServReply(_user, ERR_INVITEONLYCHAN, (string []) { name });
+                // if channal has key and invalid key
+                else if (!chan->_key.empty() && chan->_key != key)
+                    servReply = getServReply(_user, ERR_BADCHANNELKEY, (string[]) { name });
+                else {
+                    //if all ok
+                    //add user 
+                    chan->addUser(_user);
+                    //remove user in invite list
+                    chan->_invitedList.erase(_user);
+                    //add channel to user
+                    _user->_joined.insert(chan);
+                }
+            }
+        }
+        if (!servReply.empty())
+            PushToRes(_user->_fd, servReply, res);
+        else {
+            //1.send to all user in channel(NOT YET)
+            PushToRes(_user->_fd, ":" + _user->_nick + " JOIN " + name + SEP_MSG, res);
+            //2.topic(NOT YET)
+            //3. send names
+            NAMES(res);
+        }
+
+
 
         // if (chan->_topic.size()) 
         //     TOPIC(res);

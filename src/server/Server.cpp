@@ -56,8 +56,10 @@ void	Server::Watch() {
 		//loop to send response to each clientFD
 		for(resIt = res.begin(); resIt!= res.end(); ++resIt) {
 			int clientFD = resIt->first;
-			if (_clientList.find(clientFD) != _clientList.end())
+			if (_clientList.find(clientFD) != _clientList.end()) {
+				cout << resIt->first << ":" << resIt->second << endl;
 				_clientList[clientFD]->SendRes(resIt->second);
+			}
 		}
 	}
 }
