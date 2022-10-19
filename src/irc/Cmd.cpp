@@ -373,6 +373,66 @@ void    Cmd::KICK( vector<t_ClientMsg> & res )
 
 }
 
+void    Cmd::MODE( vector<t_ClientMsg> & res )
+{
+    //  Check if _params[0] is a nick or a chan
+    if (_params[0][0] == CHAN_PREFIX)
+    {
+        //  Target is a chan
+        Channel * chan = GetChannelByName(_params[0]);
+        //  chan not on the server
+        if (chan == NULL)
+            PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){_params[0]}), res);
+    }
+    else
+    {
+        //  Target is a usr
+        User * usr = getUserByNick(_params[0]);
+        //  usr not on the server
+        if (usr == NULL)
+            PushToRes(_user->_fd, getServReply(_user, ERR_NOSUCHNICK, (string[]){_params[0]}), res);
+        //  _user is not matching the nick
+        else if (_user != usr)
+            PushToRes(_user->_fd, getServReply(_user, ERR_USERSDONTMATCH, (string[]){NULL}), res);
+        //  modestring is not given then send a msg containing the current modes
+        else if (_params.size() < 2)
+            PushToRes(_user->_fd, getServReply(_user, RPL_UMODEIS, (string[]){_user->getMode()}), res);
+        else
+        {
+            //  modestring is given
+            bool isValid = true;
+            bool plus;
+            string  servReply;
+            //  parse modestring
+            vector<string> modeStr = splitModeStr(_params[1], "+-");
+            for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
+            {
+                string token = *it;
+                if (token[0] != '+' && token[0] != '-')
+                    servReply = getServReply(_user, ERR_UMODEUNKNOWNFLAG, (string[]){ _cmd }); //461
+                else
+                {
+                    if (token[0] == '+')
+                        plus = true;
+                    else if (token[1] == '-')
+                        plus = false;
+                    for(string::size_type i = 1; i < token.size(); ++i)
+                    {
+                        if (isValid == _user->isValidMode(token[i]))
+                            _user->setMode(plus, token[i]);
+                        if (!isValid)
+                            servReply = getServReply(_user, ERR_UMODEUNKNOWNFLAG, (string[]){ _cmd }); //461
+                    }
+                }
+            }
+            //  Send changed mode
+            PushToRes(_user->_fd, getServReply(_user, RPL_UMODEIS, (string[]){_user->getMode()}), res);
+            if (!servReply.empty())
+                PushToRes(_user->_fd, servReply, res);
+        }
+    }    
+}
+
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
     res.push_back(make_pair(fd, msg));
 }

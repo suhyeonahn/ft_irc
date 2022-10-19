@@ -24,11 +24,11 @@ class   Cmd
         map<string, Channel *>  &_chanList;
         //put reference to synchronize _userList and _chanList in Cmd class with thoses things in IRC class
 
-        // Connection cmds
+        //  Connection cmds
         void    PASS( vector<t_ClientMsg> & res );
         void    NICK( vector<t_ClientMsg> & res );
         void    USER( vector<t_ClientMsg> & res );
-        // Channel Operation cmds
+        //  Channel Operation cmds
         void    JOIN( vector<t_ClientMsg> & res );
         void    TOPIC( vector<t_ClientMsg> & res );
         void    NAMES( vector<t_ClientMsg> & res );
@@ -36,6 +36,8 @@ class   Cmd
         void    PART( vector<t_ClientMsg> & res );
         void    LIST( vector<t_ClientMsg> & res );
         void    KICK( vector<t_ClientMsg> & res );
+        //  Server Queries and cmds
+        void    MODE( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 

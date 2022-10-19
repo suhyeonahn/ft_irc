@@ -31,6 +31,7 @@ int main(int ac, char **av) {
     if (!isValid(ac, av, port))   
         exit(1);
     IRC irc(password);
+    irc.test();
     Server server(port, password, irc);
     server.Init();
     server.Watch();
