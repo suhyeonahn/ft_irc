@@ -23,7 +23,7 @@ class   User
 
         set<Channel *>  _joined;
 
-        char    _away; //  Away status: H(here) or G(gone)
+        string  _away; //  Away status: H(here) or G(gone)
         // User mode
         bool    _i; //  invisible
         bool    _o; //  oper
