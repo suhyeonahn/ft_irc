@@ -28,6 +28,8 @@ class   IRC
         void  test();
 
         void DEBUG();
+        static void PRINT_USER_SET(set<User *> userset, const string &type);
+
 };
 
 #endif

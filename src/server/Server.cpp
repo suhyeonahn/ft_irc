@@ -176,4 +176,5 @@ void	Server::DEBUG() {
 		cout << " ]" << endl;
 	}
 	_irc.DEBUG();
+	cout << DFT << endl;
 }
