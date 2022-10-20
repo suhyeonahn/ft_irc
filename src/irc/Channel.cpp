@@ -25,6 +25,30 @@ bool Channel::IsValidName(const string &name) {
     return true;
 }
 
+void    Channel::setMode( bool plus, char const & mode )
+{
+    if (mode == 'i')
+        _b = plus ? true : false;
+    if (mode == 'o')
+        _e = plus ? true : false;
+    if (mode == 'O')
+        _l = plus ? true : false;
+    if (mode == 'r')
+        _i = plus ? true : false;
+    if (mode == 'w')
+        _I = plus ? true : false;
+    if (mode == 'w')
+        _k = plus ? true : false;
+    if (mode == 'w')
+        _m = plus ? true : false;
+    if (mode == 'w')
+        _s = plus ? true : false;
+    if (mode == 'w')
+        _t = plus ? true : false;
+    if (mode == 'w')
+        _n = plus ? true : false;
+}
+
 void    Channel::addUser( User * user )
 {
     _userList.insert(user);
@@ -97,4 +121,32 @@ size_t  Channel::getNusers() const
         ; ++it)
         N++;
     return N;
+
+}
+
+string    Channel::getMode()  const
+{
+    string mode = "";
+    if (_b)
+        mode += "b";
+    if (_e)
+        mode += "e";
+    if (_l )
+        mode += "l";
+    if (_i)
+       mode += "i";
+    if (_I)
+        mode += "I";
+    if (_k)
+        mode += "k";
+    if (_m)
+        mode += "m";
+    if (_s)
+        mode += "s";
+    if (_t)
+        mode += "t";
+    if (_n)
+        mode += "n";
+    return mode;   
+
 }

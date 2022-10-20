@@ -385,6 +385,14 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
         //  chan not on the server
         if (chan == NULL)
             PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){_params[0]}), res);
+        else if (_params.size() < 2)
+            PushToRes(_user->_fd, getServReply(_user, RPL_CHANNELMODEIS, (string[]){chan->getName(), chan->getMode()}), res);
+        else
+        {
+            //  ERR if the user is not a channel operator.
+            if (chan->_operList.find(_user) == chan->_operList.end())
+                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){chan->getName()}), res);
+        }
     }
     else
     {
