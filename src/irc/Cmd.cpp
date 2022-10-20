@@ -20,9 +20,6 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "LIST") LIST(res);
     else if (_cmd == "KICK") KICK(res);
     else if (_cmd == "WHO") WHO(res);
-    else if (_cmd == "WHOIS") WHOIS(res);
-    else if (_cmd == "WHOWAS") WHOWAS(res);
-
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
