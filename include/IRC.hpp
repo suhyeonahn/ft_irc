@@ -26,6 +26,8 @@ class   IRC
         bool    ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
 
         void  test();
+
+        void DEBUG();
 };
 
 #endif

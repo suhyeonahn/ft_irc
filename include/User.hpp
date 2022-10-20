@@ -51,6 +51,7 @@ class   User
         int    getFd()  const;
 
         friend class Cmd;
+        friend class IRC;
 
 };
 

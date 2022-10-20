@@ -69,3 +69,38 @@ void  IRC::test()
                   std::cout << tmp[i] << endl;
             }
 }
+
+void IRC::DEBUG() {
+   //userList
+   if (_userList.size()) {
+      map<int , User *>::iterator userIt;
+      cout << "- User List: " << endl;
+      for (userIt = _userList.begin(); userIt != _userList.end(); ++userIt) {
+         //[fd] nick 
+         cout << "\t- [" << userIt->first << "] " << userIt->second->getNick() << endl;
+      }
+      cout << endl;
+   }
+
+   //chanlist
+   if (_chanList.size()) {
+      map<string , Channel *>::iterator chanIt;
+      cout << "- Channel List: " << endl;
+      for (chanIt = _chanList.begin(); chanIt != _chanList.end(); ++chanIt) {
+         Channel *chan = chanIt->second;
+         //Channel name
+         cout << "\t[ " << chanIt->first << " ]" << endl;
+         if (!chan->_topic.empty())
+            cout << "\t - topic: " << chan->_topic << endl;
+         if (chan->_userList.size()) {
+            cout << "\t - users: [ ";
+            set<User *>::iterator userIt;
+            for (userIt = chan->_userList.begin(); userIt != chan->_userList.end(); ++userIt) {
+               cout << "(" << (*userIt)->_fd << ")" << (*userIt)->_nick << ", ";
+            }
+            cout << "]" << endl;
+         }
+      }
+      cout << endl;
+   }
+}

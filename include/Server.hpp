@@ -32,6 +32,9 @@ class Server {
 
 		void Init();
 		void Watch();
+		
+		//function to debug current infos in server
+		void DEBUG();
 };
 
 
