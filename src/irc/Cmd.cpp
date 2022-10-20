@@ -19,10 +19,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "PART") PART(res);
     else if (_cmd == "LIST") LIST(res);
     else if (_cmd == "KICK") KICK(res);
-    // else if (_cmd == "WHO") WHO(res);
-    else if (_cmd == "WHOIS") WHOIS(res);
-    else if (_cmd == "WHOWAS") WHOWAS(res);
-
+    else if (_cmd == "WHO") WHO(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -443,7 +440,7 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
     }    
 }
 
-//  Didn't consider mask which would be _params[1]
+//  Didn't consider mask pattern case
 void    Cmd::WHO( vector<t_ClientMsg> & res )
 {
     if (!_params.empty() && _params[0][0] == CHAN_PREFIX)
@@ -465,16 +462,6 @@ void    Cmd::WHO( vector<t_ClientMsg> & res )
             PushToRes(_user->_fd, getServReply(_user, RPL_WHOREPLY, (string[]){usr->getWho()}), res);
     }
     PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, (string[]){NULL}), res);
-}
-
-void    Cmd::WHOIS( vector<t_ClientMsg> & res )
-{
-
-}
-
-void    Cmd::WHOWAS( vector<t_ClientMsg> & res )
-{
-
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
