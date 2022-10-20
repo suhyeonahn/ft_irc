@@ -77,9 +77,9 @@ void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
 		cout << ": [ ";
 		for (it = userset.begin(); it != userset.end(); ++it) {
 			// [ (fd1) nick1, (fd2) nick2, ...]
-			cout  << "(" << (*it)->_fd << ") "
-					<< (*it)->_nick
-					<< (it != userset.begin() ? ", " :"");
+			cout << (it != userset.begin() ? ", " :"");
+				 << "(" << (*it)->_fd << ") "
+				 << (*it)->_nick
 		}
 		cout << " ]";
 	}
@@ -102,9 +102,9 @@ void IRC::DEBUG() {
 		cout << ": [ ";
 		for (userIt = _userList.begin(); userIt != _userList.end(); ++userIt) {
 			//(fd) nick 
-			cout << "(" << userIt->first << ") "
+			cout << (userIt != _userList.begin() ? ", " :"");
+				 << "(" << userIt->first << ") "
 				 << userIt->second->_nick
-				 << (userIt != _userList.begin() ? ", " :"");
 		}
 		cout << " ]";
 	}
