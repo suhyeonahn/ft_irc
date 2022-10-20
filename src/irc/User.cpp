@@ -2,7 +2,7 @@
 
 User::User( int fd, string const servPw ) : _fd(fd), _servPw(servPw), _nick(DEFAULT_NAME), _uname(DEFAULT_NAME),
     _rname(DEFAULT_NAME), _isGoodPw(false), _isRegistered(false),
-    _i(false), _o(false), _O(false), _r(false), _w(true), _away('H') {}
+     _away("H"), _i(false), _o(false), _O(false), _r(false), _w(true) {}
 
 User::~User() {}
 
@@ -113,7 +113,7 @@ string  User::getJoinedChan() const
         chans += chan->getName() + " ";
     }
     if (chans == "") // No joined chans
-        chans == "*";
+        chans = "*";
     else
         chans.erase(chans.end() - 1); // Remove last " " Char
     return chans;
