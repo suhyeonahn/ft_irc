@@ -102,6 +102,7 @@ size_t  Channel::getNusers() const
         ; ++it)
         N++;
     return N;
+
 }
 
 string    Channel::getMode()  const
@@ -128,4 +129,5 @@ string    Channel::getMode()  const
     if (_n)
         mode += "n";
     return mode;   
+
 }

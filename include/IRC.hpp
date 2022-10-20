@@ -26,6 +26,10 @@ class   IRC
         bool    ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
 
         void  test();
+
+        void DEBUG();
+        static void PRINT_USER_SET(set<User *> userset, const string &type);
+
 };
 
 #endif

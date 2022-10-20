@@ -2,7 +2,7 @@
 
 User::User( int fd, string const servPw ) : _fd(fd), _servPw(servPw), _nick(DEFAULT_NAME), _uname(DEFAULT_NAME),
     _rname(DEFAULT_NAME), _isGoodPw(false), _isRegistered(false),
-    _i(false), _o(false), _O(false), _r(false), _w(true) {}
+    _i(false), _o(false), _O(false), _r(false), _w(true), _away('H') {}
 
 User::~User() {}
 
@@ -62,17 +62,17 @@ void    User::join( Channel * chan )
     _joined.insert(chan);
 }
 
-string    User::getNick()  const
+string  User::getNick()  const
 {
     return  _nick;
 }
 
-string    User::getUname() const
+string  User::getUname() const
 {
     return  _uname;
 }
 
-string    User::getMode()  const
+string  User::getMode()  const
 {
     string mode = "";
     if (_i)
@@ -86,6 +86,37 @@ string    User::getMode()  const
     if (_w)
         mode += "w";
     return mode;   
+}
+
+string  User::getWho() const
+{
+    //  <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>
+    string who = "";
+    who += getJoinedChan() + " ";
+    who += _uname + " ";
+    //  TODO: what does host signify
+    who += "suky ";  //  server
+    who += _nick + " ";
+    who += _away + " ";
+    who += getMode() + " ";
+    who += ":1 ";   //  hopcount is always 1 cuz we have only 1 server
+    who += _rname;
+    return who;
+}
+
+string  User::getJoinedChan() const
+{
+    string  chans = "";
+    for (set<Channel *>::iterator it(_joined.begin()) ; it != _joined.end() ; ++it)
+    {
+        Channel * chan = *it;
+        chans += chan->getName() + " ";
+    }
+    if (chans == "") // No joined chans
+        chans == "*";
+    else
+        chans.erase(chans.end() - 1); // Remove last " " Char
+    return chans;
 }
 
 int     User::getFd() const

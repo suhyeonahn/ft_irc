@@ -61,6 +61,7 @@ void	Server::Watch() {
 				_clientList[clientFD]->SendRes(resIt->second);
 			}
 		}
+		DEBUG();
 	}
 }
 
@@ -159,3 +160,21 @@ int		Server::Error(const string &msg) {
 	exit(1);
 }
 
+void	Server::DEBUG() {
+
+	cout << MAG << "[DEBUG]" << endl;
+	cout << "- Port: " << _port << endl;
+	cout << "- Password: " << _password << endl;
+	cout << "- Server FD: " << _fd << endl;
+	cout << "- Client FDs: ";
+	if (_clientList.size() > 0) {
+		map<int, Client *>::iterator it;
+		cout << "[ ";
+		for(it = _clientList.begin(); it != _clientList.end(); ++it) {
+			cout << (it != _clientList.begin() ? ", " : "") << it->first;
+		}
+		cout << " ]" << endl;
+	}
+	_irc.DEBUG();
+	cout << DFT << endl;
+}
