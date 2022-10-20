@@ -187,9 +187,8 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
         if (!servReply.empty())
             PushToRes(_user->_fd, servReply, res);
         else {
-            //1.send to all user in channel(NOT YET)
-            PushToRes(_user->_fd, ":" + _user->_nick + " JOIN " + name + SEP_MSG, res);
-            
+            //1. Emit msg to all user in channel (including current user)
+            chan->Emit(_user, (string []) { "JOIN", name, "" }, res, false);
             //2.topic(NOT YET)
             if (chan->_topic.size()) 
                 TOPIC(res);
