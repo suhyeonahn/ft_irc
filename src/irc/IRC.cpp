@@ -52,7 +52,6 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 
 void  IRC::test()
 {
-				bool plus;
 				//  parse modestring
 				string params = "i0+23l--on++=o-";
 				vector<string> modeStr = splitModeStr(params, "+-");
