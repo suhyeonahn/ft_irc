@@ -464,16 +464,6 @@ void    Cmd::WHO( vector<t_ClientMsg> & res )
     PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, (string[]){NULL}), res);
 }
 
-void    Cmd::WHOIS( vector<t_ClientMsg> & res )
-{
-
-}
-
-void    Cmd::WHOWAS( vector<t_ClientMsg> & res )
-{
-
-}
-
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
     res.push_back(make_pair(fd, msg));
 }
