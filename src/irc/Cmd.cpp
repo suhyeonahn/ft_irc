@@ -443,7 +443,7 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
     }    
 }
 
-//  Didn't consider mask which would be _params[1]
+//  Didn't consider mask pattern case
 void    Cmd::WHO( vector<t_ClientMsg> & res )
 {
     if (!_params.empty() && _params[0][0] == CHAN_PREFIX)
