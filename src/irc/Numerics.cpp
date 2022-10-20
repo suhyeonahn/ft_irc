@@ -67,7 +67,7 @@ string  getServReply(User *user, int code, string params[])
 			ss << params[0] << " " << params[1] << " "; break;
 		case RPL_WHOREPLY:	//352
 			ss << params[0]; break;
-		case RPL_ENDOFWHO:	//352
+		case RPL_ENDOFWHO:	//315
 			ss << ":End of WHO list"; break;
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
