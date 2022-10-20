@@ -23,6 +23,7 @@ class   User
 
         set<Channel *>  _joined;
 
+        char    _away; //  Away status: H(here) or G(gone)
         // User mode
         bool    _i; //  invisible
         bool    _o; //  oper
@@ -45,10 +46,12 @@ class   User
         User( int fd, string const servPw );
         virtual ~User();
 
-        string    getNick()   const;
-        string    getUname()  const;
-        string    getMode()  const;
-        int    getFd()  const;
+        string  getNick()   const;
+        string  getUname()  const;
+        string  getMode()  const;
+        string  getWho() const;
+        string  getJoinedChan() const;
+        int     getFd()  const;
 
         friend class Cmd;
         friend class IRC;

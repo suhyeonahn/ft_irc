@@ -38,6 +38,10 @@ class   Cmd
         void    KICK( vector<t_ClientMsg> & res );
         //  Server Queries and cmds
         void    MODE( vector<t_ClientMsg> & res );
+        //  User-Based Queries
+        void    WHO( vector<t_ClientMsg> & res );
+        void    WHOIS( vector<t_ClientMsg> & res );
+        void    WHOWAS( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 
