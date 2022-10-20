@@ -425,7 +425,7 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
                         plus = false;
                     for(string::size_type i = 1; i < token.size(); ++i)
                     {
-                        if (isValid = _user->isValidMode(token[i]))
+                        if (isValid == _user->isValidMode(token[i]))
                             _user->setMode(plus, token[i]);
                         if (!isValid)
                             servReply = getServReply(_user, ERR_UMODEUNKNOWNFLAG, (string[]){ _cmd }); //461
