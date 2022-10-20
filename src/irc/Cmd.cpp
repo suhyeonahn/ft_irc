@@ -20,9 +20,6 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "LIST") LIST(res);
     else if (_cmd == "KICK") KICK(res);
     else if (_cmd == "WHO") WHO(res);
-    else if (_cmd == "WHOIS") WHOIS(res);
-    else if (_cmd == "WHOWAS") WHOWAS(res);
-
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -465,16 +462,6 @@ void    Cmd::WHO( vector<t_ClientMsg> & res )
             PushToRes(_user->_fd, getServReply(_user, RPL_WHOREPLY, (string[]){usr->getWho()}), res);
     }
     PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, (string[]){NULL}), res);
-}
-
-void    Cmd::WHOIS( vector<t_ClientMsg> & res )
-{
-
-}
-
-void    Cmd::WHOWAS( vector<t_ClientMsg> & res )
-{
-
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {

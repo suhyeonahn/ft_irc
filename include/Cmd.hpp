@@ -40,8 +40,6 @@ class   Cmd
         void    MODE( vector<t_ClientMsg> & res );
         //  User-Based Queries
         void    WHO( vector<t_ClientMsg> & res );
-        void    WHOIS( vector<t_ClientMsg> & res );
-        void    WHOWAS( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 
