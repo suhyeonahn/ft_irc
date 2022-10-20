@@ -28,7 +28,7 @@ class   User
         bool    _o; //  oper
         bool    _O; //  local oper
         bool    _r; //  registered
-        bool    _w; //  WQLLOPS 
+        bool    _w; //  WALLOPS 
 
         void    setNick( std::string const & nick );
         void    setUname( std::string const & uname );

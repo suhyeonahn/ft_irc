@@ -61,8 +61,10 @@ string  getServReply(User *user, int code, string params[])
 			ss << params[0] << " " << params[1] << " :" << params[2]; break;
 		case RPL_LISTEND: //323
 			ss << "<client> :End of /LIST"; break;
-		case RPL_UMODEIS:	//221
+		case RPL_UMODEIS:	//	221
 			ss << params[0]; break;
+		case RPL_CHANNELMODEIS:	//	324
+			ss << params[0] << " " << params[1] << " "; break;
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
