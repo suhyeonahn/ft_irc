@@ -88,36 +88,48 @@ string  User::getMode()  const
     return mode;   
 }
 
-string  User::getWho() const
-{
+string  User::getWho(const string chan) const {
     //  <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>
-    string who = "";
-    who += getJoinedChan() + " ";
-    who += _uname + " ";
-    //  TODO: what does host signify
-    who += "suky ";  //  server
-    who += _nick + " ";
-    who += _away + " ";
-    who += getMode() + " ";
-    who += ":1 ";   //  hopcount is always 1 cuz we have only 1 server
-    who += _rname;
-    return who;
+    string res = chan;
+
+    if (res.size() > 1)
+        res = res.substr(1);
+    // i put hopcount '1' with hard-coding because there is only one server in this project.
+    res += (" " + _uname + " " + USR_HOST + " " + SERV_HOST + " " + _nick + " " + _away + " :1 " +_rname);
+    return res;
 }
 
-string  User::getJoinedChan() const
-{
-    string  chans = "";
-    for (set<Channel *>::iterator it(_joined.begin()) ; it != _joined.end() ; ++it)
-    {
-        Channel * chan = *it;
-        chans += chan->getName() + " ";
-    }
-    if (chans == "") // No joined chans
-        chans = "*";
-    else
-        chans.erase(chans.end() - 1); // Remove last " " Char
-    return chans;
-}
+
+// string  User::getWho() const
+// {
+//     //  <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>
+//     string who = "";
+//     who += getJoinedChan() + " ";
+//     who += _uname + " ";
+//     //  TODO: what does host signify
+//     who += "suky ";  //  server
+//     who += _nick + " ";
+//     who += _away + " ";
+//     who += getMode() + " ";
+//     who += ":1 ";   //  hopcount is always 1 cuz we have only 1 server
+//     who += _rname;
+//     return who;
+// }
+
+// string  User::getJoinedChan() const
+// {
+//     string  chans = "";
+//     for (set<Channel *>::iterator it(_joined.begin()) ; it != _joined.end() ; ++it)
+//     {
+//         Channel * chan = *it;
+//         chans += chan->getName() + " ";
+//     }
+//     if (chans == "") // No joined chans
+//         chans = "*";
+//     else
+//         chans.erase(chans.end() - 1); // Remove last " " Char
+//     return chans;
+// }
 
 int     User::getFd() const
 {

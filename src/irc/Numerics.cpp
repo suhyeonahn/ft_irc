@@ -18,6 +18,7 @@ string	get3DigitCode(int code) {
 	return res;
 }
 
+
 string  getServReply(User *user, int code, string params[])
 {
 	stringstream	ss;
@@ -25,7 +26,7 @@ string  getServReply(User *user, int code, string params[])
 	// is it mandatory...?
 	// put prefix
 	// ex - ':<HOST> <CODE> <NICKNAME> '
-	ss << ":" << HOST << " " << get3DigitCode(code) << " " << user->getNick() << " ";
+	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " " << user->getNick() << " ";
 
 	switch (code)
 	{

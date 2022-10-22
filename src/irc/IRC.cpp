@@ -52,22 +52,22 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 
 void  IRC::test()
 {
-				bool plus;
-				//  parse modestring
-				string params = "i0+23l--on++=o-";
-				vector<string> modeStr = splitModeStr(params, "+-");
-				for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
-				{
-					string tmp = *it;
-					if (tmp[0] == '+')
-						plus = true;
-					else if (tmp[1] == '-')
-						plus = false;
-					else
-						; //  skip err
-					for(string::size_type i = 1; i < tmp.size(); ++i)
-						std::cout << tmp[i] << endl;
-				}
+	bool plus;
+	//  parse modestring
+	string params = "i0+23l--on++=o-";
+	vector<string> modeStr = splitModeStr(params, "+-");
+	for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
+	{
+		string tmp = *it;
+		if (tmp[0] == '+')
+			plus = true;
+		else if (tmp[1] == '-')
+			plus = false;
+		else
+			; //  skip err
+		for(string::size_type i = 1; i < tmp.size(); ++i)
+			std::cout << tmp[i] << endl;
+	}
 }
 
 void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
@@ -77,9 +77,9 @@ void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
 		cout << ": [ ";
 		for (it = userset.begin(); it != userset.end(); ++it) {
 			// [ (fd1) nick1, (fd2) nick2, ...]
-			cout << (it != userset.begin() ? ", " :"");
+			cout << (it != userset.begin() ? ", " :"")
 				 << "(" << (*it)->_fd << ") "
-				 << (*it)->_nick
+				 << (*it)->_nick;;
 		}
 		cout << " ]";
 	}
@@ -102,9 +102,9 @@ void IRC::DEBUG() {
 		cout << ": [ ";
 		for (userIt = _userList.begin(); userIt != _userList.end(); ++userIt) {
 			//(fd) nick 
-			cout << (userIt != _userList.begin() ? ", " :"");
+			cout << (userIt != _userList.begin() ? ", " :"")
 				 << "(" << userIt->first << ") "
-				 << userIt->second->_nick
+				 << userIt->second->_nick;
 		}
 		cout << " ]";
 	}
@@ -123,7 +123,6 @@ void IRC::DEBUG() {
 			PRINT_STRING(chan->_topic, "topic");
 			//key
 			PRINT_STRING(chan->_key, "key");
-
 
 			PRINT_USER_SET(chan->_userList, "userList");
 			PRINT_USER_SET(chan->_operList, "operList");

@@ -27,7 +27,7 @@ class   User
         // User mode
         bool    _i; //  invisible
         bool    _o; //  oper
-        bool    _O; //  local oper
+        bool    _O; //  local oper, - channel oper...?
         bool    _r; //  registered
         bool    _w; //  WALLOPS 
 
@@ -49,12 +49,13 @@ class   User
         string  getNick()   const;
         string  getUname()  const;
         string  getMode()  const;
-        string  getWho() const;
-        string  getJoinedChan() const;
+        string  getWho(const string chan) const;
+        // string  getJoinedChan() const;
         int     getFd()  const;
 
         friend class Cmd;
         friend class IRC;
+        friend class Channel;
 
 };
 

@@ -39,8 +39,8 @@
 #  define DFT "\033[0m"
 # endif
 
-
-# define HOST "irc-suky.42paris.fr"
+# define USR_HOST "user.irc-suky.42paris.fr" // user's host
+# define SERV_HOST "irc-suky.42paris.fr" // server's host
 
 # define SEP_MSG "\r\n"
 # define SEP_LEN 2

@@ -20,6 +20,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "LIST") LIST(res);
     else if (_cmd == "KICK") KICK(res);
     else if (_cmd == "WHO") WHO(res);
+
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -40,6 +41,7 @@ Channel *Cmd::GetChannelByName ( const string &name ) const {
 Channel *Cmd::CreateChannel( const string &name, User *user) {
     Channel *chan = new Channel(name, user);
     _chanList[name] = chan;
+	// user->_O = true; // channel operator
     user->join(chan);
     return chan;
 }
@@ -211,7 +213,7 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
             it != _chanList.end() ; ++it )
         {
             string nicks = it->second->getNicks();
-            PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + it->first, nicks }), res);
+            PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "= " + it->first, nicks }), res);
         }
     }
     else
@@ -224,7 +226,7 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
             if (chan != NULL)
             {
                 string nicks = chan->getNicks();
-                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "=" + *it, nicks }), res);
+                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "= " + *it, nicks }), res);
             }
             PushToRes(_user->_fd, getServReply(_user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
         }
@@ -313,16 +315,16 @@ void    Cmd::LIST( vector<t_ClientMsg> & res )
     if (_params.empty())
     {
         //  Return the information about all visible channels (except hidden channels)
-        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, (string[]){NULL}), res);
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, NULL), res);
         for (map<string, Channel *>::iterator it = _chanList.begin() ; 
             it != _chanList.end() ; ++it )
             PushToRes(_user->_fd, getServReply(_user,  RPL_LIST, (string[]){it->first,
                 intToStr(it->second->getNusers()), it->second->getTopic()}), res);
-        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, (string[]){NULL}), res);
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, NULL), res);
     }
     else
     {
-        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, (string[]){NULL}), res);
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, NULL), res);
         vector<string>  givenChans = ::split(_params[0], ",");
         for (vector<string>::iterator it(givenChans.begin()) ; it != givenChans.end() ; ++it)
         {
@@ -331,7 +333,7 @@ void    Cmd::LIST( vector<t_ClientMsg> & res )
                 PushToRes(_user->_fd, getServReply(_user,  RPL_LIST, (string[]){chan->getName(),
                     intToStr(chan->getNusers()), chan->getTopic()}), res);
         }
-        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, (string[]){NULL}), res);
+        PushToRes(_user->_fd, getServReply(_user,  RPL_LISTEND, NULL), res);
     }
 }
 
@@ -388,7 +390,7 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
         {
             //  ERR if the user is not a channel operator.
             if (chan->_operList.find(_user) == chan->_operList.end())
-                    PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){chan->getName()}), res);
+				PushToRes(_user->_fd, getServReply(_user, ERR_CHANOPRIVSNEEDED, (string[]){chan->getName()}), res);
         }
     }
     else
@@ -441,27 +443,51 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
 }
 
 //  Didn't consider mask pattern case
+//"<client> <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>"
+//ex:
+// WHO emersion        ; request information on user "emersion"
+//:calcium.libera.chat 352 dan #ircv3 ~emersion sourcehut/staff/emersion calcium.libera.chat emersion H :1 Simon Ser
+//:calcium.libera.chat 315 dan emersion :End of WHO list
+
 void    Cmd::WHO( vector<t_ClientMsg> & res )
 {
-    if (!_params.empty() && _params[0][0] == CHAN_PREFIX)
-    {
-        Channel * chan = GetChannelByName(_params[0]);
-        if (chan != NULL)
-        {
-            for (set<User *>::iterator it(chan->_userList.begin()) ; it != chan->_userList.end() ; ++it)
-            {
-                User * usr = *it;
-                PushToRes(_user->_fd, getServReply(_user, RPL_WHOREPLY, (string[]){usr->getWho()}), res);
-            }
-        }
+    // string  mask;
+
+	// PushToRes(_user->_fd, ":ft-irc.42.fr 352 nick_kyu1 #test777 user_kyu user.ft-irc.42.fr ft-irc.42.fr nick_kyu1 H@ :0 realname\r\n", res);
+
+    if (_params.empty()) {
+        PushToRes(_user->_fd, getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){_cmd}), res);
+        return ;
+    } else if (Channel::IsPrefix(_params[0][0])) {
+		// case channel name => send all user in channel whose name corresponding to params[0]
+		Channel * chan = GetChannelByName(_params[0]);
+
+		if (chan) {
+			set<User *>::iterator it;
+			for (it = chan->_userList.begin(); it != chan->_userList.end(); ++it) {
+				PushToRes(
+					_user->_fd,
+					getServReply(*it, RPL_WHOREPLY, (string[]){ (*it)->getWho(_params[0])}),
+					res
+				);
+			}
+		}
+    } else {
+		// case exact nickname => send user info whose nickname correspond to params[0]
+		map<int, User *>::iterator it;
+		User *current;
+
+		for (it = _userList.begin(); it != _userList.end(); ++it) {
+			current = it->second;
+			if (current->_nick == _params[0]) // if found exact nickname correspond to params[0]
+				PushToRes(
+					_user->_fd,
+					getServReply(current, RPL_WHOREPLY, (string[]){ current->getWho("*") }),
+					res
+				);
+		}
     }
-    else if (!_params.empty())
-    {
-        User * usr = getUserByNick(_params[0]);
-        if (usr != NULL)
-            PushToRes(_user->_fd, getServReply(_user, RPL_WHOREPLY, (string[]){usr->getWho()}), res);
-    }
-    PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, (string[]){NULL}), res);
+    PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, NULL), res);
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
