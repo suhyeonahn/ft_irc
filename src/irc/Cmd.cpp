@@ -451,10 +451,6 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
 
 void    Cmd::WHO( vector<t_ClientMsg> & res )
 {
-    // string  mask;
-
-	// PushToRes(_user->_fd, ":ft-irc.42.fr 352 nick_kyu1 #test777 user_kyu user.ft-irc.42.fr ft-irc.42.fr nick_kyu1 H@ :0 realname\r\n", res);
-
     if (_params.empty()) {
         PushToRes(_user->_fd, getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){_cmd}), res);
         return ;
