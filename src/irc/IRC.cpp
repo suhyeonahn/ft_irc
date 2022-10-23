@@ -55,6 +55,38 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	return false;
 }
 
+void	IRC::DeleteOffUser(int fd) {
+	if (_userList.find(fd) != _userList.end()) {
+		User *user = _userList[fd];
+
+		//Delete user in chanList
+		map<string, Channel *>::iterator chanIt;
+		Channel *chan;
+
+		for (chanIt = _chanList.begin(); chanIt != _chanList.end(); ++chanIt) {
+			chan = chanIt->second;
+			if (chan->_invitedList.find(user) != chan->_invitedList.end()) {
+				//remove joined channel in user instance
+				if (user->_joined.find(chan) != user->_joined.end()) {
+					user->_joined.erase(chan);
+					chan->_userList.erase(user);
+					chan->_operList.erase(user);
+					// if no more user in chan, remove chan
+					if (chan->_userList.size() == 0) {
+						_chanList.erase(chan->_name);
+						delete chan;
+					}
+				} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
+					chan->_invitedList.erase(user);
+			}
+		}
+
+		delete user;
+		_userList.erase(fd);
+	}
+}
+
+
 void  IRC::test()
 {
 	bool plus;
@@ -74,6 +106,12 @@ void  IRC::test()
 			std::cout << tmp[i] << endl;
 	}
 }
+
+
+
+
+
+
 
 void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
 	cout << "\t - " << type << "(" << userset.size()<< ")" ;

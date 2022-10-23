@@ -19,7 +19,7 @@ class Server {
 		fd_set				_fdReader;
 
 		void	AcceptClient();
-		void 	DeleteClient(int fd);
+		void 	DeleteClientFD(int fd);
 
 		void	SetFDs();
 		int		GetAllFDs();

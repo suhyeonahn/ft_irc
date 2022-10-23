@@ -62,9 +62,11 @@ void	Server::Watch() {
 			if (_clientList.find(clientFD) != _clientList.end()) 
 				_clientList[clientFD]->SendRes(resIt->second);
 		}
-		for (offIt = offList.begin(); offIt != offList.end(); ++offIt)
-			DeleteClient(*offIt);
-		DEBUG();
+		for (offIt = offList.begin(); offIt != offList.end(); ++offIt) {
+			cout << RED << "offFDs: " << *offIt << DFT << endl;
+			DeleteClientFD(*offIt);
+		}
+		// DEBUG();
 	}
 }
 
@@ -82,7 +84,7 @@ void Server::AcceptClient() {
 	}
 }
 
-void Server::DeleteClient(int fd) {
+void Server::DeleteClientFD(int fd) {
 	if (_clientList.find(fd) != _clientList.end()) {
 		delete _clientList[fd];
 		_clientList.erase(fd);
@@ -131,18 +133,14 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 			//if serverFD
 			if (fd == _fd)
 				AcceptClient();
-			else {
-				// if clientFD
+			else if (offList.find(fd) == offList.end()){
+				// if current clientFD is not died
 				msg.clear();
 				if (!_clientList[fd]->RecvMsg(msg)) {
-					//Although select() said client socket is changed,
-					//if lengh of buffer sent by client is , client socket is disconnected.
-					//So, delete client in _clientList
-
-					//TODO: delete client from channel
-					//like DeleteClientFromChannel(fd)
-					//(this code will be implemented after finish JOIN functionality)
-					DeleteClient(fd);
+					// Normally Client QUIT with signal (nc 127.0.0.1 =>  ctrl + c or ctrl +d...etc)
+					std::cout << RED << "HERE(DEAD CLIENT)" << DFT << endl;
+					_irc.DeleteOffUser(fd);
+					DeleteClientFD(fd);
 				}
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
 					offList.insert(fd);
