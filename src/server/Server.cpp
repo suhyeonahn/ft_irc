@@ -44,22 +44,26 @@ void	Server::Init(){
 
 
 void	Server::Watch() {
-	vector<t_ClientMsg> res;
-	vector<t_ClientMsg>::iterator resIt;
+	vector<t_ClientMsg> 			res;
+	set<int>						offList;
+	vector<t_ClientMsg>::iterator	resIt;
+	set<int>::iterator				offIt;
 
 	while (1) {
 		res.clear();
+		offList.clear();
 
 		SetFDs();
-		WaitClientMsg(GetAllFDs(), res);
+		WaitClientMsg(GetAllFDs(), res, offList);
 
 		//loop to send response to each clientFD
 		for(resIt = res.begin(); resIt!= res.end(); ++resIt) {
 			int clientFD = resIt->first;
-			if (_clientList.find(clientFD) != _clientList.end()) {
+			if (_clientList.find(clientFD) != _clientList.end()) 
 				_clientList[clientFD]->SendRes(resIt->second);
-			}
 		}
+		for (offIt = offList.begin(); offIt != offList.end(); ++offIt)
+			DeleteClient(*offIt);
 		DEBUG();
 	}
 }
@@ -118,7 +122,7 @@ int		Server::GetAllFDs() {
  * else if client send cmd => _clientList[current_client]->RecvCommand(cmd)
  * else if client disconnected => TO MANAGE THIS
  */
-void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
+void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offList) {
 	string	msg;
 
 	for (int fd = 3; fd <= _lastFD && allFDs; ++fd) {
@@ -140,13 +144,11 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res) {
 					//(this code will be implemented after finish JOIN functionality)
 					DeleteClient(fd);
 				}
-				else if (!msg.empty()) {
-					_irc.ProcessClientMsg(make_pair(fd, msg), res);
-
-					//LINE TO DEBUG
-					cout << "client #" << fd << ":" << endl;
-					cout << CYN << msg << DFT;
-				}
+				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
+					offList.insert(fd);
+				//LINE TO DEBUG
+				cout << "client #" << fd << ":" << endl;
+				cout << CYN << msg << DFT;
 			}
 			--allFDs;
 		}

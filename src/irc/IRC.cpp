@@ -14,6 +14,9 @@ IRC::~IRC()
 		delete it->second;
 }
 
+/**
+ *  return true if client send QUIT else false;
+ */
 bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 {
 	User *   user;
@@ -45,9 +48,11 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 			vector<string> params = setParams(*it);
 			Cmd cmd(cmdStr, params, user, _userList, _chanList);
 			cmd.execute(res);
+			if (cmdStr == "QUIT")
+				return true;
 		}
 	}
-	return 0;
+	return false;
 }
 
 void  IRC::test()
