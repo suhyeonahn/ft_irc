@@ -147,6 +147,6 @@
 #define ERR_SASLALREADY 907
 
 string  getServReply(User *user, int code, string params[]);
-string	get3DigitCode(unsigned int width, int code);
+string	get3DigitCode(int code);
 
 #endif
