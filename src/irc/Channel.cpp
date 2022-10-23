@@ -106,12 +106,14 @@ string  Channel::getNicks() const
         ; ++it)
     {
         User * user = *it;
+        // if (user->_o || user->_O)
+        //     nicks += "@";
         nicks += user->getNick();
         nicks += " ";
     }
     nicks.erase(nicks.end() - 1); // Remove last " " Char
 
-    return _name;
+    return nicks;
 }
 
 size_t  Channel::getNusers() const

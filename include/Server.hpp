@@ -23,7 +23,8 @@ class Server {
 
 		void	SetFDs();
 		int		GetAllFDs();
-		void	WaitClientMsg(int allFDs, vector<t_ClientMsg> &res);
+		void	WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offList);
+
 		int		Error(const string &msg);
 
 	public:

@@ -18,6 +18,7 @@ string	get3DigitCode(int code) {
 	return res;
 }
 
+
 string  getServReply(User *user, int code, string params[])
 {
 	stringstream	ss;
@@ -25,7 +26,7 @@ string  getServReply(User *user, int code, string params[])
 	// is it mandatory...?
 	// put prefix
 	// ex - ':<HOST> <CODE> <NICKNAME> '
-	ss << ":" << HOST << " " << get3DigitCode(code) << " " << user->getNick() << " ";
+	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " " << user->getNick() << " ";
 
 	switch (code)
 	{
@@ -67,7 +68,7 @@ string  getServReply(User *user, int code, string params[])
 			ss << params[0] << " " << params[1] << " "; break;
 		case RPL_WHOREPLY:	//352
 			ss << params[0]; break;
-		case RPL_ENDOFWHO:	//352
+		case RPL_ENDOFWHO:	//315
 			ss << ":End of WHO list"; break;
 		case ERR_TOOMANYCHANNELS:
 			ss << ":You have joined too many channels"; break;
