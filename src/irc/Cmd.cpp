@@ -80,7 +80,7 @@ void    Cmd::NICK( vector<t_ClientMsg> & res )
         else {
             _user->setNick(nick);
             //reply welcome msg to client
-            Cmd::PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
+            PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
         }
     }
 

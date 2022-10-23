@@ -137,8 +137,9 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 				// if current clientFD is not died
 				msg.clear();
 				if (!_clientList[fd]->RecvMsg(msg)) {
-					// Normally Client QUIT with signal (nc 127.0.0.1 =>  ctrl + c or ctrl +d...etc)
-					std::cout << RED << "HERE(DEAD CLIENT)" << DFT << endl;
+					// when client is dead by signal (nc 127.0.0.1 =>  ctrl + c or ctrl +d...etc)
+					// cf: Hexchat(or other IRC client) send QUIT message (not signal)
+					std::cout << RED << "[" << fd << "] KILLED BY SIGNAL" << DFT << endl;
 					_irc.DeleteOffUser(fd);
 					DeleteClientFD(fd);
 				}
