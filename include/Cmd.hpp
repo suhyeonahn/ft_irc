@@ -7,7 +7,7 @@
 # include "Channel.hpp"
 # include "Utils.hpp"
 # include "Numerics.hpp"
-
+# include "IRC.hpp"
 //  All the client CMDS will be treated in this Class
 //  to categorize the CMDS
 //  Possible Categories :
@@ -23,6 +23,8 @@ class   Cmd
         map<int, User *>        &_userList;
         map<string, Channel *>  &_chanList;
         //put reference to synchronize _userList and _chanList in Cmd class with thoses things in IRC class
+
+
 
         //  Connection cmds
         void    PASS( vector<t_ClientMsg> & res );
@@ -40,6 +42,8 @@ class   Cmd
         void    MODE( vector<t_ClientMsg> & res );
         //  User-Based Queries
         void    WHO( vector<t_ClientMsg> & res );
+
+        void    QUIT( vector<t_ClientMsg> & res );
 
     public:
         Cmd( 

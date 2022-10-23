@@ -63,8 +63,8 @@ void	Server::Watch() {
 				_clientList[clientFD]->SendRes(resIt->second);
 		}
 		for (offIt = offList.begin(); offIt != offList.end(); ++offIt) {
-			cout << RED << "offFDs: " << *offIt << DFT << endl;
 			DeleteClientFD(*offIt);
+			// cout << RED << "offFDs: " << *offIt << DFT << endl;
 		}
 		// DEBUG();
 	}
@@ -140,7 +140,7 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 					// when client is dead by signal (nc 127.0.0.1 =>  ctrl + c or ctrl +d...etc)
 					// cf: Hexchat(or other IRC client) send QUIT message (not signal)
 					std::cout << RED << "[" << fd << "] KILLED BY SIGNAL" << DFT << endl;
-					_irc.DeleteOffUser(fd);
+					_irc.DeleteOffUser(fd, _irc._userList, _irc._chanList);
 					DeleteClientFD(fd);
 				}
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
