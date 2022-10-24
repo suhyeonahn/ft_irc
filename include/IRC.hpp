@@ -26,8 +26,8 @@ class   IRC
 
         bool            ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
         //put static and send userList, chanList because I have to use this function in Server class and Cmd class
-        static void         DeleteOffUser(int fd, map<int, User *> &userList, map<string, Channel *> &chanList);
-		static string	    Emit(User *user, string params[], set<User *> userList, vector<t_ClientMsg> &res, bool excludeUser);
+        static void         DeleteOffUser(int fd,  map<int, User *> &userList,  map<string, Channel *> &chanList);
+		static string	    Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser);
         static set<User *>  GetSameChanUsers(User *user);
 
 

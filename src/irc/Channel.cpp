@@ -75,7 +75,7 @@ string  Channel::getNicks() const
         User * user = *it;
         if (getOperByNick(user->getNick()))
             nicks += OPER_PREFIX;
-        nicks += user->getNick(); + " ";
+        nicks += user->getNick() + " ";
     }
     nicks.erase(nicks.end() - 1); // Remove last " " Char
 
@@ -109,7 +109,7 @@ User *  Channel::getOperByNick( string const & nick ) const
     {
         User * user = *it;
 		if (user->getNick() == nick)
-			return user
+			return user;
     }
 	return NULL;
 }

@@ -55,7 +55,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	return false;
 }
 
-void	IRC::DeleteOffUser(int fd, map<int, User *> &userList, map<string, Channel *> &chanList) {
+void	IRC::DeleteOffUser(int fd,  map<int, User *> &userList,  map<string, Channel *> &chanList) {
 	if (userList.find(fd) != userList.end()) {
 		User *user = userList[fd];
 
@@ -106,7 +106,7 @@ set<User *> IRC::GetSameChanUsers(User *user){
 //FIXME: to debug
 // userList size() is not correct after quick
 // ==93936==ERROR: AddressSanitizer: heap-use-after-free on address 0x000103603978 at pc 0x0001004f0c38 bp 0x00016f951000 sp 0x00016f950ff8
-string	IRC::Emit(User *user, string params[], set<User *> userList, vector<t_ClientMsg> &res, bool excludeUser) {
+string	IRC::Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser) {
     string  msg = ":" + user->getNick();
 
     for (int i = 0; !params[i].empty(); ++i )
