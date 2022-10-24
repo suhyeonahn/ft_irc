@@ -6,7 +6,7 @@
 
 # define DEFAULT_NAME       "*"
 # define VALID_CHARS_NICK   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
-# define USER_MODE          "ioOrw"
+# define USER_MODE          "io"
 class   User
 {
     
@@ -27,9 +27,6 @@ class   User
         // User mode
         bool    _i; //  invisible
         bool    _o; //  oper
-        bool    _O; //  local oper, - channel oper...?
-        bool    _r; //  registered
-        bool    _w; //  WALLOPS 
 
         void    setNick( std::string const & nick );
         void    setUname( std::string const & uname );
