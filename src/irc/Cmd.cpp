@@ -21,6 +21,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "KICK") KICK(res);
     else if (_cmd == "WHO") WHO(res);
     else if (_cmd == "QUIT") QUIT(res);
+    else if (_cmd == "PRIVMSG") PRIVMSG(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -439,7 +440,7 @@ void    Cmd::MODE( vector<t_ClientMsg> & res )
             PushToRes(_user->_fd, getServReply(_user, ERR_NOSUCHNICK, (string[]){_params[0]}), res);
         //  _user is not matching the nick
         else if (_user != usr)
-            PushToRes(_user->_fd, getServReply(_user, ERR_USERSDONTMATCH, (string[]){NULL}), res);
+            PushToRes(_user->_fd, getServReply(_user, ERR_USERSDONTMATCH, NULL), res);
         //  modestring is not given then send a msg containing the current modes
         else if (_params.size() < 2)
             PushToRes(_user->_fd, getServReply(_user, RPL_UMODEIS, (string[]){_user->getMode()}), res);
@@ -520,6 +521,51 @@ void    Cmd::WHO( vector<t_ClientMsg> & res )
 		}
     }
     PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, NULL), res);
+}
+
+void    Cmd::PRIVMSG( vector<t_ClientMsg> & res )
+{
+    if (_params.empty())
+        PushToRes(_user->_fd, getServReply(_user, ERR_NORECIPIENT, NULL), res);
+    else if (_params.size() < 2)
+        PushToRes(_user->_fd, getServReply(_user, ERR_NOTEXTTOSEND, NULL), res);
+    else
+    {
+        vector<string> targets = split(_params[0], ",");
+        for (int i = 0; i < targets.size(); ++i)
+        {
+            //  Target is a chan
+            if (targets[i].find(CHAN_PREFIX) != string::npos)
+            {
+                Channel * chan = GetChannelByName(targets[i]);
+                //  ERR if the channel doesn't exist
+                if (chan == NULL)
+                    PushToRes(_user->_fd, getServReply(_user,  ERR_NOSUCHCHANNEL, (string[]){targets[i]}), res);
+                else
+                {
+                    //  when prefixed, msg will be delivered only to the membs of given status in the channel
+                    if (_params[0][0] == OPER_PREFIX)
+                        ;//IRC::Emit(_user, (string []){_params[1]}, chan->_operList, res, false);
+                    else
+                        ;//IRC::Emit(_user, (string []){_params[1]}, chan->_userList, res, false);
+                }
+            }
+            // Target is a user
+            else
+            {
+                User * usr = getUserByNick(_params[0]);
+                //  usr not on the server
+                if (usr == NULL)
+                    PushToRes(_user->_fd, getServReply(_user, ERR_NOSUCHNICK, (string[]){targets[i]}), res);
+                else
+                {
+                    if (usr->_away == "G")
+                        PushToRes(_user->_fd, getServReply(_user,  RPL_AWAY, (string[]){targets[i]}), res);
+                    PushToRes(_user->_fd, getServReply(_user, MSG_PRIVMSG, (string[]){_params[1]}), res);
+                }
+            }
+        }
+    }
 }
 
 void    Cmd::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {

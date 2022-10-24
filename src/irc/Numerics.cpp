@@ -45,9 +45,10 @@ string  getServReply(User *user, int code, string params[])
 				ss << " by " << params[2];
 			break;
 		}
+		case RPL_AWAY: // 301
+			ss << ": " << params[0] <<  " is away" ; break;
 		case MSG_PART: // 999
 			ss  << ":" << params[0] << " is leaving the channel " << params[1]; break;
-
 		case MSG_KICK: // 998
 		{	
 			ss << ":You are kicked from " << params[0]; 
@@ -55,6 +56,8 @@ string  getServReply(User *user, int code, string params[])
 				ss << " due to following reason: " << params[1];
 			break;
 		}
+		case MSG_PRIVMSG:	//	997
+			ss  << ": " << params[0]<< ; break;
 		case RPL_LISTSTART: // 321
 			ss << "Channel :Users  Name"; break;
 		case RPL_LIST: // 322
@@ -102,6 +105,10 @@ string  getServReply(User *user, int code, string params[])
 			ss << ":Cant change mode for other users"; break;
 		case ERR_UMODEUNKNOWNFLAG: // 501
 			ss << ":Unknown MODE flag"; break;
+		case ERR_NORECIPIENT: // 411
+			ss << ":No recipient given"; break;
+		case ERR_NOTEXTTOSEND: // 412
+			ss << ":No text given to send"; break;
 		default: break;
 	}
 	ss	<< SEP_MSG;
