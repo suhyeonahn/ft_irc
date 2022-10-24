@@ -25,6 +25,15 @@ bool Channel::IsValidName(const string &name) {
     return true;
 }
 
+bool    Channel::isValidMode( char const & mode )
+{
+    static string const     validChars(CHAN_MODE);
+
+    if (validChars.find(mode) == string::npos)
+        return false;
+    return true;
+}
+
 void    Channel::setMode( bool plus, char const & mode )
 {
     if (mode == 'i')

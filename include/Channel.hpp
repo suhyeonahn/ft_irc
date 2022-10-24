@@ -7,7 +7,8 @@
 
 # define CHAN_PREFIX '#'
 # define CHAN_INVALID_CHAR "\a,: "
-# define OPER_PREFIX '@'
+# define OPER_PREFIX "@"
+# define CHAN_MODE  "ik"
 
 class   Channel
 {
@@ -48,6 +49,7 @@ class   Channel
 
 		static bool IsPrefix(char c);
 		static bool IsValidName(const string &name);
+        bool    isValidMode( char const & mode );
 
 		friend class Cmd;
 		friend class IRC;
