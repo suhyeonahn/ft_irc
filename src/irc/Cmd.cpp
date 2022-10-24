@@ -237,8 +237,6 @@ void    Cmd::NAMES( vector<t_ClientMsg> & res )
             }
             PushToRes(_user->_fd, getServReply(_user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
         }
-        //  if the given channel has the secret channel mode set
-        //  and the user is not joined to that channel return RPL_ENDOFNAMES
     }
 }
 

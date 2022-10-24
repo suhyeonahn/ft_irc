@@ -28,25 +28,9 @@ bool Channel::IsValidName(const string &name) {
 void    Channel::setMode( bool plus, char const & mode )
 {
     if (mode == 'i')
-        _b = plus ? true : false;
-    if (mode == 'o')
-        _e = plus ? true : false;
-    if (mode == 'O')
-        _l = plus ? true : false;
-    if (mode == 'r')
         _i = plus ? true : false;
-    if (mode == 'w')
-        _I = plus ? true : false;
-    if (mode == 'w')
+    if (mode == 'k')
         _k = plus ? true : false;
-    if (mode == 'w')
-        _m = plus ? true : false;
-    if (mode == 'w')
-        _s = plus ? true : false;
-    if (mode == 'w')
-        _t = plus ? true : false;
-    if (mode == 'w')
-        _n = plus ? true : false;
 }
 
 void    Channel::addUser( User * user )
@@ -89,10 +73,9 @@ string  Channel::getNicks() const
         ; ++it)
     {
         User * user = *it;
-        // if (user->_o || user->_O)
-        //     nicks += "@";
-        nicks += user->getNick();
-        nicks += " ";
+        if (getOperByNick(user->getNick()))
+            nicks += OPER_PREFIX;
+        nicks += user->getNick(); + " ";
     }
     nicks.erase(nicks.end() - 1); // Remove last " " Char
 
@@ -112,26 +95,21 @@ size_t  Channel::getNusers() const
 string    Channel::getMode()  const
 {
     string mode = "";
-    if (_b)
-        mode += "b";
-    if (_e)
-        mode += "e";
-    if (_l )
-        mode += "l";
     if (_i)
        mode += "i";
-    if (_I)
-        mode += "I";
     if (_k)
         mode += "k";
-    if (_m)
-        mode += "m";
-    if (_s)
-        mode += "s";
-    if (_t)
-        mode += "t";
-    if (_n)
-        mode += "n";
-    return mode;   
+    return mode;
+}
 
+User *  Channel::getOperByNick( string const & nick ) const
+{
+	for (set<User *>::const_iterator it(_operList.begin());
+		it != _operList.end(); ++it)
+    {
+        User * user = *it;
+		if (user->getNick() == nick)
+			return user
+    }
+	return NULL;
 }
