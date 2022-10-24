@@ -55,6 +55,74 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	return false;
 }
 
+void	IRC::DeleteOffUser(int fd, map<int, User *> &userList, map<string, Channel *> &chanList) {
+	if (userList.find(fd) != userList.end()) {
+		User *user = userList[fd];
+
+		//Delete user in chanList
+		map<string, Channel *>::iterator chanIt;
+		Channel *chan;
+
+		for (chanIt = chanList.begin(); chanIt != chanList.end(); ++chanIt) {
+			chan = chanIt->second;
+			if (chan->_invitedList.find(user) != chan->_invitedList.end()) {
+				//remove joined channel in user instance
+				if (user->_joined.find(chan) != user->_joined.end()) {
+					user->_joined.erase(chan);
+					chan->_userList.erase(user);
+					chan->_operList.erase(user);
+					// if no more user in chan, remove chan
+					if (chan->_userList.size() == 0) {
+						chanList.erase(chan->_name);
+						delete chan;
+					}
+				} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
+					chan->_invitedList.erase(user);
+			}
+		}
+		delete user;
+		userList.erase(fd);
+	}
+}
+
+// returns all users in same channel with current user passed by param
+set<User *> IRC::GetSameChanUsers(User *user){
+	set<User *> 				res;
+	set<Channel *>::iterator	chanIt;
+
+	for(chanIt = user->_joined.begin(); chanIt != user->_joined.end(); ++chanIt)
+		res.insert((*chanIt)->_userList.begin(), (*chanIt)->_userList.end());
+	res.erase(user);
+	return res;
+}
+
+//I moved this function to IRC from Channel to use it on divers cases.
+// send message to userList
+// if excludeUser is true, except current user
+// else current user will be also receive msg
+// returns msg which could be useful depending to case.
+// string	IRC::Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser) 
+
+//FIXME: to debug
+// userList size() is not correct after quick
+// ==93936==ERROR: AddressSanitizer: heap-use-after-free on address 0x000103603978 at pc 0x0001004f0c38 bp 0x00016f951000 sp 0x00016f950ff8
+string	IRC::Emit(User *user, string params[], set<User *> userList, vector<t_ClientMsg> &res, bool excludeUser) {
+    string  msg = ":" + user->getNick();
+
+    for (int i = 0; !params[i].empty(); ++i )
+        msg += " " + params[i];
+    msg += SEP_MSG;
+
+    set<User *>::iterator it;
+	cout << "HERE:" << userList.size() << endl;
+    for(it = userList.begin(); it != userList.end(); ++it) {
+        if (*it != user || !excludeUser)
+            Cmd::PushToRes((*it)->getFd(), msg, res);
+    }
+    return msg;
+}
+
+
 void  IRC::test()
 {
 	bool plus;
@@ -74,6 +142,12 @@ void  IRC::test()
 			std::cout << tmp[i] << endl;
 	}
 }
+
+
+
+
+
+
 
 void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
 	cout << "\t - " << type << "(" << userset.size()<< ")" ;

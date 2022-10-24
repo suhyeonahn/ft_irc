@@ -20,7 +20,7 @@ void    Cmd::execute(vector<t_ClientMsg> & res ) {
     else if (_cmd == "LIST") LIST(res);
     else if (_cmd == "KICK") KICK(res);
     else if (_cmd == "WHO") WHO(res);
-
+    else if (_cmd == "QUIT") QUIT(res);
 }
 
 User *  Cmd::getUserByNick( string const & nick ) const
@@ -44,6 +44,13 @@ Channel *Cmd::CreateChannel( const string &name, User *user) {
 	// user->_O = true; // channel operator
     user->join(chan);
     return chan;
+}
+
+void    Cmd::QUIT( vector<t_ClientMsg> & res ) {
+    string  msg = !_params[0].empty() ? _params[0] : "No reason";
+
+    IRC::Emit(_user, (string[]){"QUIT", ":" + msg, ""}, IRC::GetSameChanUsers(_user), res, true);
+    IRC::DeleteOffUser(_user->_fd, _userList, _chanList);
 }
 
 void    Cmd::PASS( vector<t_ClientMsg> & res )
@@ -80,7 +87,7 @@ void    Cmd::NICK( vector<t_ClientMsg> & res )
         else {
             _user->setNick(nick);
             //reply welcome msg to client
-            Cmd::PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
+            PushToRes(_user->_fd, getServReply(_user, RPL_WELCOME, NULL), res); // 001
         }
     }
 
@@ -187,7 +194,7 @@ void    Cmd::JOIN( vector<t_ClientMsg> & res ) {
             PushToRes(_user->_fd, servReply, res);
         else {
             //1. Emit msg to all user in channel (including current user)
-            chan->Emit(_user, (string []) { "JOIN", name, "" }, res, false);
+            IRC::Emit(_user, (string []) { "JOIN", name, "" }, chan->_userList, res, false);
             //2.topic(NOT YET)
             if (chan->_topic.size()) 
                 TOPIC(res);

@@ -69,24 +69,7 @@ void    Channel::sendMsg( int code, string params[], vector<t_ClientMsg> & res )
     }
 }
 
-// send message to all user in channel
-// if excludeUser is true, except current user
-// else current user will be also receive msg
-// returns msg which could be useful depending to case.
-string  Channel::Emit(User *user, string params[], vector<t_ClientMsg> &res, bool excludeUser) {
-    string  msg = ":" + user->getNick();
 
-    for (int i = 0; !params[i].empty(); ++i )
-        msg += " " + params[i];
-    msg += SEP_MSG;
-
-    set<User *>::iterator it;
-    for(it = _userList.begin(); it != _userList.end(); ++it) {
-        if (*it != user || !excludeUser)
-            Cmd::PushToRes((*it)->getFd(), msg, res);
-    }
-    return msg;
-}
 
 string  Channel::getName() const
 {

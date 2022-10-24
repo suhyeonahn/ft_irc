@@ -41,7 +41,6 @@ class   Channel
         void    rmUser( User * user );
 
 		void	sendMsg( int code, string params[], vector<t_ClientMsg> & res );
-		string	Emit(User *user, string params[], vector<t_ClientMsg> &res, bool excludeUser);
 
 
 	public:
