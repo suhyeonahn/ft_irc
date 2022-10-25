@@ -52,18 +52,6 @@ void    Channel::rmUser( User * user )
     _userList.erase(user);
 }
 
-void    Channel::sendMsg( int code, string params[], vector<t_ClientMsg> & res )
-{
-    for (set<User *>::iterator it(_userList.begin()) ; it != _userList.end() 
-        ; ++it)
-    {
-        User * user = *it;
-        IRC::PushToRes(user->getFd(), getServReply(user, code, params), res);
-    }
-}
-
-
-
 string  Channel::getName() const
 {
     return _name;
@@ -74,7 +62,7 @@ string  Channel::getTopic() const
     return _topic;
 }
 
-string  Channel::getNicks() const
+string  Channel::getNicks( bool i ) const
 {
     string nicks = "";
 
@@ -82,9 +70,12 @@ string  Channel::getNicks() const
         ; ++it)
     {
         User * user = *it;
-        if (getOperByNick(user->getNick()))
-            nicks += OPER_PREFIX;
-        nicks += user->getNick() + " ";
+        if (!(i == true && user->_i == true))
+        {
+            if (getOperByNick(user->getNick()))
+                nicks += OPER_PREFIX;
+            nicks += user->getNick() + " ";
+        }
     }
     nicks.erase(nicks.end() - 1); // Remove last " " Char
 

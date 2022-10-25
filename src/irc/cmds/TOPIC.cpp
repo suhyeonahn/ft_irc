@@ -16,10 +16,10 @@ void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res) {
     
     //No error    
     chan = _chanList[cmd._params[0]];
-    servReply = getServReply(cmd._user, RPL_TOPIC, (string[]){chan->_topic });
+    servReply = getServReply(cmd._user, RPL_TOPIC, (string[]){chan->getName(),chan->getTopic()});
 
     if (!servReply.empty())
-        PushToRes(cmd._user->_fd, servReply, res);
+        PushToRes(cmd._user->getFd(), servReply, res);
 }
 
 

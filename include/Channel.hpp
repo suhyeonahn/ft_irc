@@ -32,8 +32,6 @@ class   Channel
         void    addUser( User * user );
         void    rmUser( User * user );
 
-		void	sendMsg( int code, string params[], vector<t_ClientMsg> & res );
-
 	public:
 
 		Channel( string const & name, User * creator );
@@ -42,7 +40,7 @@ class   Channel
 
         string  getName() const;
         string  getTopic() const;
-        string  getNicks() const;
+        string  getNicks( bool i ) const;
         size_t  getNusers() const;
         string  getMode()  const;
         User *  getOperByNick( string const & nick ) const;

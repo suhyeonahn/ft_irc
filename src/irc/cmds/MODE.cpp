@@ -10,15 +10,15 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
         Channel * chan = GetChannelByName(cmd._params[0]);
         //  chan not on the server
         if (chan == NULL)
-            PushToRes(cmd._user->_fd, getServReply(cmd._user,  ERR_NOSUCHCHANNEL, (string[]){cmd._params[0]}), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user,  ERR_NOSUCHCHANNEL, (string[]){cmd._params[0]}), res);
         //  modestring is not given then send a msg containing the current modes
         else if (cmd._params.size() < 2)
-            PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_CHANNELMODEIS, (string[]){chan->getName(), chan->getMode()}), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_CHANNELMODEIS, (string[]){chan->getName(),chan->getMode()}), res);
         else
         {
             //  ERR if the user is not a channel operator.
             if (chan->_operList.find(cmd._user) == chan->_operList.end())
-				PushToRes(cmd._user->_fd, getServReply(cmd._user, ERR_CHANOPRIVSNEEDED, (string[]){chan->getName()}), res);
+				PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_CHANOPRIVSNEEDED, (string[]){chan->getName()}), res);
             else
             {
                 //  modestring is given
@@ -30,7 +30,7 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
                 {
                     string token = *it;
                     if (token[0] != '+' && token[0] != '-')
-                        servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, (string[]){cmd._cmd }); //461
+                        servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                     else
                     {
                         if (token[0] == '+')
@@ -42,12 +42,12 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
                             if (isValid == chan->isValidMode(token[i]))
                                 chan->setMode(plus, token[i]);
                             if (!isValid)
-                                servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, (string[]){cmd._cmd }); //461
+                                servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                         }
                     }
                 }
                 //  Send changed mode
-                PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_UMODEIS, (string[]){chan->getMode()}), res);
+                PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_UMODEIS, (string[]){chan->getMode()}), res);
             }
         }
     }
@@ -57,13 +57,13 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
         User * usr = getUserByNick(cmd._params[0]);
         //  usr not on the server
         if (usr == NULL)
-            PushToRes(cmd._user->_fd, getServReply(cmd._user, ERR_NOSUCHNICK, (string[]){cmd._params[0]}), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NOSUCHNICK, (string[]){cmd._params[0]}), res);
         //  cmd._user is not matching the nick
         else if (cmd._user != usr)
-            PushToRes(cmd._user->_fd, getServReply(cmd._user, ERR_USERSDONTMATCH, NULL), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_USERSDONTMATCH, NULL), res);
         //  modestring is not given then send a msg containing the current modes
         else if (cmd._params.size() < 2)
-            PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()}), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()}), res);
         else
         {
             //  modestring is given
@@ -75,7 +75,7 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
             {
                 string token = *it;
                 if (token[0] != '+' && token[0] != '-')
-                    servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, (string[]){cmd._cmd }); //461
+                    servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                 else
                 {
                     if (token[0] == '+')
@@ -87,14 +87,14 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
                         if (isValid == cmd._user->isValidMode(token[i]))
                             cmd._user->setMode(plus, token[i]);
                         if (!isValid)
-                            servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, (string[]){cmd._cmd }); //461
+                            servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                     }
                 }
             }
             //  Send changed mode
-            PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()}), res);
+            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()}), res);
         }
     }
     if (!servReply.empty())
-        PushToRes(cmd._user->_fd, servReply, res);
+        PushToRes(cmd._user->getFd(), servReply, res);
 }

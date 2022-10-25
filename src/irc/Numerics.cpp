@@ -18,63 +18,45 @@ string	get3DigitCode(int code) {
 	return res;
 }
 
-
-string  getServReply(User *user, int code, string params[])
+string  getServReply( User * user, int code, string params[] )
 {
 	stringstream	ss;
 
 	// is it mandatory...?
 	// put prefix
-	// ex - ':<HOST> <CODE> <NICKNAME> '
-	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " " << user->getNick() << " ";
+	// ex - ':<HOST> <CODE> <NICKNAME>[!user@host] '
+	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " "
+		<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
 
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
-			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
+			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
 		case RPL_TOPIC: // 332
-			ss << ":" << params[0]; break;
-		case RPL_NAMREPLY: // 353
+			ss << params[0] << " :" << params[1]; break;
+		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_ENDOFNAMES: // 366
 			ss << params[0] << " :End of /NAMES list"; break;
 		case RPL_INVITING:	// 341
-		{	
-			ss << params[0] << " has been invited to " << params[1]; 
-			if (*(&params + 1) - params == 3)
-				ss << " by " << params[2];
-			break;
-		}
-		case RPL_AWAY: // 301
-			ss << ": " << params[0] <<  " is away" ; break;
-		case MSG_PART: // 999
-			ss  << ":" << params[0] << " is leaving the channel " << params[1]; break;
-		case MSG_KICK: // 998
-		{	
-			ss << ":You are kicked from " << params[0]; 
-			if (*(&params + 1) - params == 2)
-				ss << " due to following reason: " << params[1];
-			break;
-		}
-		case MSG_PRIVMSG:	//	997
-			ss  << ": " << params[0]; break;
+			ss << params[0] << " :has been invited to " << params[1]; break;
+		case RPL_AWAY: // 301  FIXEME :: message is a pram "<client> <nick> :<message>"
+			ss << params[0] << ":is away" ; break;
 		case RPL_LISTSTART: // 321
 			ss << "Channel :Users  Name"; break;
 		case RPL_LIST: // 322
 		//  <channel> <client count> :<topic>
 			ss << params[0] << " " << params[1] << " :" << params[2]; break;
 		case RPL_LISTEND: //323
-			ss << "<client> :End of /LIST"; break;
+			ss << ":End of /LIST"; break;
 		case RPL_UMODEIS:	//	221
 			ss << params[0]; break;
 		case RPL_CHANNELMODEIS:	//	324
-			ss << params[0] << " " << params[1] << " "; break;
+			ss << params[0] << " " << params[1]; break;
 		case RPL_WHOREPLY:	//352
 			ss << params[0]; break;
 		case RPL_ENDOFWHO:	//315
-			ss << ":End of WHO list"; break;
-		case ERR_TOOMANYCHANNELS:
-			ss << ":You have joined too many channels"; break;
+			ss << params[0] << " :End of WHO list"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461
@@ -116,4 +98,34 @@ string  getServReply(User *user, int code, string params[])
 	return ss.str();
 }
 
+string  getServMsg( User * user, int code, string params[] )
+{
+	stringstream	ss;
+	
+	// put prefix(source)
+	// ex - ':<HOST> <NICKNAME>[!user@host] '
+	ss << ":" << SERV_HOST << " "
+		<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
+	switch (code)
+	{
+		case MSG_PART: // 1000
+		{
+			ss  << "PART " << params[0];
+			if (*(&params + 1) - params == 2)
+			ss << " :" << params[1];
+			break;
+		}
+		case MSG_KICK: // 1001
+			ss  << "KICK " << params[0] << " " << params[1] << " :" << params[2]; break;
+		case MSG_PRIVMSG:	//	1002
+			ss  << "PRIVMSG " << params[0] << " :" << params[1]; break;
+		case MSG_NOTICE:	//	1003
+			ss  << "NOTICE " << params[0] << " :" << params[1]; break;
+		case MSG_INVITE:	//	1004
+			ss  << "INVITE " << params[0] << " " << params[1]; break;
+	}
+	ss	<< SEP_MSG;
+
+	return ss.str();
+}
 

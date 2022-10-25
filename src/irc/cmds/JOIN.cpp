@@ -8,7 +8,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
     //ERROR_RPLY
     if (cmd._params.size() < 1) {
         servReply = getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){ cmd._cmd });
-        PushToRes(cmd._user->_fd, servReply, res);
+        PushToRes(cmd._user->getFd(), servReply, res);
         return ;
     }
 
@@ -24,7 +24,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
 
         if (!Channel::IsValidName(name)) {
             servReply = getServReply(cmd._user, ERR_BADCHANMASK, (string []) { name });
-            PushToRes(cmd._user->_fd, servReply, res);
+            PushToRes(cmd._user->getFd(), servReply, res);
             continue;
         }
 
@@ -54,7 +54,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
             }
         }
         if (!servReply.empty())
-            PushToRes(cmd._user->_fd, servReply, res);
+            PushToRes(cmd._user->getFd(), servReply, res);
         else {
             //1. Emit msg to all user in channel (including current user)
             IRC::Emit(cmd._user, (string []) { "JOIN", name, "" }, chan->_userList, res, false);
