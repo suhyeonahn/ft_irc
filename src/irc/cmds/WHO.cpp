@@ -10,7 +10,7 @@
 void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     if (cmd._params.empty()) {
-        PushToRes(cmd._user->_fd, getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
+        PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
         return ;
     } else if (Channel::IsPrefix(cmd._params[0][0])) {
 		// case channel name => send all user in channel whose name corresponding to params[0]
@@ -19,11 +19,8 @@ void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 		if (chan) {
 			set<User *>::iterator it;
 			for (it = chan->_userList.begin(); it != chan->_userList.end(); ++it) {
-				PushToRes(
-					cmd._user->_fd,
-					getServReply(*it, RPL_WHOREPLY, (string[]){ (*it)->getWho(cmd._params[0])}),
-					res
-				);
+				PushToRes(cmd._user->getFd(),
+					getServReply(*it, RPL_WHOREPLY, (string[]){ (*it)->getWho(chan->getName())}), res);
 			}
 		}
     } else {
@@ -34,12 +31,9 @@ void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 		for (it = _userList.begin(); it != _userList.end(); ++it) {
 			current = it->second;
 			if (current->_nick == cmd._params[0]) // if found exact nickname correspond to params[0]
-				PushToRes(
-					cmd._user->_fd,
-					getServReply(current, RPL_WHOREPLY, (string[]){ current->getWho("*") }),
-					res
-				);
+				PushToRes(cmd._user->getFd(),
+					getServReply(current, RPL_WHOREPLY, (string[]){ current->getWho("*") }), res);
 		}
     }
-    PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_ENDOFWHO, NULL), res);
+    PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_ENDOFWHO,(string[]){cmd._params[0]}), res);
 }

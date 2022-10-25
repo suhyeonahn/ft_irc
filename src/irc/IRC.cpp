@@ -129,6 +129,12 @@ string	IRC::Emit(User *user, string params[], const set<User *> &userList, vecto
     return msg;
 }
 
+void	IRC::Emit2( const set<User *> & userList, string msg, vector<t_ClientMsg> & res )
+{
+    set<User *>::iterator it;
+    for(it = userList.begin(); it != userList.end(); ++it)
+            PushToRes((*it)->getFd(), msg, res);
+}
 
 void  IRC::test()
 {

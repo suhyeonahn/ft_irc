@@ -19,9 +19,9 @@ void    IRC::NOTICE( const Cmd & cmd, vector<t_ClientMsg> & res )
                 {
                     //  when prefixed, msg will be delivered only to the membs of given status in the channel
                     if (cmd._params[0][0] == OPER_PREFIX)
-                        ;//IRC::Emit(cmd._user, (string []){_params[1]}, chan->_operList, res, false);
+                        Emit2(chan->_operList, getServMsg(cmd._user, MSG_NOTICE, (string[]){chan->getName(),cmd._params[1]}), res);
                     else
-                        ;//IRC::Emit(cmd._user, (string []){_params[1]}, chan->cmd._userList, res, false);
+                        Emit2(chan->_userList, getServMsg(cmd._user, MSG_NOTICE, (string[]){chan->getName(),cmd._params[1]}), res);
                 }
             }
             // Target is a user
@@ -29,7 +29,7 @@ void    IRC::NOTICE( const Cmd & cmd, vector<t_ClientMsg> & res )
             {
                 User * target = getUserByNick(cmd._params[0]);
                 if (target != NULL)
-                    PushToRes(target->_fd, getServReply(cmd._user, MSG_PRIVMSG, (string[]){cmd._params[1]}), res);
+                    PushToRes(target->getFd(), getServReply(cmd._user, MSG_NOTICE, (string[]){target->getNick(),cmd._params[1]}), res);
             }
         }
     }

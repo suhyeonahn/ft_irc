@@ -2,17 +2,12 @@
 
 void    IRC::PASS( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
-    string  servReply;
-
     if (cmd._params.empty())
-        servReply = getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){ cmd._cmd }); //461
+        PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
     else if (cmd._user->_isGoodPw)
-        servReply = getServReply(cmd._user, ERR_ALREADYREGISTERED, NULL); //462
+        PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_ALREADYREGISTERED, NULL), res);
     else if (cmd._params[0] == cmd._user->_servPw)
         cmd._user->_isGoodPw = true;
     else
-        servReply = getServReply(cmd._user, ERR_PASSWDMISMATCH, NULL); //464
-    
-    if (!servReply.empty())
-        PushToRes(cmd._user->_fd, servReply, res);
+        PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_PASSWDMISMATCH, NULL), res);
 }

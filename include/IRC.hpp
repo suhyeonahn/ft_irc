@@ -23,6 +23,7 @@ class   IRC
         void    PASS( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    NICK( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    USER( const Cmd &cmd, vector<t_ClientMsg> & res );
+        void    QUIT( const Cmd &cmd, vector<t_ClientMsg> & res );
         //  Channel Operation cmds
         void    JOIN( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res );
@@ -38,8 +39,8 @@ class   IRC
         void    NOTICE( const Cmd &cmd, vector<t_ClientMsg> & res );
         //  User-Based Queries
         void    WHO( const Cmd &cmd, vector<t_ClientMsg> & res );
-
-        void    QUIT( const Cmd &cmd, vector<t_ClientMsg> & res );
+        //  Operator Messages
+        void    KILL( const Cmd &cmd, vector<t_ClientMsg> & res );
 
         void    execute(const Cmd &cmd, vector<t_ClientMsg> & res );
 
@@ -49,6 +50,7 @@ class   IRC
 		string	        Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser);
         set<User *>     GetSameChanUsers(User *user);
 
+        void            Emit2( const set<User *> & userList, string msg, vector<t_ClientMsg> & res );
 
         bool            ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
         void            DeleteOffUser(int fd);

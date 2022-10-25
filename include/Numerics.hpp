@@ -96,9 +96,11 @@
 #define RPL_SASLMECHS 908
 
 //SERVER MSG TO CLIENT
-#define MSG_PART 999
-#define MSG_KICK 998
-#define MSG_PRIVMSG 997
+#define MSG_PART 1000
+#define MSG_KICK 1001
+#define MSG_PRIVMSG 1002
+#define MSG_NOTICE 1003
+#define MSG_INVITE 1004
 
 //ERRORS
 #define ERR_UNKNOWNERROR 400
@@ -149,7 +151,8 @@
 #define ERR_SASLABORTED 906
 #define ERR_SASLALREADY 907
 
-string  getServReply(User *user, int code, string params[]);
+string  getServReply( User * user, int code, string params[] );
+string  getServMsg( User * user, int code, string params[] );
 string	get3DigitCode(int code);
 
 #endif
