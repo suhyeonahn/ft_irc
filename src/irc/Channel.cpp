@@ -58,7 +58,7 @@ void    Channel::sendMsg( int code, string params[], vector<t_ClientMsg> & res )
         ; ++it)
     {
         User * user = *it;
-        Cmd::PushToRes(user->getFd(), getServReply(user, code, params), res);
+        IRC::PushToRes(user->getFd(), getServReply(user, code, params), res);
     }
 }
 

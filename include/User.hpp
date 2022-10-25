@@ -50,7 +50,6 @@ class   User
         // string  getJoinedChan() const;
         int     getFd()  const;
 
-        friend class Cmd;
         friend class IRC;
         friend class Channel;
 

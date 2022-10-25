@@ -51,7 +51,6 @@ class   Channel
 		static bool IsValidName(const string &name);
         bool    isValidMode( char const & mode );
 
-		friend class Cmd;
 		friend class IRC;
 };
 

@@ -42,46 +42,53 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 		// Check if the cmd exists
 		// TODO: Send an err numeric accordingly 
 		if (!isValid(cmdStr)) 
-			Cmd::PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmdStr}), res);
+			PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmdStr}), res);
 		else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
 		{
 			vector<string> params = setParams(*it);
-			Cmd cmd(cmdStr, params, user, _userList, _chanList);
-			cmd.execute(res);
-			if (cmdStr == "QUIT")
+			Cmd cmd(cmdStr, params, user);
+
+			execute(cmd, res);
+			if (cmdStr == "QUIT") {
 				return true;
+			}
 		}
 	}
 	return false;
 }
 
-void	IRC::DeleteOffUser(int fd,  map<int, User *> &userList,  map<string, Channel *> &chanList) {
-	if (userList.find(fd) != userList.end()) {
-		User *user = userList[fd];
+void	IRC::DeleteOffUser(int fd) {
+	if (_userList.find(fd) != _userList.end()) {
+		User *user = _userList[fd];
 
 		//Delete user in chanList
+		map<string, Channel *> copy(_chanList);
 		map<string, Channel *>::iterator chanIt;
 		Channel *chan;
 
-		for (chanIt = chanList.begin(); chanIt != chanList.end(); ++chanIt) {
-			chan = chanIt->second;
-			if (chan->_invitedList.find(user) != chan->_invitedList.end()) {
+		if (user->_isRegistered) {
+			for (chanIt = copy.begin(); chanIt != copy.end(); ++chanIt) {
+				chan = chanIt->second;
+
 				//remove joined channel in user instance
 				if (user->_joined.find(chan) != user->_joined.end()) {
 					user->_joined.erase(chan);
 					chan->_userList.erase(user);
 					chan->_operList.erase(user);
+					// cout << "2userlist size ==" << chan->_userList.size() << endl;
+
 					// if no more user in chan, remove chan
 					if (chan->_userList.size() == 0) {
-						chanList.erase(chan->_name);
+						copy.erase(chan->_name);
 						delete chan;
 					}
 				} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
 					chan->_invitedList.erase(user);
 			}
 		}
+
 		delete user;
-		userList.erase(fd);
+		_userList.erase(fd);
 	}
 }
 
@@ -117,7 +124,7 @@ string	IRC::Emit(User *user, string params[], const set<User *> &userList, vecto
 	cout << "HERE:" << userList.size() << endl;
     for(it = userList.begin(); it != userList.end(); ++it) {
         if (*it != user || !excludeUser)
-            Cmd::PushToRes((*it)->getFd(), msg, res);
+            PushToRes((*it)->getFd(), msg, res);
     }
     return msg;
 }
@@ -142,12 +149,6 @@ void  IRC::test()
 			std::cout << tmp[i] << endl;
 	}
 }
-
-
-
-
-
-
 
 void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
 	cout << "\t - " << type << "(" << userset.size()<< ")" ;
@@ -208,4 +209,54 @@ void IRC::DEBUG() {
 			PRINT_USER_SET(chan->_invitedList, "invitedList");
 		}
 	}
+}
+
+
+
+// Execs
+
+void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
+    if (cmd._cmd == "PASS") PASS(cmd, res);
+    else if (cmd._cmd == "NICK") NICK(cmd, res);
+    else if (cmd._cmd == "USER") USER(cmd, res);
+    else if (cmd._cmd == "JOIN") JOIN(cmd, res);
+    else if (cmd._cmd == "NAMES") NAMES(cmd, res);
+    else if (cmd._cmd == "INVITE") INVITE(cmd, res);
+    else if (cmd._cmd == "PART") PART(cmd, res);
+    else if (cmd._cmd == "LIST") LIST(cmd, res);
+    else if (cmd._cmd == "KICK") KICK(cmd, res);
+    else if (cmd._cmd == "WHO") WHO(cmd, res);
+    else if (cmd._cmd == "QUIT") QUIT(cmd, res);
+    else if (cmd._cmd == "PRIVMSG") PRIVMSG(cmd, res);
+    else if (cmd._cmd == "NOTICE") NOTICE(cmd, res);
+}
+
+
+
+User *  IRC::getUserByNick( string const & nick ) const
+{
+	for (map<int, User *>::const_iterator it(_userList.begin());
+		it != _userList.end(); ++it)
+		if (it->second->_nick == nick)
+			return it->second;
+	return NULL;
+}
+
+Channel *IRC::GetChannelByName ( const string &name ) const {
+    if (_chanList.find(name) != _chanList.end())
+        return _chanList.at(name);
+    return NULL;
+}
+
+Channel *IRC::CreateChannel( const string &name, User *user) {
+    Channel *chan = new Channel(name, user);
+    _chanList[name] = chan;
+	// user->_O = true; // channel operator
+    user->join(chan);
+    return chan;
+}
+
+
+void    IRC::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
+    res.push_back(make_pair(fd, msg));
 }

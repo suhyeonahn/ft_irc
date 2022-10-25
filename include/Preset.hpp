@@ -53,6 +53,7 @@ class User;
 class Server;
 class Client;
 class Channel;
+class Cmd;
 
 typedef std::pair<int, string>	t_ClientMsg;
 

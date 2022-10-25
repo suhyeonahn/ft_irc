@@ -1,6 +1,7 @@
 INC_DIR		=	./include/
 
 SRCS		=	./src/main.cpp \
+				./src/utils/Utils.cpp \
 				./src/server/Client.cpp \
 				./src/server/Server.cpp \
 				./src/irc/IRC.cpp \
@@ -9,7 +10,21 @@ SRCS		=	./src/main.cpp \
 				./src/irc/Channel.cpp \
 				./src/irc/Numerics.cpp \
 				./src/irc/ParseCmd.cpp \
-				./src/utils/Utils.cpp
+				./src/irc/cmds/INVITE.cpp \
+				./src/irc/cmds/JOIN.cpp \
+				./src/irc/cmds/KICK.cpp \
+				./src/irc/cmds/LIST.cpp \
+				./src/irc/cmds/MODE.cpp \
+				./src/irc/cmds/NAMES.cpp \
+				./src/irc/cmds/NICK.cpp \
+				./src/irc/cmds/NOTICE.cpp \
+				./src/irc/cmds/PART.cpp \
+				./src/irc/cmds/PASS.cpp \
+				./src/irc/cmds/PRIVMSG.cpp \
+				./src/irc/cmds/QUIT.cpp \
+				./src/irc/cmds/TOPIC.cpp \
+				./src/irc/cmds/USER.cpp \
+				./src/irc/cmds/WHO.cpp \
 
 OBJS		= $(SRCS:.cpp=.o)
 

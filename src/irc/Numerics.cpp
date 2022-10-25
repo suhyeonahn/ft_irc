@@ -57,7 +57,7 @@ string  getServReply(User *user, int code, string params[])
 			break;
 		}
 		case MSG_PRIVMSG:	//	997
-			ss  << ": " << params[0]<< ; break;
+			ss  << ": " << params[0]; break;
 		case RPL_LISTSTART: // 321
 			ss << "Channel :Users  Name"; break;
 		case RPL_LIST: // 322
