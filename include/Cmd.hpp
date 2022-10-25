@@ -40,6 +40,9 @@ class   Cmd
         void    KICK( vector<t_ClientMsg> & res );
         //  Server Queries and cmds
         void    MODE( vector<t_ClientMsg> & res );
+        //  Sending Messages
+        void    PRIVMSG( vector<t_ClientMsg> & res );
+        void    NOTICE( vector<t_ClientMsg> & res );
         //  User-Based Queries
         void    WHO( vector<t_ClientMsg> & res );
 

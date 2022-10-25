@@ -7,7 +7,7 @@
 
 # define CHAN_PREFIX '#'
 # define CHAN_INVALID_CHAR "\a,: "
-# define OPER_PREFIX "@"
+# define OPER_PREFIX '@'
 # define CHAN_MODE  "ik"
 
 class   Channel
