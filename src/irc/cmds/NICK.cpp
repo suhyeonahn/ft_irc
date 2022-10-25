@@ -4,16 +4,16 @@ void    IRC::NICK( const Cmd &cmd, vector<t_ClientMsg> & res )
 {
     string  servReply;
 
-    if (_params.empty())
+    if (cmd._params.empty())
         servReply = getServReply(_user, ERR_NONICKNAMEGIVEN, NULL); //431
     else
     {
-        string const   &nick(_params[0]);
+        string const   &nick(cmd._params[0]);
 
         if (!_user->isValidNick(nick)) 
-            servReply = getServReply(_user, ERR_ERRONEUSNICKNAME, (string[]){ _cmd }); //432
+            servReply = getServReply(_user, ERR_ERRONEUSNICKNAME, (string[]){ cmd._cmd }); //432
         else if (getUserByNick(nick)) 
-            servReply = getServReply(_user, ERR_NICKNAMEINUSE, (string[]){ _cmd }); //433
+            servReply = getServReply(_user, ERR_NICKNAMEINUSE, (string[]){ cmd._cmd }); //433
         else {
             _user->setNick(nick);
             //reply welcome msg to client

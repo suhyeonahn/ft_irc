@@ -10,7 +10,7 @@
 void    IRC::NAMES( const Cmd &cmd, vector<t_ClientMsg> & res )
 {
     //  List all channel members
-    if (_params.empty())
+    if (cmd._params.empty())
     {
         for (map<string, Channel *>::iterator it = _chanList.begin() ; 
             it != _chanList.end() ; ++it )
@@ -21,7 +21,7 @@ void    IRC::NAMES( const Cmd &cmd, vector<t_ClientMsg> & res )
     }
     else
     {
-        vector<string>  givenNames = ::split(_params[0], ",");
+        vector<string>  givenNames = ::split(cmd._params[0], ",");
         for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
         {
             Channel * chan = GetChannelByName(*it);

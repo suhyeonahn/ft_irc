@@ -6,17 +6,17 @@ void    IRC::JOIN( const Cmd &cmd, vector<t_ClientMsg> & res ) {
     Channel *chan;
 
     //ERROR_RPLY
-    if (_params.size() < 1) {
-        servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ _cmd });
+    if (cmd._params.size() < 1) {
+        servReply = getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){ cmd._cmd });
         PushToRes(_user->_fd, servReply, res);
         return ;
     }
 
     vector<string> names;
     vector<string> keys;
-    names = split(_params[0], ",");
-    if (_params.size() > 1)
-        keys = split(_params[1], ",");
+    names = split(cmd._params[0], ",");
+    if (cmd._params.size() > 1)
+        keys = split(cmd._params[1], ",");
     
     for (int i = 0; i < names.size(); ++i) {
         const string &name = names[i];
