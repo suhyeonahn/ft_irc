@@ -1,7 +1,7 @@
 #include "IRC.hpp"
 
 //  No need to send an ERR msg according to MAN
-void    IRC::LIST( const Cmd &cmd, vector<t_ClientMsg> & res )
+void    IRC::LIST( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     if (_params.empty())
     {
@@ -16,7 +16,7 @@ void    IRC::LIST( const Cmd &cmd, vector<t_ClientMsg> & res )
     else
     {
         PushToRes(_user->_fd, getServReply(_user,  RPL_LISTSTART, NULL), res);
-        vector<string>  givenChans = ::split(_params[0], ",");
+        vector<string>  givenChans = ::split(cmd._params[0], ",");
         for (vector<string>::iterator it(givenChans.begin()) ; it != givenChans.end() ; ++it)
         {
             Channel * chan = GetChannelByName(*it);

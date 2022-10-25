@@ -7,6 +7,7 @@
 # define DEFAULT_NAME       "*"
 # define VALID_CHARS_NICK   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
 # define USER_MODE          "io"
+
 class   User
 {
     
