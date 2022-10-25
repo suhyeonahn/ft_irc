@@ -7,7 +7,7 @@
 //  unless the requesting client is also joined to that channel.
 //
 //  For now, only considered normal channel with "=" preset
-void    IRC::NAMES( const Cmd &cmd, vector<t_ClientMsg> & res )
+void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     //  List all channel members
     if (cmd._params.empty())
@@ -16,7 +16,7 @@ void    IRC::NAMES( const Cmd &cmd, vector<t_ClientMsg> & res )
             it != _chanList.end() ; ++it )
         {
             string nicks = it->second->getNicks();
-            PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "= " + it->first, nicks }), res);
+            PushToRes(cmd._user->_fd, getServReply(cmd._user,  RPL_NAMREPLY, (string[]){ "= " + it->first, nicks }), res);
         }
     }
     else
@@ -29,9 +29,9 @@ void    IRC::NAMES( const Cmd &cmd, vector<t_ClientMsg> & res )
             if (chan != NULL)
             {
                 string nicks = chan->getNicks();
-                PushToRes(_user->_fd, getServReply(_user,  RPL_NAMREPLY, (string[]){ "= " + *it, nicks }), res);
+                PushToRes(cmd._user->_fd, getServReply(cmd._user,  RPL_NAMREPLY, (string[]){ "= " + *it, nicks }), res);
             }
-            PushToRes(_user->_fd, getServReply(_user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
+            PushToRes(cmd._user->_fd, getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){ *it }), res);
         }
     }
 }

@@ -7,10 +7,10 @@
 //:calcium.libera.chat 352 dan #ircv3 ~emersion sourcehut/staff/emersion calcium.libera.chat emersion H :1 Simon Ser
 //:calcium.libera.chat 315 dan emersion :End of WHO list
 
-void    IRC::WHO( const Cmd &cmd, vector<t_ClientMsg> & res )
+void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     if (cmd._params.empty()) {
-        PushToRes(_user->_fd, getServReply(_user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
+        PushToRes(cmd._user->_fd, getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
         return ;
     } else if (Channel::IsPrefix(cmd._params[0][0])) {
 		// case channel name => send all user in channel whose name corresponding to params[0]
@@ -20,7 +20,7 @@ void    IRC::WHO( const Cmd &cmd, vector<t_ClientMsg> & res )
 			set<User *>::iterator it;
 			for (it = chan->_userList.begin(); it != chan->_userList.end(); ++it) {
 				PushToRes(
-					_user->_fd,
+					cmd._user->_fd,
 					getServReply(*it, RPL_WHOREPLY, (string[]){ (*it)->getWho(cmd._params[0])}),
 					res
 				);
@@ -35,11 +35,11 @@ void    IRC::WHO( const Cmd &cmd, vector<t_ClientMsg> & res )
 			current = it->second;
 			if (current->_nick == cmd._params[0]) // if found exact nickname correspond to params[0]
 				PushToRes(
-					_user->_fd,
+					cmd._user->_fd,
 					getServReply(current, RPL_WHOREPLY, (string[]){ current->getWho("*") }),
 					res
 				);
 		}
     }
-    PushToRes(_user->_fd, getServReply(_user, RPL_ENDOFWHO, NULL), res);
+    PushToRes(cmd._user->_fd, getServReply(cmd._user, RPL_ENDOFWHO, NULL), res);
 }

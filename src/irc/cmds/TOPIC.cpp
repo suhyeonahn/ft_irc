@@ -15,11 +15,11 @@ void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res) {
     //ERROR RPLY
     
     //No error    
-    chan = _chanList[_params[0]];
-    servReply = getServReply(_user, RPL_TOPIC, (string[]){ chan->_topic });
+    chan = _chanList[cmd._params[0]];
+    servReply = getServReply(cmd._user, RPL_TOPIC, (string[]){chan->_topic });
 
     if (!servReply.empty())
-        PushToRes(_user->_fd, servReply, res);
+        PushToRes(cmd._user->_fd, servReply, res);
 }
 
 
