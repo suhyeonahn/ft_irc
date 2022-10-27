@@ -36,7 +36,7 @@ NAME		=	ircserv
 
 .cpp.o:
 			@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $(<:.cpp=.o)
-			@echo "\033[92m\n...\n \033[0m"
+			@echo "\033[92m... \033[0m"
 
 $(NAME):		$(OBJS)
 			@echo "\033[92m\n\nObject files has been compiled!\n \033[0m"

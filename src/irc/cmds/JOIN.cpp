@@ -30,7 +30,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
 
         //TODO: modify here...
         chan = GetChannelByName(name);
-        cout << chan << endl;
+        cout << "chan instance ptr:" << chan << endl;
         if (chan == NULL)
             chan = CreateChannel(name, cmd._user);
         else {
@@ -57,7 +57,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
             PushToRes(cmd._user->getFd(), servReply, res);
         else {
             //1. Emit msg to all user in channel (including current user)
-            IRC::Emit(cmd._user, (string []) { "JOIN", name, "" }, chan->_userList, res, false);
+            Emit(cmd._user, (string []) { "JOIN", name, "" }, chan->_userList, res, false);
             //2.topic(NOT YET)
             if (chan->_topic.size()) 
                 TOPIC(cmd, res);

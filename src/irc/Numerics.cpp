@@ -26,12 +26,14 @@ string  getServReply( User * user, int code, string params[] )
 	// put prefix
 	// ex - ':<HOST> <CODE> <NICKNAME>[!user@host] '
 	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " "
-		<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
+		<< user->getNick();
+
+		// << "!" << user->getUname() << "@" << USR_HOST << " ";
 
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
-			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
+			ss << " :Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
 		case RPL_TOPIC: // 332
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
