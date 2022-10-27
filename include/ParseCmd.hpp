@@ -10,7 +10,7 @@
 
 void            initCmdList();
 string			setCmd( string & msg );
-vector<string>	setParams( string const & msg );
+vector<string>	setParams( string & cmd, string const & msg );
 
 bool    isValid( string const & cmd );
 bool	isImplemented( string const & cmd );

@@ -3,6 +3,8 @@
 void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     string  servReply;
+    if (cmd._params.empty())
+        PushToRes(cmd._user->getFd(), getServReply(cmd._user,  ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
     //  Check if _params[0] is a nick or a chan
     if (cmd._params[0][0] == CHAN_PREFIX)
     {
