@@ -45,7 +45,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 			PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmdStr}), res);
 		else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
 		{
-			vector<string> params = setParams(*it);
+			vector<string> params = setParams(cmdStr, *it);
 			Cmd cmd(cmdStr, params, user);
 
 			execute(cmd, res);

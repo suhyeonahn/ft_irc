@@ -33,9 +33,7 @@ string  getServReply( User * user, int code, string params[] )
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
-			ss << " :Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
-		case RPL_TOPIC: // 332
-			ss << params[0] << " :" << params[1]; break;
+			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
 		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_ENDOFNAMES: // 366
@@ -59,6 +57,12 @@ string  getServReply( User * user, int code, string params[] )
 			ss << params[0]; break;
 		case RPL_ENDOFWHO:	//315
 			ss << params[0] << " :End of WHO list"; break;
+		case RPL_NOTOPIC: //331
+			ss << params[0] << " :No topic is set"; break;
+		case RPL_TOPIC: //332
+			ss << params[0] << " :" << params[1]; break;
+		case RPL_TOPICWHOTIME: //323
+			ss << params[0] << " " << params[1] << getTime(); break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461

@@ -97,7 +97,7 @@ string  setCmd( string & msg )
     return cmd;
 }
 
-vector<string>  setParams( string const & msg )
+vector<string>  setParams( string & cmd, string const & msg )
 {
     size_t  i(msg.find(" :", 0));
     if (i == string::npos)
@@ -106,8 +106,12 @@ vector<string>  setParams( string const & msg )
     string paramsStr(msg.substr(0, i));
     vector<string>  params = ::split(paramsStr, " ");
 
-	//move index after " :"
-	i += 2;
+	//	move index after " :"
+	//	execept TOPIC
+	if (cmd == "TOPIC")
+		i+= 1;
+	else
+		i += 2;
 	if (i < msg.size())
 		// last_param.size = all msg.size() - (before_last_param).size()
 		params.push_back(msg.substr(i, msg.size() - i));
