@@ -1,5 +1,5 @@
 #include "IRC.hpp"
-
+//  TODO: add function to remove the user from channel
 //  Send a rpy for each channel
 void    IRC::PART( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
@@ -21,9 +21,9 @@ void    IRC::PART( const Cmd & cmd, vector<t_ClientMsg> & res )
             {
                 //  If PART is successful
                 if (cmd._params.size() >= 2)
-                    Emit2(chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),cmd._params[1]}), res);
+                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),cmd._params[1]}), res, true);
                 else
-                    Emit2(chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName()}), res);
+                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName()}), res, true);
             }
         }
     }

@@ -50,7 +50,7 @@ class   IRC
 		string	        Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser);
         set<User *>     GetSameChanUsers(User *user);
 
-        void            Emit2( const set<User *> & userList, string msg, vector<t_ClientMsg> & res );
+        void            Emit2( User *user, const set<User *> & userList, string msg, vector<t_ClientMsg> & res, bool excludeUser );
 
         bool            ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
         void            DeleteOffUser(int fd);
