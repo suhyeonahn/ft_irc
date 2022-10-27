@@ -20,11 +20,7 @@ class   Cmd
 
 
     public:
-        Cmd( 
-            string const & cmd,
-            vector<string> params,
-            User * user
-        );
+        Cmd( string const & cmd, vector<string> params, User * user );
 	    virtual ~Cmd();
 
         friend class IRC;

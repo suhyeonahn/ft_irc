@@ -121,7 +121,7 @@ string	IRC::Emit(User *user, string params[], const set<User *> &userList, vecto
     msg += SEP_MSG;
 
     set<User *>::iterator it;
-	cout << "HERE:" << userList.size() << endl;
+	// cout << "HERE:" << userList.size() << endl;
     for(it = userList.begin(); it != userList.end(); ++it) {
         if (*it != user || !excludeUser)
             PushToRes((*it)->getFd(), msg, res);

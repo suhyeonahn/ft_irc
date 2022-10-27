@@ -31,6 +31,6 @@ bool    Client::RecvMsg(string &msg) {
 
 void    Client::SendRes(const string &res) {
     //TO DEBUG
-    cout << BLU << "[" << _fd << "]" << res << DFT << endl;
+    cout << BLU << res << DFT;
     send(_fd, res.c_str(), res.size(), 0);
 }

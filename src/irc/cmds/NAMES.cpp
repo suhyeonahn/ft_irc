@@ -4,43 +4,39 @@
 //  For now, only considered normal(public) channel with "=" preset
 void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
+    Channel *chan;
+    string  servReply;
+    // string  name;
+    bool    isJoined;
     //  List all channel members
     if (cmd._params.empty())
     {
-        for (map<string, Channel *>::iterator it = _chanList.begin() ; 
-            it != _chanList.end() ; ++it )
-        {
-            Channel * chan = GetChannelByName(it->first);
-            cout << RED << "NAMES" << chan->_name << endl;
-            if (chan->_userList.find(cmd._user) != chan->_userList.end()) {
-                PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = "+chan->getName(),chan->getNicks(false)}), res);
+        map<string, Channel *>::iterator it = _chanList.begin();
+        // name = "*";
+        for (it = _chanList.begin(); it != _chanList.end() ; ++it ) {
+            chan = GetChannelByName(it->first);
+            if (chan != NULL) {
+                isJoined = chan->_userList.find(cmd._user) != chan->_userList.end();
+                servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = " + chan->getName(), chan->getNicks(isJoined)});
             }
-            else
-                //  If the usr isn't on the channel,
-                //  users with the invisible user mode set are not shown in channel responses
-                PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = "+chan->getName(),chan->getNicks(true)}), res);
-            PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){chan->getName()}), res);
         }
     }
     else
     {
         vector<string>  givenNames = ::split(cmd._params[0], ",");
+        cout << "HERE" << endl;
         for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
         {
-            Channel * chan = GetChannelByName(*it);
-
-            cout << RED << "NAMES" << chan->_name << endl;
-
-            
-            //  If the channel doesn't exist, send only RPL_ENDOFNAMES
-            if (chan != NULL)
-            {
-                if (chan->_userList.find(cmd._user) != chan->_userList.end())
-                    PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = "+chan->getName(),chan->getNicks(false)}), res);
-                else
-                    PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = "+chan->getName(),chan->getNicks(true)}), res);
+            chan = GetChannelByName(*it);
+            if (chan != NULL) {
+                cout << chan->_name << endl;
+                isJoined = chan->_userList.find(cmd._user) != chan->_userList.end();
+                servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = " + chan->getName(), chan->getNicks(isJoined)});
             }
-            PushToRes(cmd._user->getFd(), getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){chan->getName()}), res);
         }
     }
+    servReply += getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){cmd._params[0]});
+    PushToRes(cmd._user->getFd(), servReply, res);
 }
+
+//   "<client> <channel> :End of /NAMES list"

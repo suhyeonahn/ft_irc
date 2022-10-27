@@ -20,7 +20,7 @@ void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 			set<User *>::iterator it;
 			for (it = chan->_userList.begin(); it != chan->_userList.end(); ++it) {
 				PushToRes(cmd._user->getFd(),
-					getServReply(*it, RPL_WHOREPLY, (string[]){ (*it)->getWho(chan->getName())}), res);
+					getServReply(*it, RPL_WHOREPLY, (string[]){(*it)->getWho(cmd._params[0])}), res);
 			}
 		}
     } else {

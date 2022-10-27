@@ -80,8 +80,8 @@ string  User::getWho(const string chan) const {
     //  <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>
     string res = chan;
 
-    if (res.size() > 1)
-        res = res.substr(1);
+    // if (res.size() > 1)
+    //     res = res.substr(1);
     // i put hopcount '1' with hard-coding because there is only one server in this project.
     res += (" " + _uname + " " + USR_HOST + " " + SERV_HOST + " " + _nick + " " + _away + " :1 " +_rname);
     return res;

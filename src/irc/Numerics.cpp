@@ -33,13 +33,13 @@ string  getServReply( User * user, int code, string params[] )
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
-			ss << " :Welcome to the FT_IRC42 Network, " << user->getNick() << "!" << user->getUname() << "@" << USR_HOST; break; 
+			ss << " :Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
 		case RPL_TOPIC: // 332
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_ENDOFNAMES: // 366
-			ss << params[0] << " :End of /NAMES list"; break;
+			ss << " " << params[0] << " :End of /NAMES list"; break;
 		case RPL_INVITING:	// 341
 			ss << params[0] << " :has been invited to " << params[1]; break;
 		case RPL_AWAY: // 301  FIXEME :: message is a pram "<client> <nick> :<message>"
@@ -56,9 +56,9 @@ string  getServReply( User * user, int code, string params[] )
 		case RPL_CHANNELMODEIS:	//	324
 			ss << params[0] << " " << params[1]; break;
 		case RPL_WHOREPLY:	//352
-			ss << params[0]; break;
+			ss << " " <<  params[0]; break;
 		case RPL_ENDOFWHO:	//315
-			ss << params[0] << " :End of WHO list"; break;
+			ss << " " << params[0] << " :End of WHO list"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461
@@ -106,8 +106,9 @@ string  getServMsg( User * user, int code, string params[] )
 	
 	// put prefix(source)
 	// ex - ':<HOST> <NICKNAME>[!user@host] '
-	ss << ":" << SERV_HOST << " "
-		<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
+	// ss << ":" << SERV_HOST << " "
+	// 	<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
+	ss << ":" << user->getNick() << " ";
 	switch (code)
 	{
 		case MSG_PART: // 1000
