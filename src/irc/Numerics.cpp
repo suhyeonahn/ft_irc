@@ -26,7 +26,9 @@ string  getServReply( User * user, int code, string params[] )
 	// put prefix
 	// ex - ':<HOST> <CODE> <NICKNAME>[!user@host] '
 	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " "
-		<< user->getNick() << "!" << user->getUname() << "@" << USR_HOST << " ";
+		<< user->getNick();
+
+		// << "!" << user->getUname() << "@" << USR_HOST << " ";
 
 	switch (code)
 	{
