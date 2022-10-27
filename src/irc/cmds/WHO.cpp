@@ -11,7 +11,7 @@ void    IRC::WHO( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     if (cmd._params.empty()) {
         PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
-        return ;
+		return ;
     } else if (Channel::IsPrefix(cmd._params[0][0])) {
 		// case channel name => send all user in channel whose name corresponding to params[0]
 		Channel * chan = GetChannelByName(cmd._params[0]);

@@ -37,3 +37,8 @@ string  intToStr(int x)
     return str;
 }
 
+string  getTime()
+{
+    time_t result = time(NULL);
+    return (asctime(localtime(&result)));
+}

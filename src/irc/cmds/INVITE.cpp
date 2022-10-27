@@ -2,7 +2,7 @@
 
 void    IRC::INVITE( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
-    if (cmd._params.size() != 2)
+    if (cmd._params.size() < 2)
         PushToRes(cmd._user->getFd(), getServReply(cmd._user,  ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
     else
     {
