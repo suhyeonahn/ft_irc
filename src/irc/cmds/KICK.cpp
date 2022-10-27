@@ -25,12 +25,11 @@ void    IRC::KICK( const Cmd & cmd, vector<t_ClientMsg> & res )
                 //  If KICK is successful
                 //  Inform the channel that the user has left
                 if (cmd._params.size() >= 3)
-                    Emit2(chan->_userList, getServMsg(cmd._user, MSG_KICK, (string[]){chan->_name,kicked->getNick(),cmd._params[2]}), res);
+                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_KICK, (string[]){chan->_name,kicked->getNick(),cmd._params[2]}), res, false);
                 else
-                    Emit2(chan->_userList, getServMsg(cmd._user, MSG_KICK, (string[]){chan->_name,kicked->getNick(),"For some reason"}), res);
+                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_KICK, (string[]){chan->_name,kicked->getNick(),"For some reason"}), res, false);
                 chan->rmUser(kicked);
             }
         }
     }
-
 }
