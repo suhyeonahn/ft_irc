@@ -124,9 +124,9 @@ string  getServMsg( User * user, int code, string params[] )
 		case MSG_INVITE:	//	1004
 			ss  << "INVITE " << params[0] << " " << params[1]; break;
 		case MSG_ERROR:	//1005
-			ss  << "ERROR " << params[0]; break;
+			ss  << "ERROR :" << params[0]; break;
 		case MSG_QUIT:	//1006
-			ss  << "QUIT" << params[0]; break;
+			ss  << "QUIT :" << params[0]; break;
 	}
 	ss	<< SEP_MSG;
 
