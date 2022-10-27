@@ -129,11 +129,14 @@ string	IRC::Emit(User *user, string params[], const set<User *> &userList, vecto
     return msg;
 }
 
-void	IRC::Emit2( const set<User *> & userList, string msg, vector<t_ClientMsg> & res )
+void	IRC::Emit2( User * user, const set<User *> & userList, string msg, vector<t_ClientMsg> & res, bool excludeUser )
 {
     set<User *>::iterator it;
     for(it = userList.begin(); it != userList.end(); ++it)
-            PushToRes((*it)->getFd(), msg, res);
+	{
+		if (!(*it == user && excludeUser == true))
+        	PushToRes((*it)->getFd(), msg, res);
+	}
 }
 
 void  IRC::test()
