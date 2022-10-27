@@ -6,8 +6,6 @@
 // RPL_TOPICWHOTIME (333)
 void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res)
 {
-    Channel *chan;
-
     //ERROR RPLY
     if (!cmd._params.empty())
     {
@@ -33,7 +31,7 @@ void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res)
         if (cmd._params[1] == ":")
             chan->_topic = "";
         else
-            chan->_topic == cmd._params[1];
+            chan->_topic = cmd._params[1];
         Emit2(cmd._user, chan->_userList, getServReply(cmd._user, RPL_TOPIC, (string[]){chan->_name, chan->_topic}), res, false);
         Emit2(cmd._user, chan->_userList, getServReply(cmd._user, RPL_TOPICWHOTIME, (string[]){chan->_name, cmd._user->_nick}), res, false);
     }
