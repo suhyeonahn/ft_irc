@@ -10,7 +10,7 @@
 
 //Util function to add '0' until code string's length become 3
 // ex: 1 => 001, 42 => 042, 242 => 242
-string	get3DigitCode(int code) {
+string	IRC::get3DigitCode(int code) {
 	string res = intToStr(code);
 
 	for(; res.length() < 3;) 
@@ -18,7 +18,7 @@ string	get3DigitCode(int code) {
 	return res;
 }
 
-string  getServReply( User * user, int code, string params[] )
+string  IRC::getServReply( User * user, int code, string params[] )
 {
 	stringstream	ss;
 
@@ -104,7 +104,7 @@ string  getServReply( User * user, int code, string params[] )
 	return ss.str();
 }
 
-string  getServMsg( User * user, int code, string params[] )
+string  IRC::getServMsg( User * user, int code, string params[] )
 {
 	stringstream	ss;
 	
