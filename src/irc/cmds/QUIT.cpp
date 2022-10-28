@@ -12,11 +12,14 @@ void    IRC::QUIT( const Cmd & cmd, vector<t_ClientMsg> & res ) {
     // PushToRes(cmd._user->getFd(), getServMsg(cmd._user, MSG_ERROR, (string[]){"QUIT requested"}), res);
     // DeleteOffUser(cmd._user->getFd());
 
+    User *user(cmd._user);
+    cout << "quit-" << user->_fd << endl;
 
-    string  msg = !cmd._params[0].empty() ? cmd._params[0] : "No reason";
 
-    Emit(cmd._user, (string[]){"QUIT", ":" + msg, ""}, IRC::GetSameChanUsers(cmd._user), res, true);
-    // DeleteOffUser(cmd._user->getFd());
+    string  msg = !cmd._params[0].empty() ? "QUIT:" + cmd._params[0] : "No reason";
+
+    Emit(user, (string[]){"QUIT", ":" + msg, ""}, IRC::GetSameChanUsers(user), res, true);
+    DeleteOffUser(user->_fd);
 }
 
 

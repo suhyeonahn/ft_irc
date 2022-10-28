@@ -54,7 +54,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 
 void	IRC::DeleteOffUser(int fd) {
 	if (_userList.find(fd) != _userList.end()) {
-		User *user = _userList[fd];
+		User *user(_userList[fd]);
 
 		//Delete user in chanList
 		map<string, Channel *> copy(_chanList);
@@ -70,7 +70,6 @@ void	IRC::DeleteOffUser(int fd) {
 					user->_joined.erase(chan);
 					chan->_userList.erase(user);
 					chan->_operList.erase(user);
-					// cout << "2userlist size ==" << chan->_userList.size() << endl;
 
 					// if no more user in chan, remove chan
 					if (chan->_userList.size() == 0) {
