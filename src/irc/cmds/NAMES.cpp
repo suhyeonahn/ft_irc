@@ -24,11 +24,9 @@ void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
     else
     {
         vector<string>  givenNames = ::split(cmd._params[0], ",");
-        cout << YEL << "names: " << cmd._params[0] << endl;
         for (vector<string>::iterator it(givenNames.begin()) ; it != givenNames.end() ; ++it)
         {
             chan = GetChannelByName(*it);
-            cout << YEL << chan->getName() << ", " << *it << DFT << endl;
             if (chan != NULL) {
                 cout << chan->_name << endl;
                 isJoined = chan->_userList.find(cmd._user) != chan->_userList.end();
