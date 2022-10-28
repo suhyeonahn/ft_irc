@@ -18,7 +18,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
     if (cmd._params.size() > 1)
         keys = split(cmd._params[1], ",");
     
-    for (int i = 0; i < names.size(); ++i) {
+    for (size_t i = 0; i < names.size(); ++i) {
         const string &name = names[i];
         const string &key = (i < keys.size()) ? keys[i] : "";
 

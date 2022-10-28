@@ -14,9 +14,9 @@ class   Cmd
     
     private:
 
-        string                  _cmd;
-	    vector<string>          _params;
-        User *                  _user;
+        string          _cmd;
+	    vector<string>  _params;
+        User *          _user;
 
 
     public:

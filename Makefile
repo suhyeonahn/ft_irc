@@ -30,7 +30,7 @@ OBJS		= $(SRCS:.cpp=.o)
 
 CC			=	c++
 
-CFLAGS		=	-Wall -g3 -fsanitize=address  -std=c++98 
+CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address  -std=c++98 
 
 NAME		=	ircserv
 

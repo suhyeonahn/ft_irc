@@ -9,7 +9,7 @@ void    IRC::PRIVMSG( const Cmd & cmd, vector<t_ClientMsg> & res )
     else
     {
         vector<string> targets = split(cmd._params[0], ",");
-        for (int i = 0; i < targets.size(); ++i)
+        for (size_t i = 0; i < targets.size(); ++i)
         {
             //  Target is a chan
             if (targets[i].find(CHAN_PREFIX) != string::npos)

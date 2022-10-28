@@ -142,6 +142,8 @@ void	IRC::Emit2( User * user, const set<User *> & userList, string msg, vector<t
 void  IRC::test()
 {
 	bool plus;
+
+	(void)plus;
 	//  parse modestring
 	string params = "i0+23l--on++=o-";
 	vector<string> modeStr = splitModeStr(params, "+-");
