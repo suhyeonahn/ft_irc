@@ -14,14 +14,18 @@ void    IRC::PRIVMSG( const Cmd & cmd, vector<t_ClientMsg> & res )
             //  Target is a chan
             if (targets[i].find(CHAN_PREFIX) != string::npos)
             {
-                Channel * chan = GetChannelByName(targets[i]);
+                Channel * chan;
+                if (targets[i][0] == OPER_PREFIX)
+                    chan = GetChannelByName(&targets[i][1]);
+                else
+                    chan = GetChannelByName(targets[i]);
                 //  ERR if the channel doesn't exist
                 if (chan == NULL)
                     PushToRes(cmd._user->getFd(), getServReply(cmd._user,  ERR_NOSUCHCHANNEL, (string[]){targets[i]}), res);
                 else
                 {
                     //  when prefixed, msg will be delivered only to the membs of given status in the channel
-                    if (cmd._params[0][0] == OPER_PREFIX)
+                    if (targets[i][0] == OPER_PREFIX)
                         Emit2(cmd._user, chan->_operList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, true);
                     else
                         Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, true);
