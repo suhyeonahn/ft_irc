@@ -27,8 +27,12 @@ void	Server::Init(){
 	    when server is stopped, socket is not yet close directly.
 	  * this function make to use which has been just used, managing socket level.
 	  */
-	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
-		Error("setsock");
+	#if defined (__APPLE__)
+		if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
+	#else
+		if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(int)) == -1)
+	#endif
+			Error("setsock");
 
 	sockaddr_in			servSIN;
 	servSIN.sin_family = AF_INET;

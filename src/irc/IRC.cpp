@@ -114,6 +114,8 @@ string	IRC::Emit(User *user, string params[], const set<User *> &userList, vecto
         msg += " " + params[i];
     msg += SEP_MSG;
 
+	cout << "EMIT-msg " << msg <<endl;
+
     set<User *>::iterator it;
 	// cout << "HERE:" << userList.size() << endl;
     for(it = userList.begin(); it != userList.end(); ++it) {
