@@ -29,7 +29,6 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
 
         //TODO: modify here...
         Channel *chan = GetChannelByName(name);
-        cout << "chan instance ptr:" << chan << endl;
         if (chan == NULL)
             chan = CreateChannel(name, cmd._user);
         else {
