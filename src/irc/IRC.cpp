@@ -21,8 +21,6 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 {
 	User *   user;
 	int      fd(msg.first);
-	string   cmdStr = "";
-
 	// New user registration
 	if (_userList.find(fd) == _userList.end()) 
 		user = (_userList[fd] = new User(fd, _pw));
@@ -32,24 +30,20 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	// Split msg to cmd(s)
 	vector<string>  cmds = ::split(msg.second, SEP_MSG);
 
-	initCmdList();
-
 	// Execute cmd(s)
-	for (std::vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
+	for (vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
 	{
-		cmdStr = setCmd(*it);
+		Cmd cmd(user, *it);
 
 		// Check if the cmd exists
-		// TODO: Send an err numeric accordingly 
-		if (!isValid(cmdStr)) 
-			PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmdStr}), res);
-		else if (isImplemented(cmdStr)) // Check if the cmd is implemented in our IRC
+		// TODO: Send an err numeric accordingly
+		cout << cmd._cmd << endl;
+		if (!cmd.isValid()) 
+			;//PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmd._cmd}), res);
+		else if (cmd.isImplemented()) // Check if the cmd is implemented in our IRC
 		{
-			vector<string> params = setParams(cmdStr, *it);
-			Cmd cmd(cmdStr, params, user);
-
 			execute(cmd, res);
-			if (cmdStr == "QUIT") {
+			if (cmd._cmd == "QUIT") {
 				return true;
 			}
 		}

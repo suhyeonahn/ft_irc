@@ -153,8 +153,4 @@
 #define ERR_SASLABORTED 906
 #define ERR_SASLALREADY 907
 
-string  getServReply( User * user, int code, string params[] );
-string  getServMsg( User * user, int code, string params[] );
-string	get3DigitCode(int code);
-
 #endif

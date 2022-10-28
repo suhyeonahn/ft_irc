@@ -1,9 +1,5 @@
 #include "IRC.hpp"
 
-//FIXME: put error case etc
-// RPL_NOTOPIC (331)
-// RPL_TOPIC (332)
-// RPL_TOPICWHOTIME (333)
 void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res)
 {
     //ERROR RPLY

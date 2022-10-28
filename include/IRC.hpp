@@ -55,7 +55,9 @@ class   IRC
         bool            ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res);
         void            DeleteOffUser(int fd);
 
-
+        string  getServReply( User * user, int code, string params[] );
+        string  getServMsg( User * user, int code, string params[] );
+        string	get3DigitCode(int code);
 
 
 
