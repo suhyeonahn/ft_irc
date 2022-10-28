@@ -37,7 +37,7 @@ string  IRC::getServReply( User * user, int code, string params[] )
 		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_ENDOFNAMES: // 366
-			ss << " " << params[0] << " :End of /NAMES list"; break;
+			ss << params[0] << " :End of /NAMES list"; break;
 		case RPL_INVITING:	// 341
 			ss << params[0] << " :has been invited to " << params[1]; break;
 		case RPL_AWAY: // 301  FIXEME :: message is a pram "<client> <nick> :<message>"
