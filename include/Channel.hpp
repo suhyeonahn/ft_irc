@@ -15,7 +15,7 @@ class   Channel
 	
 	private:
 
-        string  const   &_name;
+        string  const   _name;
         set<User *>     _userList;  // joined users
         string          _topic;
 
