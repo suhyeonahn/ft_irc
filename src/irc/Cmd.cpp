@@ -7,11 +7,12 @@ Cmd::Cmd( User * user, const string & msg ) : _user(user)
 {
     string  cpyMsg(msg);
 
+
+
     setCmd(cpyMsg);
     if (isImplemented())
     {
         setParams(cpyMsg);
-        initCmdList();
     }
 }
 
@@ -98,26 +99,25 @@ void    Cmd::setCmd( string & cpyMsg )
 
 	if (i == string::npos)
     {
-		// _cmd = cpyMsg;
-        // cpyMsg = "";
-		_cmd = "no";
+		_cmd = cpyMsg;
+        cpyMsg = "";
     }
 	else
     {
-		// _cmd = cpyMsg.substr(0, i);
-        // cpyMsg = cpyMsg.substr(i, cpyMsg.size() - i);
-		_cmd = "yes";
+		_cmd = cpyMsg.substr(0, i);
+        cpyMsg = cpyMsg.substr(i, cpyMsg.size() - i);
     }
 }
 
-vector<string>  Cmd::setParams( string & cpyMsg )
+void Cmd::setParams( string & cpyMsg )
 {
     size_t  i(cpyMsg.find(" :", 0));
     if (i == string::npos)
         i = cpyMsg.size();
     
     string paramsStr(cpyMsg.substr(0, i));
-    vector<string>  params = ::split(paramsStr, " ");
+    _params = ::split(paramsStr, " ");
+    // cout << RED << "params[0]" << params[0] << DFT << endl;
 
 	//	move index after " :"
 	//	execept TOPIC
@@ -127,9 +127,8 @@ vector<string>  Cmd::setParams( string & cpyMsg )
 		i += 2;
 	if (i < cpyMsg.size())
 		// last_param.size = all msg.size() - (before_last_param).size()
-		params.push_back(cpyMsg.substr(i, cpyMsg.size() - i));
+		_params.push_back(cpyMsg.substr(i, cpyMsg.size() - i));
     
-    return params;
 }
 
 bool    Cmd::isValid( void )

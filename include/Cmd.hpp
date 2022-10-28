@@ -20,9 +20,8 @@ class   Cmd
 	    vector<string>  _params;
         User *          _user;
 
-        void        initCmdList();
         void		setCmd( string & cpyMsg );
-        vector<string>	setParams( string & cpyMsg );
+        void		setParams( string & cpyMsg );
 
         bool    isValid();
         bool	isImplemented();
@@ -30,6 +29,8 @@ class   Cmd
     public:
         Cmd( User * user, const string & msg );
 	    virtual ~Cmd();
+
+    	static void        initCmdList();
 
         friend class IRC;
 };

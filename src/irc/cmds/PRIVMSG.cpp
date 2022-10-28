@@ -22,9 +22,9 @@ void    IRC::PRIVMSG( const Cmd & cmd, vector<t_ClientMsg> & res )
                 {
                     //  when prefixed, msg will be delivered only to the membs of given status in the channel
                     if (cmd._params[0][0] == OPER_PREFIX)
-                        Emit2(cmd._user, chan->_operList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, false);
+                        Emit2(cmd._user, chan->_operList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, true);
                     else
-                        Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, false);
+                        Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PRIVMSG, (string[]){chan->getName(),cmd._params[1]}), res, true);
                 }
             }
             // Target is a user

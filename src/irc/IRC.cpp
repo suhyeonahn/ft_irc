@@ -2,7 +2,9 @@
 
 #include "IRC.hpp"
 
-IRC::IRC( const string &pw ) : _pw(pw) {}
+IRC::IRC( const string &pw ) : _pw(pw) {
+	Cmd::initCmdList();
+}
 
 IRC::~IRC()
 {
@@ -37,9 +39,8 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 
 		// Check if the cmd exists
 		// TODO: Send an err numeric accordingly
-		cout << cmd._cmd << endl;
 		if (!cmd.isValid()) 
-			;//PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmd._cmd}), res);
+			PushToRes(fd, getServReply(user, ERR_UNKNOWNCOMMAND, (string[]){cmd._cmd}), res);
 		else if (cmd.isImplemented()) // Check if the cmd is implemented in our IRC
 		{
 			execute(cmd, res);

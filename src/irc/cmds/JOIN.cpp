@@ -3,7 +3,6 @@
 // JOIN(client) - resp(server) -> MODE(client) -resp(server) -> WHO(client)...
 void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
     string  servReply;
-    Channel *chan;
 
     //ERROR_RPLY
     if (cmd._params.size() < 1) {
@@ -29,7 +28,7 @@ void    IRC::JOIN( const Cmd & cmd, vector<t_ClientMsg> & res ) {
         }
 
         //TODO: modify here...
-        chan = GetChannelByName(name);
+        Channel *chan = GetChannelByName(name);
         cout << "chan instance ptr:" << chan << endl;
         if (chan == NULL)
             chan = CreateChannel(name, cmd._user);
