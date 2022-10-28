@@ -33,7 +33,7 @@ string  IRC::getServReply( User * user, int code, string params[] )
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
-			ss << " :Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
+			ss << ":Welcome to the FT_IRC42 Network, " << user->getNick(); break; 
 		case RPL_NAMREPLY: // 353  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_ENDOFNAMES: // 366
@@ -54,9 +54,9 @@ string  IRC::getServReply( User * user, int code, string params[] )
 		case RPL_CHANNELMODEIS:	//	324
 			ss << params[0] << " " << params[1]; break;
 		case RPL_WHOREPLY:	//352
-			ss << " " <<  params[0]; break;
+			ss << params[0]; break;
 		case RPL_ENDOFWHO:	//315
-			ss << " " << params[0] << " :End of WHO list"; break;
+			ss << params[0] << " :End of WHO list"; break;
 		case RPL_NOTOPIC: //331
 			ss << params[0] << " :No topic is set"; break;
 		case RPL_TOPIC: //332
