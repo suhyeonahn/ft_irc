@@ -6,13 +6,10 @@ void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
     Channel *chan;
     string  servReply;
-    // string  name;
     bool    isJoined;
-    //  List all channel members
     if (cmd._params.empty())
     {
         map<string, Channel *>::iterator it = _chanList.begin();
-        // name = "*";
         for (it = _chanList.begin(); it != _chanList.end() ; ++it ) {
             chan = GetChannelByName(it->first);
             if (chan != NULL) {
@@ -20,6 +17,7 @@ void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
                 servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = " + chan->getName(), chan->getNicks(isJoined)});
             }
         }
+        servReply += getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){"*"});
     }
     else
     {
@@ -33,8 +31,8 @@ void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
                 servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = " + chan->getName(), chan->getNicks(isJoined)});
             }
         }
+        servReply += getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){chan->getName()});
     }
-    servReply += getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){cmd._params[0]});
     PushToRes(cmd._user->getFd(), servReply, res);
 }
 
