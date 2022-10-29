@@ -28,7 +28,7 @@ void    IRC::NAMES( const Cmd & cmd, vector<t_ClientMsg> & res )
             if (chan != NULL) {
                 cout << chan->_name << endl;
                 isJoined = chan->_userList.find(cmd._user) != chan->_userList.end();
-                servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){" = " + chan->getName(), chan->getNicks(isJoined)});
+                servReply += getServReply(cmd._user,  RPL_NAMREPLY, (string[]){"= " + chan->getName(), chan->getNicks(isJoined)});
             }
         }
         servReply += getServReply(cmd._user,  RPL_ENDOFNAMES, (string[]){chan->getName()});

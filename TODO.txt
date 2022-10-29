@@ -1,7 +1,20 @@
+TO_FIX:
+- PART
+READ of size 8 at 0x7fffa77f66a8 thread T0
+    #0 0x515ae9 in IRC::getServMsg(User*, int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) /mnt/nfs/homes/kychoi/Documents/ft_irc/src/irc/Numerics.cpp:121:8
+    #1 0x527005 in IRC::PART(Cmd const&, std::vector<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&) /mnt/nfs/homes/kychoi/Documents/ft_irc/src/irc/cmds/PART.cpp:26:55
+    #2 0x4e483c in IRC::execute(Cmd const&, std::vector<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&) /mnt/nfs/homes/kychoi/Documents/ft_irc/src/irc/IRC.cpp:232:34
+    #3 0x4e406f in IRC::ProcessClientMsg(std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&, std::vector<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&) /mnt/nfs/homes/kychoi/Documents/ft_irc/src/irc/IRC.cpp:46:4
+    #4 0x4d6c93 in Server::WaitClientMsg(int, std::vector<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&, std::set<int, std::less<int>, std::allocator<int> >&) /mnt/nfs/homes/kychoi/Documents/ft_irc/src/server/Server.cpp:150:35
+    #5 0x4d54f9 in Server::Watch() /mnt/nfs/homes/kychoi/Documents/ft_irc/src/server/Server.cpp:61:3
+    #6 0x4d100c in main /mnt/nfs/homes/kychoi/Documents/ft_irc/src/main.cpp:37:12
+    #7 0x7f901e4d0d8f in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x7f901e4d0e3f in __libc_start_main csu/../csu/libc-start.c:392:3
+    #9 0x422174 in _start (/mnt/nfs/homes/kychoi/Documents/ft_irc/ircserv+0x422174)
+
+
 Kyubong:
-    - Server:
-        - Manage watch loop better
-        - Manage Client quit server
+
 
 
 Suhyeon:
