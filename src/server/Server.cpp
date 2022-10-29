@@ -27,8 +27,12 @@ void	Server::Init(){
 	    when server is stopped, socket is not yet close directly.
 	  * this function make to use which has been just used, managing socket level.
 	  */
-	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
-		Error("setsock");
+	#if defined (__APPLE__)
+		if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
+	#else
+		if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(int)) == -1)
+	#endif
+			Error("setsock");
 
 	sockaddr_in			servSIN;
 	servSIN.sin_family = AF_INET;
@@ -127,7 +131,7 @@ int		Server::GetAllFDs() {
 void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offList) {
 	string	msg;
 
-	for (int fd = 3; fd <= _lastFD && allFDs; ++fd) {
+	for (int fd(3); fd <= _lastFD && allFDs; ++fd) {
 		// verify if current fd is set by _fdReader
 		if (FD_ISSET(fd, &_fdReader)) {
 			//if serverFD
@@ -146,8 +150,8 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
 					offList.insert(fd);
 				//LINE TO DEBUG
-				cout << "client #" << fd << ":" << endl;
-				cout << CYN << msg << DFT;
+				// cout << "client #" << fd << ":" << endl;
+				// cout << CYN << msg << DFT;
 			}
 			--allFDs;
 		}
