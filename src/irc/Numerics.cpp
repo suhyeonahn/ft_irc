@@ -28,8 +28,6 @@ string  IRC::getServReply( User * user, int code, string params[] )
 	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " "
 		<< user->getNick() << " ";
 
-		// << "!" << user->getUname() << "@" << USR_HOST << " ";
-
 	switch (code)
 	{
 		case RPL_WELCOME: // 001
@@ -135,7 +133,7 @@ string  IRC::getServMsg( User * user, int code, string params[] )
 		case MSG_QUIT:	//1006
 			ss  << "QUIT :" << params[0]; break;
 	}
-	ss	<< SEP_MSG;
+	ss << SEP_MSG;
 
 	return ss.str();
 }
