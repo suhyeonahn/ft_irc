@@ -11,6 +11,7 @@ void    IRC::USER( const Cmd & cmd, vector<t_ClientMsg> & res )
     else {
         cmd._user->setUname(cmd._params[0]);
         cmd._user->setRname(cmd._params[3]);
-        cmd._user->_isRegistered = true;
+        if (cmd._user->getNick() != DEFAULT_NAME)
+            cmd._user->_isRegistered = true;
     }
 }
