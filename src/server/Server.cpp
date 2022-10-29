@@ -131,7 +131,7 @@ int		Server::GetAllFDs() {
 void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offList) {
 	string	msg;
 
-	for (int fd = 3; fd <= _lastFD && allFDs; ++fd) {
+	for (int fd(3); fd <= _lastFD && allFDs; ++fd) {
 		// verify if current fd is set by _fdReader
 		if (FD_ISSET(fd, &_fdReader)) {
 			//if serverFD
@@ -150,8 +150,8 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
 					offList.insert(fd);
 				//LINE TO DEBUG
-				cout << "client #" << fd << ":" << endl;
-				cout << CYN << msg << DFT;
+				// cout << "client #" << fd << ":" << endl;
+				// cout << CYN << msg << DFT;
 			}
 			--allFDs;
 		}
