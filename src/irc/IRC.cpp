@@ -80,7 +80,6 @@ void	IRC::DeleteOffUser(int fd) {
 					chan->_invitedList.erase(user);
 			}
 		}
-
 		delete user;
 		_userList.erase(fd);
 	}
@@ -223,6 +222,7 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
     if (cmd._cmd == "PASS") PASS(cmd, res);
     else if (cmd._cmd == "NICK") NICK(cmd, res);
     else if (cmd._cmd == "USER") USER(cmd, res);
+	else if (!cmd._user->_isRegistered) return ;
     else if (cmd._cmd == "JOIN") JOIN(cmd, res);
     else if (cmd._cmd == "NAMES") NAMES(cmd, res);
     else if (cmd._cmd == "INVITE") INVITE(cmd, res);

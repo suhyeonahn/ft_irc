@@ -150,8 +150,8 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
 					offList.insert(fd);
 				//LINE TO DEBUG
-				// cout << "client #" << fd << ":" << endl;
-				// cout << CYN << msg << DFT;
+				cout << "client #" << fd << ":" << endl;
+				cout << CYN << msg << DFT;
 			}
 			--allFDs;
 		}
