@@ -20,12 +20,12 @@ void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res)
     else if (cmd._user->_joined.find(chan) == cmd._user->_joined.end())
         PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NOTONCHANNEL, (string[]){chan->_name}), res);
         //  ERR if the user is not a channel operator.
-    else if (chan->_operList.find(cmd._user) == chan->_operList.end())
-		PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_CHANOPRIVSNEEDED, (string[]){chan->_name}), res);
     else if (cmd._params.size() < 2 && chan->getTopic().empty())
         PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_NOTOPIC, (string[]){chan->_name}), res);
     else if (cmd._params.size() < 2 && !chan->getTopic().empty())
         PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_TOPIC, (string[]){chan->_name, chan->_topic}), res);
+    else if (chan->_operList.find(cmd._user) == chan->_operList.end())
+		PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_CHANOPRIVSNEEDED, (string[]){chan->_name}), res);
     else
     {
         if (cmd._params[1] == ":")
