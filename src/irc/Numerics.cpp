@@ -116,8 +116,8 @@ string  IRC::getServMsg( User * user, int code, string params[] )
 		case MSG_PART: // 1000
 		{
 			ss  << "PART " << params[0];
-			if (*(&params + 1) - params == 2)
-			ss << " :" << params[1];
+			if (!params[1].empty())
+				ss << " :" << params[1];
 			break;
 		}
 		case MSG_KICK: // 1001

@@ -3,7 +3,7 @@
 //  Send a rpy for each channel
 void    IRC::PART( const Cmd & cmd, vector<t_ClientMsg> & res )
 {
-    if (cmd._params.size() < 1)
+    if (cmd._params.empty())
         PushToRes(cmd._user->getFd(), getServReply(cmd._user,  ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
     else
     {
@@ -23,7 +23,14 @@ void    IRC::PART( const Cmd & cmd, vector<t_ClientMsg> & res )
                 if (cmd._params.size() >= 2)
                     Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),cmd._params[1]}), res, true);
                 else
-                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName()}), res, true);
+                    Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),""}), res, true);
+                chan->rmUser(cmd._user);
+                if (chan->_userList.empty())
+                {
+						_chanList.erase(chan->_name);
+						delete chan;
+                }
+
             }
         }
     }
