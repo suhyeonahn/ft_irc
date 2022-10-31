@@ -24,6 +24,7 @@ void    IRC::PART( const Cmd & cmd, vector<t_ClientMsg> & res )
                     Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),cmd._params[1]}), res, true);
                 else
                     Emit2(cmd._user, chan->_userList, getServMsg(cmd._user, MSG_PART, (string[]){chan->getName(),""}), res, true);
+                cmd._user->_joined.erase(chan);
                 chan->rmUser(cmd._user);
                 if (chan->_userList.empty())
                 {
