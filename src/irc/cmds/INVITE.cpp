@@ -20,7 +20,7 @@ void    IRC::INVITE( const Cmd & cmd, vector<t_ClientMsg> & res )
             else
             {
                 //  ERR if the invited user is on the channel already
-                if (invited->_joined.find(chan) != cmd._user->_joined.end())
+                if (invited->_joined.find(chan) != invited->_joined.end())
                     PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_USERONCHANNEL, (string[]){cmd._params[0],cmd._params[1]}), res);
                 //  ERR if the requesting user is not a member of the channer
                 else if (cmd._user->_joined.find(chan) == cmd._user->_joined.end())
