@@ -127,7 +127,7 @@ void Cmd::setParams( string & cpyMsg )
 		i += 2;
 	if (i < cpyMsg.size())
 		// last_param.size = all msg.size() - (before_last_param).size()
-		_params.push_back(cpyMsg.substr(i, cpyMsg.size() - i));
+		_params.push_back(cpyMsg.substr(i, cpyMsg.size() - i));    
 }
 
 bool    Cmd::isValid( void )

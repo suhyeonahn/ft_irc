@@ -33,7 +33,7 @@ void    IRC::NOTICE( const Cmd & cmd, vector<t_ClientMsg> & res )
             {
                 User * target = getUserByNick(cmd._params[0]);
                 if (target != NULL)
-                    PushToRes(target->getFd(), getServReply(cmd._user, MSG_NOTICE, (string[]){target->getNick(),cmd._params[1]}), res);
+                    PushToRes(target->getFd(), getServMsg(cmd._user, MSG_NOTICE, (string[]){target->getNick(),cmd._params[1]}), res);
             }
         }
     }
