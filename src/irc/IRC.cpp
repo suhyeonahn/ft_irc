@@ -158,6 +158,7 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
     else if (cmd._cmd == "QUIT") QUIT(cmd, res);
     else if (cmd._cmd == "PRIVMSG") PRIVMSG(cmd, res);
     else if (cmd._cmd == "NOTICE") NOTICE(cmd, res);
+	else if (cmd._cmd == "PING") PONG(cmd, res);
 }
 
 

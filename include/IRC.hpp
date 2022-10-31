@@ -42,6 +42,8 @@ class   IRC
         //  Operator Messages
         void    KILL( const Cmd &cmd, vector<t_ClientMsg> & res );
 
+        void    PONG( const Cmd &cmd, vector<t_ClientMsg> & res );
+
         void    execute(const Cmd &cmd, vector<t_ClientMsg> & res );
 
         User            *getUserByNick( string const & nick ) const;
