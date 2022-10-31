@@ -114,10 +114,6 @@ set<User *> IRC::GetSameChanUsers(User *user){
 // else current user will be also receive msg
 // returns msg which could be useful depending to case.
 // string	IRC::Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser) 
-
-//FIXME: to debug
-// userList size() is not correct after quick
-// ==93936==ERROR: AddressSanitizer: heap-use-after-free on address 0x000103603978 at pc 0x0001004f0c38 bp 0x00016f951000 sp 0x00016f950ff8
 string	IRC::Emit(User *user, string params[], const set<User *> &userList, vector<t_ClientMsg> &res, bool excludeUser) {
     string  msg = ":" + user->getNick();
 
@@ -142,90 +138,6 @@ void	IRC::Emit2( User * user, const set<User *> & userList, string msg, vector<t
         	PushToRes((*it)->getFd(), msg, res);
 	}
 }
-
-void  IRC::test()
-{
-	bool plus;
-
-	(void)plus;
-	//  parse modestring
-	string params = "i0+23l--on++=o-";
-	vector<string> modeStr = splitModeStr(params, "+-");
-	for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
-	{
-		string tmp = *it;
-		if (tmp[0] == '+')
-			plus = true;
-		else if (tmp[1] == '-')
-			plus = false;
-		else
-			; //  skip err
-		for(string::size_type i = 1; i < tmp.size(); ++i)
-			std::cout << tmp[i] << endl;
-	}
-}
-
-void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
-	cout << "\t - " << type << "(" << userset.size()<< ")" ;
-	if (userset.size()) {
-		set<User *>::iterator it;
-		cout << ": [ ";
-		for (it = userset.begin(); it != userset.end(); ++it) {
-			// [ (fd1) nick1, (fd2) nick2, ...]
-			cout << (it != userset.begin() ? ", " :"")
-				 << "(" << (*it)->_fd << ") "
-				 << (*it)->_nick;;
-		}
-		cout << " ]";
-	}
-	cout << endl;
-}
-void IRC::PRINT_STRING(const string &current, const string &type) {
-	cout << "\t - " << type;
-	if (!current.empty())
-		cout << ": " << current;
-	cout << endl;
-}
-
-void IRC::DEBUG() {
-	cout << "\nIRC::DEBUG()" << endl;
-	//userList
-	cout << "- All User in IRC Server(" << _userList.size() << ")";
-	if (_userList.size()) {
-		map<int , User *>::iterator userIt;
-
-		cout << ": [ ";
-		for (userIt = _userList.begin(); userIt != _userList.end(); ++userIt) {
-			//(fd) nick 
-			cout << (userIt != _userList.begin() ? ", " :"")
-				 << "(" << userIt->first << ") "
-				 << userIt->second->_nick;
-		}
-		cout << " ]";
-	}
-	cout << endl;
-
-
-	//chanlist
-	if (_chanList.size()) {
-		map<string , Channel *>::iterator chanIt;
-		cout << "- Channel List: " << endl;
-		for (chanIt = _chanList.begin(); chanIt != _chanList.end(); ++chanIt) {
-			Channel *chan = chanIt->second;
-			//Channel name
-			cout << "\t[ " << chanIt->first << " ]" << endl;
-			//topic
-			PRINT_STRING(chan->_topic, "topic");
-			//key
-			PRINT_STRING(chan->_key, "key");
-
-			PRINT_USER_SET(chan->_userList, "userList");
-			PRINT_USER_SET(chan->_operList, "operList");
-			PRINT_USER_SET(chan->_invitedList, "invitedList");
-		}
-	}
-}
-
 
 
 // Execs
@@ -276,3 +188,92 @@ Channel *IRC::CreateChannel( const string &name, User *user) {
 void    IRC::PushToRes( int fd, const string &msg, vector<t_ClientMsg> &res ) {
     res.push_back(make_pair(fd, msg));
 }
+
+
+
+
+void  IRC::test()
+{
+	bool plus;
+
+	(void)plus;
+	//  parse modestring
+	string params = "i0+23l--on++=o-";
+	vector<string> modeStr = splitModeStr(params, "+-");
+	for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
+	{
+		string tmp = *it;
+		if (tmp[0] == '+')
+			plus = true;
+		else if (tmp[1] == '-')
+			plus = false;
+		else
+			; //  skip err
+		for(string::size_type i = 1; i < tmp.size(); ++i)
+			std::cout << tmp[i] << endl;
+	}
+}
+
+
+
+// void IRC::PRINT_USER_SET(set<User *> userset, const string &type) {
+// 	cout << "\t - " << type << "(" << userset.size()<< ")" ;
+// 	if (userset.size()) {
+// 		set<User *>::iterator it;
+// 		cout << ": [ ";
+// 		for (it = userset.begin(); it != userset.end(); ++it) {
+// 			// [ (fd1) nick1, (fd2) nick2, ...]
+// 			cout << (it != userset.begin() ? ", " :"")
+// 				 << "(" << (*it)->_fd << ") "
+// 				 << (*it)->_nick;;
+// 		}
+// 		cout << " ]";
+// 	}
+// 	cout << endl;
+// }
+// void IRC::PRINT_STRING(const string &current, const string &type) {
+// 	cout << "\t - " << type;
+// 	if (!current.empty())
+// 		cout << ": " << current;
+// 	cout << endl;
+// }
+
+// void IRC::DEBUG() {
+// 	cout << "\nIRC::DEBUG()" << endl;
+// 	//userList
+// 	cout << "- All User in IRC Server(" << _userList.size() << ")";
+// 	if (_userList.size()) {
+// 		map<int , User *>::iterator userIt;
+
+// 		cout << ": [ ";
+// 		for (userIt = _userList.begin(); userIt != _userList.end(); ++userIt) {
+// 			//(fd) nick 
+// 			cout << (userIt != _userList.begin() ? ", " :"")
+// 				 << "(" << userIt->first << ") "
+// 				 << userIt->second->_nick;
+// 		}
+// 		cout << " ]";
+// 	}
+// 	cout << endl;
+
+
+// 	//chanlist
+// 	if (_chanList.size()) {
+// 		map<string , Channel *>::iterator chanIt;
+// 		cout << "- Channel List: " << endl;
+// 		for (chanIt = _chanList.begin(); chanIt != _chanList.end(); ++chanIt) {
+// 			Channel *chan = chanIt->second;
+// 			//Channel name
+// 			cout << "\t[ " << chanIt->first << " ]" << endl;
+// 			//topic
+// 			PRINT_STRING(chan->_topic, "topic");
+// 			//key
+// 			PRINT_STRING(chan->_key, "key");
+
+// 			PRINT_USER_SET(chan->_userList, "userList");
+// 			PRINT_USER_SET(chan->_operList, "operList");
+// 			PRINT_USER_SET(chan->_invitedList, "invitedList");
+// 		}
+// 	}
+// }
+
