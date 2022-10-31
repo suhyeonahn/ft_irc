@@ -24,9 +24,11 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	User *   user;
 	int      fd(msg.first);
 	// New user registration
-	if (_userList.find(fd) == _userList.end()) 
+	if (_userList.find(fd) == _userList.end()) {
 		user = (_userList[fd] = new User(fd, _pw));
-	else
+		if (_pw.empty())
+			user->_isGoodPw = true;
+	} else
 		user = _userList[fd];
 	
 	// Split msg to cmd(s)
@@ -36,6 +38,7 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	for (vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
 	{
 		Cmd cmd(user, *it);
+		bool registered(user->_isRegistered);
 
 		// Check if the cmd exists
 		// TODO: Send an err numeric accordingly
@@ -47,6 +50,13 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 			if (cmd._cmd == "QUIT") {
 				return true;
 			}
+			if (!cmd._user->_isGoodPw) {
+				PushToRes(user->_fd, "You are not authentificated!\r\n", res);
+				DeleteOffUser(user->_fd);
+				return true;
+			}
+			if (!registered && user->_isRegistered) // first registered
+	            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_WELCOME, NULL), res);
 		}
 	}
 	return false;
@@ -71,17 +81,19 @@ void	IRC::DeleteOffUser(int fd) {
 					chan->_userList.erase(user);
 					chan->_operList.erase(user);
 
-					// if no more user in chan, remove chan
+					// // if no more user in chan, remove chan
 					if (chan->_userList.size() == 0) {
-						copy.erase(chan->_name);
+						_chanList.erase(chan->_name);
 						delete chan;
 					}
+
 				} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
 					chan->_invitedList.erase(user);
 			}
 		}
 		delete user;
 		_userList.erase(fd);
+
 	}
 }
 
