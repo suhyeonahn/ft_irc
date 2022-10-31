@@ -150,6 +150,7 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 				else if (!msg.empty() && _irc.ProcessClientMsg(make_pair(fd, msg), res))
 					offList.insert(fd);
 				//LINE TO DEBUG
+				DEBUG();
 				cout << "client #" << fd << ":" << endl;
 				cout << CYN << msg << DFT;
 			}
@@ -162,23 +163,4 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 int		Server::Error(const string &msg) {
 	cerr << RED << msg << " : " << strerror(errno) << DFT << endl;
 	exit(1);
-}
-
-void	Server::DEBUG() {
-
-	cout << MAG << "[DEBUG]" << endl;
-	cout << "- Port: " << _port << endl;
-	cout << "- Password: " << _password << endl;
-	cout << "- Server FD: " << _fd << endl;
-	cout << "- Client FDs: ";
-	if (_clientList.size() > 0) {
-		map<int, Client *>::iterator it;
-		cout << "[ ";
-		for(it = _clientList.begin(); it != _clientList.end(); ++it) {
-			cout << (it != _clientList.begin() ? ", " : "") << it->first;
-		}
-		cout << " ]" << endl;
-	}
-	_irc.DEBUG();
-	cout << DFT << endl;
 }

@@ -65,10 +65,9 @@ class   IRC
         IRC(const string &pw);
         virtual ~IRC();
 
-
         void  test();
-
         void DEBUG();
+
         static void PRINT_USER_SET(set<User *> userset, const string &type);
         static void PRINT_STRING(const string &current, const string &type);
         

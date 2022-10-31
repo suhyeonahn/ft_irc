@@ -2,6 +2,7 @@ INC_DIR		=	./include/
 
 SRCS		=	./src/main.cpp \
 				./src/utils/Utils.cpp \
+				./src/utils/DEBUG.cpp \
 				./src/server/Client.cpp \
 				./src/server/Server.cpp \
 				./src/irc/IRC.cpp \
