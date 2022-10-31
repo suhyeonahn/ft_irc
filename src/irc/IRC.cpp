@@ -208,8 +208,7 @@ void  IRC::test()
 			plus = true;
 		else if (tmp[1] == '-')
 			plus = false;
-		else
-			; //  skip err
+
 		for(string::size_type i = 1; i < tmp.size(); ++i)
 			std::cout << tmp[i] << endl;
 	}

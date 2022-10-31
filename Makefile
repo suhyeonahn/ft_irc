@@ -29,7 +29,7 @@ SRCS		=	./src/main.cpp \
 
 OBJS		= $(SRCS:.cpp=.o)
 
-CC			=	c++
+CC			=	clang++
 
 CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address  -std=c++98 
 
