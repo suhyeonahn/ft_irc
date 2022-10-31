@@ -148,6 +148,7 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
     else if (cmd._cmd == "USER") USER(cmd, res);
 	else if (!cmd._user->_isRegistered) return ;
     else if (cmd._cmd == "JOIN") JOIN(cmd, res);
+    else if (cmd._cmd == "TOPIC") TOPIC(cmd, res);
     else if (cmd._cmd == "NAMES") NAMES(cmd, res);
     else if (cmd._cmd == "INVITE") INVITE(cmd, res);
     else if (cmd._cmd == "PART") PART(cmd, res);

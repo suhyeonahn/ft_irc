@@ -4,6 +4,7 @@
 // c++ standard header
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <cstring>
 #include <iostream>
 #include <map>

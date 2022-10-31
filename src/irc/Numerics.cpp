@@ -60,7 +60,7 @@ string  IRC::getServReply( User * user, int code, string params[] )
 		case RPL_TOPIC: //332
 			ss << params[0] << " :" << params[1]; break;
 		case RPL_TOPICWHOTIME: //323
-			ss << params[0] << " " << params[1] << getTime(); break;
+			ss << params[0] << " " << params[1] << " " << getTime(); break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461

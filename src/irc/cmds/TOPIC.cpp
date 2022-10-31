@@ -2,8 +2,12 @@
 
 void IRC::TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res)
 {
+    // if (!cmd._params[0].empty())
+    //     cout << "0:" << cmd._params[0] << endl;
+    // if (!cmd._params[1].empty())
+    //     cout << "1:" << cmd._params[1] << endl;
     //ERROR RPLY
-    if (!cmd._params.empty())
+    if (cmd._params.empty())
     {
         PushToRes(cmd._user->getFd(), getServReply(cmd._user, ERR_NEEDMOREPARAMS, (string[]){cmd._cmd}), res);
         return ;
