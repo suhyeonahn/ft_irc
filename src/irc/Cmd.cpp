@@ -128,8 +128,6 @@ void Cmd::setParams( string & cpyMsg )
 	if (i < cpyMsg.size())
 		// last_param.size = all msg.size() - (before_last_param).size()
 		_params.push_back(cpyMsg.substr(i, cpyMsg.size() - i));
-	cout << "cmd._params.size():" << _params.size() << endl;
-    
 }
 
 bool    Cmd::isValid( void )
