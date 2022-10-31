@@ -41,10 +41,10 @@ string  IRC::getServReply( User * user, int code, string params[] )
 		case RPL_AWAY: // 301  FIXEME :: message is a pram "<client> <nick> :<message>"
 			ss << params[0] << ":is away" ; break;
 		case RPL_LISTSTART: // 321
-			ss << "Channel :Users  Name"; break;
+			ss << "Channel :Users Name"; break;
 		case RPL_LIST: // 322
 		//  <channel> <client count> :<topic>
-			ss << params[0] << " " << params[1] << " :" << params[2]; break;
+			ss << params[0] << " " << params[1] << " " << params[2]; break;
 		case RPL_LISTEND: //323
 			ss << ":End of /LIST"; break;
 		case RPL_UMODEIS:	//	221
