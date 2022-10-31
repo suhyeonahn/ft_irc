@@ -79,8 +79,10 @@ string  IRC::getServReply( User * user, int code, string params[] )
             ss << params[0] << " :Nickname is already in use"; break;
 		case ERR_NOSUCHCHANNEL: // 403
 			ss << params[0] << " :No such channel"; break;
+		case ERR_USERNOTINCHANNEL: // 441
+			ss << params[0] << " " << params[1] << " :isn't on that channel"; break;
 		case ERR_NOTONCHANNEL: // 442
-			ss << params[0] << " :You're not on that channel"; break; 
+			ss << params[0] << " :You're not on that channel"; break;
 		case ERR_USERONCHANNEL: // 443
 			ss << params[0] << " " << params[1] << " :is already on channel"; break;
 		case ERR_CHANOPRIVSNEEDED: // 482
