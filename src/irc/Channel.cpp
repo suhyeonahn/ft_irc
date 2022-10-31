@@ -50,6 +50,7 @@ void    Channel::addUser( User * user )
 void    Channel::rmUser( User * user )
 {
     _userList.erase(user);
+    _operList.erase(user);
 }
 
 string  Channel::getName() const
