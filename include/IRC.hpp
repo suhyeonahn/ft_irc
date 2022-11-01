@@ -6,7 +6,6 @@
 # include "Client.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
-# include "ParseCmd.hpp"
 # include "Cmd.hpp"
 # include "Utils.hpp"
 # include "Numerics.hpp"

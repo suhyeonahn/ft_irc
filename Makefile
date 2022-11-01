@@ -10,7 +10,6 @@ SRCS		=	./src/main.cpp \
 				./src/irc/Cmd.cpp \
 				./src/irc/Channel.cpp \
 				./src/irc/Numerics.cpp \
-				./src/irc/ParseCmd.cpp \
 				./src/irc/cmds/INVITE.cpp \
 				./src/irc/cmds/JOIN.cpp \
 				./src/irc/cmds/KICK.cpp \
