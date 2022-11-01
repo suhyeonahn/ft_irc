@@ -80,13 +80,22 @@ string  User::getWho(const string chan) const {
     //  <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>
     string res = chan;
 
-    // if (res.size() > 1)
-    //     res = res.substr(1);
-    // i put hopcount '1' with hard-coding because there is only one server in this project.
     res += (" " + _uname + " " + USR_HOST + " " + SERV_HOST + " " + _nick + " " + _away + " :1 " +_rname);
     return res;
 }
 
+
+int     User::getFd() const
+{
+    return  _fd;
+}
+
+
+
+
+// if (res.size() > 1)
+//     res = res.substr(1);
+// i put hopcount '1' with hard-coding because there is only one server in this project.
 
 // string  User::getWho() const
 // {
@@ -106,7 +115,7 @@ string  User::getWho(const string chan) const {
 
 // string  User::getJoinedChan() const
 // {
-//     string  chans = "";
+//     string  chans  = "";
 //     for (set<Channel *>::iterator it(_joined.begin()) ; it != _joined.end() ; ++it)
 //     {
 //         Channel * chan = *it;
@@ -118,8 +127,3 @@ string  User::getWho(const string chan) const {
 //         chans.erase(chans.end() - 1); // Remove last " " Char
 //     return chans;
 // }
-
-int     User::getFd() const
-{
-    return  _fd;
-}
