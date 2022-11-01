@@ -10,10 +10,10 @@
 
 //Util function to add '0' until code string's length become 3
 // ex: 1 => 001, 42 => 042, 242 => 242
-string	IRC::get3DigitCode(int code) {
+string	IRC::getNDigitCode(int code, int n) {
 	string res = intToStr(code);
 
-	for(; res.length() < 3;) 
+	for(; (int) res.length() < n;) 
 		res.insert(0, "0");
 	return res;
 }
@@ -25,7 +25,7 @@ string  IRC::getServReply( User * user, int code, string params[] )
 	// is it mandatory...?
 	// put prefix
 	// ex - ':<HOST> <CODE> <NICKNAME>[!user@host] '
-	ss << ":" << SERV_HOST << " " << get3DigitCode(code) << " "
+	ss << ":" << SERV_HOST << " " << getNDigitCode(code, 3) << " "
 		<< user->getNick() << " ";
 
 	switch (code)
@@ -61,6 +61,14 @@ string  IRC::getServReply( User * user, int code, string params[] )
 			ss << params[0] << " " << params[1]; break;
 		case RPL_TOPICWHOTIME: //323
 			ss << params[0] << " " << params[1] << " " << time(NULL); break;
+		case RPL_MOTD: //372
+			ss << ":" << params[0]; break;
+		case RPL_MOTDSTART: //375
+			ss << ":- " << SERV_HOST <<  " Message of the day - "; break;
+		case RPL_ENDOFMOTD: //376
+			ss << ":End of /MOTD command."; break;
+		case ERR_NOMOTD: // 421
+			ss << ":MOTD File is missing"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
 			ss << params[0] << " :Unknown command"; break;
 		case ERR_NEEDMOREPARAMS: // 461

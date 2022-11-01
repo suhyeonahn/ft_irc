@@ -25,7 +25,8 @@ SRCS		=	./src/main.cpp \
 				./src/irc/cmds/TOPIC.cpp \
 				./src/irc/cmds/USER.cpp \
 				./src/irc/cmds/WHO.cpp \
-				./src/irc/cmds/PONG.cpp 
+				./src/irc/cmds/PONG.cpp \
+				./src/irc/cmds/MOTD.cpp \
 
 
 OBJS		= $(SRCS:.cpp=.o)

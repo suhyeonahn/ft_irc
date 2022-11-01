@@ -15,8 +15,6 @@ void    IRC::NICK( const Cmd & cmd, vector<t_ClientMsg> & res )
             cmd._user->setNick(nick);
             if (!cmd._user->_uname.empty() && !cmd._user->_rname.empty())
                 cmd._user->_isRegistered = true;
-            //reply welcome msg to client
-            //PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_WELCOME, NULL), res);
         }
     }
 }

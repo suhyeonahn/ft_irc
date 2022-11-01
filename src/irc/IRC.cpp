@@ -55,8 +55,11 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 				DeleteOffUser(user->_fd);
 				return true;
 			}
-			if (!registered && user->_isRegistered) // first registered
+			// first registered 
+			if (!registered && user->_isRegistered) {
 	            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_WELCOME, NULL), res);
+				MOTD(cmd, res);
+			}
 		}
 	}
 	return false;
@@ -159,6 +162,7 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
     else if (cmd._cmd == "PRIVMSG") PRIVMSG(cmd, res);
     else if (cmd._cmd == "NOTICE") NOTICE(cmd, res);
 	else if (cmd._cmd == "PING") PONG(cmd, res);
+	else if (cmd._cmd == "MOTD") MOTD(cmd, res);
 }
 
 
