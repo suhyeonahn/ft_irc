@@ -42,6 +42,7 @@ class   IRC
         void    KILL( const Cmd &cmd, vector<t_ClientMsg> & res );
 
         void    PONG( const Cmd &cmd, vector<t_ClientMsg> & res );
+        void    MOTD( const Cmd &cmd, vector<t_ClientMsg> & res );
 
         void    execute(const Cmd &cmd, vector<t_ClientMsg> & res );
 
@@ -58,7 +59,9 @@ class   IRC
 
         string  getServReply( User * user, int code, string params[] );
         string  getServMsg( User * user, int code, string params[] );
-        string	get3DigitCode(int code);
+        string	getNDigitCode(int code, int n);
+        string	ReadMOTD();
+
 
 
 

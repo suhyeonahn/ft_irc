@@ -7,6 +7,7 @@
 #include <ctime>
 #include <cstring>
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <vector>
 #include <iterator>
