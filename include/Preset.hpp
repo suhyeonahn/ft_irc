@@ -47,6 +47,9 @@
 # define SEP_MSG "\r\n"
 # define SEP_LEN 2
 
+// OPER config
+# define OPER_NAME "suky"
+# define OPER_PASS "1234"
 
 using namespace std;
 

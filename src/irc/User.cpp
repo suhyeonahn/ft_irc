@@ -21,18 +21,19 @@ void    User::setRname( std::string const & rname )
     _rname = rname;
 }
 
-void    User::setMode( bool plus, char const & mode )
+void    User::setMode( bool plus, string const & mode )
 {
-    if (mode == 'i')
-        _i = plus ? true : false;
-    if (mode == 'o')
-        _o = plus ? true : false;
+    for (unsigned long i = 0 ; i < mode.size(); i++)
+    {
+        if (mode[i] == 'i')
+           _i = plus ? true : false;
+    }
 }
 
 bool    User::isValidNick( string const & nick )
 {
     static string const     validChars(VALID_CHARS_NICK);
-    static set<char> const  nickSet(nick.begin(), nick.end());
+    set<char> const  nickSet(nick.begin(), nick.end());
 
     for (set<char>::const_iterator it(nickSet.begin()) ; it != nickSet.end() ; it++)
     {
@@ -42,12 +43,15 @@ bool    User::isValidNick( string const & nick )
     return true;
 }
 
-bool    User::isValidMode( char const & mode )
+bool    User::isValidMode( string const & mode )
 {
     static string const     validChars(USER_MODE);
 
-    if (validChars.find(mode) == string::npos)
-        return false;
+for (unsigned long i = 0 ; i < mode.size(); i++)
+    {
+        if (validChars.find(mode[i]) == string::npos)
+            return false;
+    }
     return true;
 }
 
