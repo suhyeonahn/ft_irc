@@ -24,8 +24,6 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
             else
             {
                 //  modestring is given
-                bool isValid = true;
-                bool plus;
                 //  parse modestring
                 vector<string> modeStr = splitModeStr(cmd._params[1], "+-");
                 for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
@@ -35,21 +33,22 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
                         servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                     else
                     {
-                        if (token[0] == '+')
-                            plus = true;
-                        else if (token[1] == '-')
-                            plus = false;
+                        bool plus = token[0] == '+' ? true : false;
+                        if (token.size() == 1)
+                            servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                         for(string::size_type i = 1; i < token.size(); ++i)
                         {
-                            if (isValid == chan->isValidMode(token[i]))
+                            bool isValid;
+                            if ((isValid = chan->isValidMode(token[i])) == true)
+                            {
                                 chan->setMode(plus, token[i]);
+                                getServReply(cmd._user, RPL_CHANNELMODEIS, (string[]){chan->getName(),chan->getMode()});
+                            }
                             if (!isValid)
                                 servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                         }
                     }
                 }
-                //  Send changed mode
-                PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_UMODEIS, (string[]){chan->getMode()}), res);
             }
         }
     }
@@ -69,8 +68,6 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
         else
         {
             //  modestring is given
-            bool isValid = true;
-            bool plus;
             //  parse modestring
             vector<string> modeStr = splitModeStr(cmd._params[1], "+-");
             for (vector<string>::iterator it = modeStr.begin() ; it != modeStr.end() ; ++it)
@@ -80,21 +77,22 @@ void    IRC::MODE( const Cmd & cmd, vector<t_ClientMsg> & res )
                     servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                 else
                 {
-                    if (token[0] == '+')
-                        plus = true;
-                    else if (token[1] == '-')
-                        plus = false;
+                    bool plus = token[0] == '+' ? true : false; 
+                    if (token.size() == 1)
+                        servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                     for(string::size_type i = 1; i < token.size(); ++i)
                     {
-                        if (isValid == cmd._user->isValidMode(token[i]))
+                        bool isValid;
+                        if ((isValid = cmd._user->isValidMode(token[i])) == true)
+                        {
                             cmd._user->setMode(plus, token[i]);
+                            getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()});
+                        }
                         if (!isValid)
                             servReply = getServReply(cmd._user, ERR_UMODEUNKNOWNFLAG, NULL); //461
                     }
                 }
             }
-            //  Send changed mode
-            PushToRes(cmd._user->getFd(), getServReply(cmd._user, RPL_UMODEIS, (string[]){cmd._user->getMode()}), res);
         }
     }
     if (!servReply.empty())

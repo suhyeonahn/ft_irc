@@ -71,14 +71,17 @@ string  Channel::getNicks( bool i ) const
         ; ++it)
     {
         User * user = *it;
-        if (!(i == true && user->_i == true))
+        //  Users with the invisible user mode set are not shown in channel responses
+        //  unless the requesting client is also joined to that channel.
+        if (!(i == false && user->_i == true))
         {
             if (getOperByNick(user->getNick()))
                 nicks += OPER_PREFIX;
             nicks += user->getNick() + " ";
         }
     }
-    nicks.erase(nicks.end() - 1); // Remove last " " Char
+    if (!nicks.empty())
+        nicks.erase(nicks.end() - 1); // Remove last " " Char
 
     return nicks;
 }
