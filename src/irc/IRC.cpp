@@ -163,6 +163,7 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
     else if (cmd._cmd == "NOTICE") NOTICE(cmd, res);
 	else if (cmd._cmd == "PING") PONG(cmd, res);
 	else if (cmd._cmd == "MOTD") MOTD(cmd, res);
+	else if (cmd._cmd == "MODE") MODE(cmd, res);
 }
 
 

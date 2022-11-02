@@ -32,7 +32,7 @@ void    User::setMode( bool plus, char const & mode )
 bool    User::isValidNick( string const & nick )
 {
     static string const     validChars(VALID_CHARS_NICK);
-    static set<char> const  nickSet(nick.begin(), nick.end());
+    set<char> const  nickSet(nick.begin(), nick.end());
 
     for (set<char>::const_iterator it(nickSet.begin()) ; it != nickSet.end() ; it++)
     {
