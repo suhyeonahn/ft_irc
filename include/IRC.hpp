@@ -23,6 +23,7 @@ class   IRC
         void    NICK( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    USER( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    QUIT( const Cmd &cmd, vector<t_ClientMsg> & res );
+        void    OPER( const Cmd &cmd, vector<t_ClientMsg> & res );
         //  Channel Operation cmds
         void    JOIN( const Cmd &cmd, vector<t_ClientMsg> & res );
         void    TOPIC( const Cmd &cmd, vector<t_ClientMsg> & res );

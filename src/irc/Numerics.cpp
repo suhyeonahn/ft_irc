@@ -67,6 +67,8 @@ string  IRC::getServReply( User * user, int code, string params[] )
 			ss << ":- " << SERV_HOST <<  " Message of the day - "; break;
 		case RPL_ENDOFMOTD: //376
 			ss << ":End of /MOTD command."; break;
+		case RPL_YOUREOPER: //376
+			ss << ":You are now an IRC operator."; break;
 		case ERR_NOMOTD: // 421
 			ss << ":MOTD File is missing"; break;
 		case ERR_UNKNOWNCOMMAND: // 421
@@ -105,6 +107,8 @@ string  IRC::getServReply( User * user, int code, string params[] )
 			ss << ":No recipient given"; break;
 		case ERR_NOTEXTTOSEND: // 412
 			ss << ":No text given to send"; break;
+		case ERR_NOPRIVILEGES: // 481
+		    ss << ":Permission Denied- You're not an IRC operator"; break;
 		default: break;
 	}
 	ss	<< SEP_MSG;
@@ -142,6 +146,8 @@ string  IRC::getServMsg( User * user, int code, string params[] )
 			ss  << "ERROR :" << params[0]; break;
 		case MSG_QUIT:	//1006
 			ss  << "QUIT :" << params[0]; break;
+		case MSG_KILL: // 1007
+		    ss  << "KILL " << params[0] << " " << params[1]; break;
 	}
 	ss << SEP_MSG;
 

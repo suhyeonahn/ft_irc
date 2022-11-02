@@ -27,8 +27,6 @@ void    User::setMode( bool plus, string const & mode )
     {
         if (mode[i] == 'i')
            _i = plus ? true : false;
-        if (mode[i] == 'o')
-           _o = plus ? true : false;
     }
 }
 

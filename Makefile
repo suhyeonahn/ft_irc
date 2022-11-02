@@ -27,6 +27,8 @@ SRCS		=	./src/main.cpp \
 				./src/irc/cmds/WHO.cpp \
 				./src/irc/cmds/PONG.cpp \
 				./src/irc/cmds/MOTD.cpp \
+				./src/irc/cmds/KILL.cpp \
+				./src/irc/cmds/OPER.cpp
 
 
 OBJS		= $(SRCS:.cpp=.o)
