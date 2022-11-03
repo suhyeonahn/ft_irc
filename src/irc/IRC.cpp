@@ -25,21 +25,14 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	int      fd(msg.first);
 	// New user registration
 	if (_userList.find(fd) == _userList.end()) {
-		cout << "HERE" << endl;
 		user = (_userList[fd] = new User(fd, _pw));
 		if (_pw.empty())
 			user->_isGoodPw = true;
-	} else {
-		cout << "HERE2" << endl;
-		cout << _userList.size() << endl;
-
+	} else 
 		user = _userList[fd];
-	}
 	
 	// Split msg to cmd(s)
 	vector<string>  cmds = ::split(msg.second, SEP_MSG);
-
-		cout << user << endl;
 
 
 	// Execute cmd(s)
