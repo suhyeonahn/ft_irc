@@ -37,10 +37,10 @@ int main(int ac, char **av) {
     atexit(HandleExit);
 
     int     port;
-    string  password = av[2];
 
     if (!isValid(ac, av, port))   
         exit(1);
+    string  password = av[2];
     irc = new IRC(password);
     // irc.test();
     server = new Server(port, password, *irc);
