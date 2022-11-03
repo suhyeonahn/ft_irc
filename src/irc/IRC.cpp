@@ -70,33 +70,35 @@ void	IRC::DeleteOffUser(int fd) {
 		User *user(_userList[fd]);
 
 		//Delete user in chanList
-		map<string, Channel *> copy(_chanList);
-		map<string, Channel *>::iterator chanIt;
-		Channel *chan;
 
-		if (user->_isRegistered) {
-			for (chanIt = copy.begin(); chanIt != copy.end(); ++chanIt) {
-				chan = chanIt->second;
+		if (user) {
+			map<string, Channel *> copy(_chanList);
+			map<string, Channel *>::iterator chanIt;
+			Channel *chan;
 
-				//remove joined channel in user instance
-				if (user->_joined.find(chan) != user->_joined.end()) {
-					user->_joined.erase(chan);
-					chan->_userList.erase(user);
-					chan->_operList.erase(user);
+			if (user->_isRegistered) {
+				for (chanIt = copy.begin(); chanIt != copy.end(); ++chanIt) {
+					chan = chanIt->second;
 
-					// // if no more user in chan, remove chan
-					if (chan->_userList.size() == 0) {
-						_chanList.erase(chan->_name);
-						delete chan;
-					}
+					//remove joined channel in user instance
+					if (user->_joined.find(chan) != user->_joined.end()) {
+						user->_joined.erase(chan);
+						chan->_userList.erase(user);
+						chan->_operList.erase(user);
 
-				} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
-					chan->_invitedList.erase(user);
+						// // if no more user in chan, remove chan
+						if (chan->_userList.size() == 0) {
+							_chanList.erase(chan->_name);
+							delete chan;
+						}
+
+					} else if (chan->_invitedList.find(user) != chan->_invitedList.end())
+						chan->_invitedList.erase(user);
+				}
 			}
+			delete user;
+			_userList.erase(fd);
 		}
-		delete user;
-		_userList.erase(fd);
-
 	}
 }
 
@@ -164,8 +166,6 @@ void    IRC::execute(const Cmd &cmd, vector<t_ClientMsg> & res ) {
 	else if (cmd._cmd == "PING") PONG(cmd, res);
 	else if (cmd._cmd == "MOTD") MOTD(cmd, res);
 }
-
-
 
 User *  IRC::getUserByNick( string const & nick ) const
 {
