@@ -25,20 +25,29 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 	int      fd(msg.first);
 	// New user registration
 	if (_userList.find(fd) == _userList.end()) {
+		cout << "HERE" << endl;
 		user = (_userList[fd] = new User(fd, _pw));
 		if (_pw.empty())
 			user->_isGoodPw = true;
-	} else
+	} else {
+		cout << "HERE2" << endl;
+		cout << _userList.size() << endl;
+
 		user = _userList[fd];
+	}
 	
 	// Split msg to cmd(s)
 	vector<string>  cmds = ::split(msg.second, SEP_MSG);
+
+		cout << user << endl;
+
 
 	// Execute cmd(s)
 	for (vector<string>::iterator it(cmds.begin()) ; it != cmds.end() ; ++it)
 	{
 		Cmd cmd(user, *it);
 		bool registered(user->_isRegistered);
+
 
 		// Check if the cmd exists
 		// TODO: Send an err numeric accordingly
@@ -68,7 +77,6 @@ bool   IRC::ProcessClientMsg( t_ClientMsg const & msg, vector<t_ClientMsg> &res)
 void	IRC::DeleteOffUser(int fd) {
 	if (_userList.find(fd) != _userList.end()) {
 		User *user(_userList[fd]);
-
 		//Delete user in chanList
 
 		if (user) {

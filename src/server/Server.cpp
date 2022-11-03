@@ -145,9 +145,9 @@ void	Server::WaitClientMsg(int allFDs, vector<t_ClientMsg> &res, set<int> &offLi
 					// when client is dead by signal (nc 127.0.0.1 =>  ctrl + c or ctrl +d...etc)
 					// cf: Hexchat(or other IRC client) send QUIT message (not signal)
 					std::cout << RED << "[" << fd << "] KILLED BY SIGNAL" << DFT << endl;
-					User *user = _irc._userList[fd];
-					if (user)
-				    	_irc.Emit(user, (string[]){"QUIT", ":killed by signal", ""}, _irc.GetSameChanUsers(user), res, true);
+					// User *user = _irc._userList[fd];
+					// if (user)
+				    // 	_irc.Emit(user, (string[]){"QUIT", ":killed by signal", ""}, _irc.GetSameChanUsers(user), res, true);
 					_irc.DeleteOffUser(fd);
 					DeleteClientFD(fd);
 				}
