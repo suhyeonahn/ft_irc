@@ -27,7 +27,7 @@ class   Channel
         bool    _i; //  Invite-Only Channel Mode
         bool    _k; //  Key Channel Mode
 
-        void    setMode( bool plus, char const & mode );
+        void    setMode( bool plus, string const & mode );
 
         void    addUser( User * user );
         void    rmUser( User * user );
@@ -47,7 +47,7 @@ class   Channel
 
 		static bool IsPrefix(char c);
 		static bool IsValidName(const string &name);
-        bool    isValidMode( char const & mode );
+        bool    isValidMode( string const & mode );
 
 		friend class IRC;
 };

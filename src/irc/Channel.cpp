@@ -25,21 +25,26 @@ bool Channel::IsValidName(const string &name) {
     return true;
 }
 
-bool    Channel::isValidMode( char const & mode )
+bool    Channel::isValidMode( string const & mode )
 {
     static string const     validChars(CHAN_MODE);
-
-    if (validChars.find(mode) == string::npos)
-        return false;
+    for (unsigned long i = 0 ; i < mode.size(); i++)
+    {
+        if (validChars.find(mode[i]) == string::npos)
+            return false;
+    }
     return true;
 }
 
-void    Channel::setMode( bool plus, char const & mode )
+void    Channel::setMode( bool plus, string const & mode )
 {
-    if (mode == 'i')
-        _i = plus ? true : false;
-    if (mode == 'k')
-        _k = plus ? true : false;
+    for (unsigned long i = 0 ; i < mode.size(); i++)
+    {
+        if (mode[i] == 'i')
+            _i = plus ? true : false;
+        if (mode[i] == 'k')
+            _k = plus ? true : false;
+    }
 }
 
 void    Channel::addUser( User * user )
@@ -71,14 +76,17 @@ string  Channel::getNicks( bool i ) const
         ; ++it)
     {
         User * user = *it;
-        if (!(i == true && user->_i == true))
+        //  Users with the invisible user mode set are not shown in channel responses
+        //  unless the requesting client is also joined to that channel.
+        if (!(i == false && user->_i == true))
         {
             if (getOperByNick(user->getNick()))
                 nicks += OPER_PREFIX;
             nicks += user->getNick() + " ";
         }
     }
-    nicks.erase(nicks.end() - 1); // Remove last " " Char
+    if (!nicks.empty())
+        nicks.erase(nicks.end() - 1); // Remove last " " Char
 
     return nicks;
 }

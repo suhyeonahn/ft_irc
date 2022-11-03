@@ -6,7 +6,7 @@
 
 # define DEFAULT_NAME       "*"
 # define VALID_CHARS_NICK   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
-# define USER_MODE          "io"
+# define USER_MODE          "oi"
 
 class   User
 {
@@ -29,13 +29,13 @@ class   User
         bool    _i; //  invisible
         bool    _o; //  oper
 
-        void    setNick( std::string const & nick );
-        void    setUname( std::string const & uname );
-        void    setRname( std::string const & rname );
-        void    setMode( bool plus, char const & mode );
+        void    setNick( string const & nick );
+        void    setUname( string const & uname );
+        void    setRname( string const & rname );
+        void    setMode( bool plus, string const & mode );
 
         bool    isValidNick( string const & nick );
-        bool    isValidMode( char const & mode );
+        bool    isValidMode( string const & mode );
 
         void    join( Channel * chan );
 
