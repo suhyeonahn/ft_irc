@@ -4,7 +4,8 @@ Server::Server(int port, const string &password, IRC & irc) : _port(port), _pass
 
 }
 Server::~Server(){
-
+	for (map<int, Client *>::iterator it = _clientList.begin() ; it != _clientList.end() ; ++it )
+		delete it->second;
 }
 
 void	Server::Init(){
